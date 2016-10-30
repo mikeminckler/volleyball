@@ -1,0 +1,31 @@
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .25s
+}
+
+.fade-enter, .fade-leave-active {
+    opacity: 0
+}
+
+.slide-down-enter-active, .slide-down-leave-active {
+    transition: all .5s
+}
+
+.slide-down-enter, .slide-down-leave-active {
+    transform: translateY(-40px);
+}
+
+/* FEEDBACK */
+
+.feedback-item {
+    transition: all .25s;
+}
+
+.feedback-enter, .feedback-leave-active {
+    opacity: 0;
+    transform: translateX(-100px);
+}
+
+.feedback-leave-active {
+    position: absolute;
+}
