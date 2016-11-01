@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Tymon\JWTAuth\JWTAuth;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
+//use Illuminate\Support\Facades\Redis;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -74,6 +75,7 @@ class LoginController extends Controller
 
         // all good so return the token
         $this->clearLoginAttempts($request);
+        //Redis::publish('public-message', auth()->user()->full_name.' has logged in');
         return response()->json(compact('token'));
 
     }

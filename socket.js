@@ -13,9 +13,12 @@ var server = require('http').createServer();
 var io = require('socket.io')(server);
 var socketioJwt = require('socketio-jwt');
 
+var Redis = require('ioredis');
+var redis = new Redis();
+
 io.on('connection', socketioJwt.authorize({
-        secret: process.env.JWT_SECRET,
-        timeout: 15000
+    secret: process.env.JWT_SECRET,
+    timeout: 15000
 }));
 
 io.on('authenticated', function (socket) {
@@ -23,30 +26,44 @@ io.on('authenticated', function (socket) {
     // we can access the token props via socket.decoded_token
     // these are set in App\User::getJWTCustomClaims()
     //
-    // socket.decoded_token.userid)
-    // socket.decoded_token.email)
+    // socket.decoded_token.userid
+    // socket.decoded_token.email
+    // socket.decoded_token.name
     
-    socket.on('public-message', function (data) {
-        socket.emit('public-message', data);
+    //socket.join('auth.info');
+    //console.log('authenticated');
+    
+    socket.on('auth.info', function (message) {
+        socket.broadcast.emit('auth.info', message);
     });
 
     socket.join('user.' + socket.decoded_token.userid);
+     
+    socket.on('disconnect', function (socket) {
+        //console.log('close');
+    });
 
 });
-
-io.on('disconnect', function (socket) {
-    
-});
-
-var Redis = require('ioredis');
-var redis = new Redis();
 
 /*
-redis.subscribe('foo');
-
-redis.on('message', function(channel, message) {
-    console.log(message);
+io.on('join-channel', function( socket ) {
+    console.log('JOIN');
 });
 */
+
+io.on('connection', function( socket ) {
+    socket.on('public.info', function (message) {
+        socket.broadacast.emit('public.info', message);
+    });
+});
+
+
+redis.subscribe('public.info');
+
+redis.on('message', function(channel, response) {
+    console.log(channel);
+    let res = JSON.parse(response);
+    io.sockets.emit(channel, res.data.message);
+});
 
 server.listen(process.env.SOCKETIO_PORT);

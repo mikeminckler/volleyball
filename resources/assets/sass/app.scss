@@ -50,10 +50,7 @@ div#app {
 
 div.container {
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
+    padding: 50px 15px 35px 15px;
 }
 
 div.header {
@@ -180,6 +177,14 @@ div.login {
     box-shadow: 0 0 15px rgba(255,255,255,0.1);
 }
 
+div.login-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 div.login-logo {
     font-size: 80px;
     height: 45px;
@@ -227,7 +232,7 @@ div.feedback {
 div.feedback-item {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    padding: 2px 5px;
+    padding: 2px 10px 2px 2px;
     margin: 2px;
 }
 
@@ -245,6 +250,9 @@ div.feedback-item.info {
 
 div.feedback-item::before {
     font-family: FontAwesome;
+    width: 18px;
+    display: inline-block;
+    text-align: center;
 }
 
 div.feedback-item.error:before {

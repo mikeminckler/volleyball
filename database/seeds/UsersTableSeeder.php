@@ -19,5 +19,12 @@ class UsersTableSeeder extends Seeder
         $mike->email = 'mikeminckler@gmail.com';
         $mike->password = bcrypt('password');
         $mike->save();
+
+        $jb = new User;
+        $jb->first_name = 'John';
+        $jb->last_name = 'Bonham';
+        $jb->email = 'info@bluehealth.ca';
+        $jb->password = bcrypt('password');
+        $jb->save();
     }
 }

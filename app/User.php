@@ -59,8 +59,14 @@ class User extends Model implements
     {
         return [
             'userid' => $this->id,
-            'email' => $this->email    
+            'email' => $this->email,
+            'name' => $this->full_name
         ];
+    }
+
+    public function getFullNameAttribute() 
+    {
+        return $this->first_name.' '.$this->last_name;
     }
 
 }

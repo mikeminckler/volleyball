@@ -2,16 +2,30 @@
 require('./bootstrap');
 
 window.io = require('socket.io-client');
-var socket = io('http://localhost:3000'); 
-
-// Vue Components
-
-const Login = Vue.component('login', require('./components/Login.vue'));
+//var socket = io('http://localhost:3000', {query: 'jwt=' + store.state.user.token}); 
+var socket = io('http://localhost:3000');
 
 const router = new VueRouter({
     routes: [
-        { path: '/api/login', component: Login }
+        { path: '/login', component: require('./components/Login.vue') },
+        { path: '/home', component: require('./components/Home.vue') }
     ]
+});
+
+router.beforeEach((to, from, next) => {
+    if (to.path !== '/login') {
+        if (store.state.user.authenticated) {
+            next();
+        } else {
+            next('/login');
+        }
+    } else {
+        if (store.state.user.authenticated) {
+            next('/home');
+        } else {
+            next();
+        }
+    }
 });
 
 const store = new Vuex.Store({
@@ -20,6 +34,7 @@ const store = new Vuex.Store({
         user: {
             authenticated: false,
             token: '',
+            //name: '',
             first_name: '',
             last_name: '',
             email: '',
@@ -29,8 +44,8 @@ const store = new Vuex.Store({
         feedback: []
     },
 
-    computed: {
-        user_name () {
+    getters: {
+        user_name: state => {
             return state.user.first_name + ' ' + state.user.last_name;
         }
     },
@@ -51,6 +66,7 @@ const store = new Vuex.Store({
         },
 
         userInfo (state, info) {
+            //state.user.name = info.first_name + ' ' + info.last_name;
             state.user.first_name = info.first_name;
             state.user.last_name = info.last_name;
             state.user.email = info.email;
@@ -62,22 +78,30 @@ const store = new Vuex.Store({
         setToken({ commit, state }, token) {
 
             commit('setToken', token);
+
+            // connect incase we had logged out before
+            socket.connect();
+
+            // authenticate our token
             socket.emit('authenticate', {token: token});
+
+            // add our listeners
+            socket.on('auth.info', function (data) {
+                commit('addFeedback', {'type': 'info', 'message': data});
+            }.bind(this));
 
         },
         
-        removeToken({ commit, state }) {
-
-            commit('removeToken');
-
-            socket.emit('disconnect');
-            socket.emit('public-message', state.user.email + ' has logged OUT');
-        },
-
         userInfo({ commit, state }, info) {
             commit('userInfo', info);
-            socket.emit('public-message', state.user.email + ' has logged IN');
+            socket.emit('auth.info', store.getters.user_name + ' has connected');
+        },
+
+        removeToken({ commit, state }) {
+            commit('removeToken');
+            socket.emit('auth.info', store.getters.user_name + ' has disconnected');
         }
+
     }
 });
 
@@ -93,11 +117,16 @@ const app = new Vue({
             this.$http.post(e.target.action).then((response) => {
 
                 // call the action for the store update
-                this.$store.dispatch('removeToken');
+                this.$store.dispatch('removeToken').then(() => {
+                    socket.removeListener('auth.info');
+                    socket.close();
+                });
 
-                this.$router.push('/api/login');
+                this.$router.push('/login');
 
                 this.$store.commit('addFeedback', {'type': 'success', 'message': 'Logged Out'});
+
+                // we should probably disconnect here from socket
 
             }, (response) => {
 
@@ -108,12 +137,15 @@ const app = new Vue({
 
     created: function () {
         if (!this.$store.state.user.authenticated) {
-            this.$router.push('/api/login');
+            this.$router.push('/login');
+        } else {
+            this.$router.push('/home');
         }
 
-        socket.on('public-message', function (data) {
+        socket.on('public.info', function (data) {
             this.$store.commit('addFeedback', {'type': 'info', 'message': data});
         }.bind(this));
+
     }
 
 });
