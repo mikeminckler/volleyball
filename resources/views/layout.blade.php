@@ -34,7 +34,9 @@
                 </div>
         
                 <div class="menu">
-                        <div class="menu-item"></div>
+                    <div class="menu-item" v-for="item in $store.state.menu">
+                        <router-link :to="{path: '/' + item.url}">@{{ item.name }}</router-link>
+                    </div>
                 </div>
 
                 <div class="right-menu">

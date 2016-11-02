@@ -12,6 +12,8 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+use App\Events\UserUpdated;
+
 class User extends Model implements
     AuthenticatableContract,
     AuthorizableContract,
@@ -26,7 +28,7 @@ class User extends Model implements
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name', 'last_name', 'email', 'password',
     ];
 
     /**
@@ -67,6 +69,32 @@ class User extends Model implements
     public function getFullNameAttribute() 
     {
         return $this->first_name.' '.$this->last_name;
+    }
+
+    public function saveUser($input, $id = null) {
+
+        if ($id) {
+            $user = $this->findOrFail($id);
+        } else {
+            $user = new User;
+        }
+
+        $user->first_name = $input['first_name'];
+        $user->last_name = $input['last_name'];
+        $user->email = $input['email'];
+
+        if (array_key_exists('password', $input)) {
+            if (strlen(trim($input['password'])) > 0) {
+                $user->password = bcrypt($input['password']);
+            }
+        }
+
+        $user->save();
+
+        $message = 'Your info has been updated by '.auth()->user()->full_name;
+        event(new UserUpdated($message, $user));
+
+        return $user;
     }
 
 }

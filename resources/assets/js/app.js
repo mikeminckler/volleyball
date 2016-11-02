@@ -8,15 +8,24 @@ var socket = io('http://localhost:3000');
 const router = new VueRouter({
     routes: [
         { path: '/login', component: require('./components/Login.vue') },
-        { path: '/home', component: require('./components/Home.vue') }
+        { path: '/home', component: require('./components/Home.vue') },
+        { path: '/users', component: require('./components/Users.vue') },
+        { path: '/users/:id', component: require('./components/User.vue') },
+        //{ path: '/not-found', component: require('./components/404.vue') },
+        //{ path: '/*', redirect: '/not-found' }
     ]
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.path !== '/login') {
+    if (to.path != '/login') {
         if (store.state.user.authenticated) {
+            store.dispatch('clearErrorsFeedback');
             next();
         } else {
+            if (to.path != '/') {
+                store.dispatch('addFeedback', {'type': 'error', 'message': 'Please login to acces that page'});
+            }
+            store.state.intended = to.path;
             next('/login');
         }
     } else {
@@ -34,14 +43,15 @@ const store = new Vuex.Store({
         user: {
             authenticated: false,
             token: '',
-            //name: '',
             first_name: '',
             last_name: '',
             email: '',
             id: ''
         },
 
-        feedback: []
+        feedback: [],
+        intended: '',
+        menu: []
     },
 
     getters: {
@@ -65,13 +75,36 @@ const store = new Vuex.Store({
             state.feedback.push(item);
         },
 
+        clearFeedback (state) {
+            state.feedback = state.feedback.filter(function(item) {
+                //console.log(new Date().getTime() + '::' + item.expire);
+                let now = new Date().getTime();
+                if (item.expire < now && item.type != 'error') {
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+        },
+
+        clearErrorsFeedback (state) {
+            state.feedback = state.feedback.filter(function(item) {
+                return item.type != 'error';
+            });
+        },
+
         userInfo (state, info) {
             //state.user.name = info.first_name + ' ' + info.last_name;
             state.user.first_name = info.first_name;
             state.user.last_name = info.last_name;
             state.user.email = info.email;
             state.user.id = info.id;
+        },
+
+        menu (state, menu) {
+            state.menu = menu;
         }
+
     },
 
     actions: {
@@ -87,8 +120,8 @@ const store = new Vuex.Store({
 
             // add our listeners
             socket.on('auth.info', function (data) {
-                commit('addFeedback', {'type': 'info', 'message': data});
-            }.bind(this));
+                app.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
+            }.bind(app));
 
         },
         
@@ -100,11 +133,41 @@ const store = new Vuex.Store({
         removeToken({ commit, state }) {
             commit('removeToken');
             socket.emit('auth.info', store.getters.user_name + ' has disconnected');
+        },
+
+        addFeedback({ commit, state }, feedback) {
+            
+            let item = {
+                type: feedback.type,
+                message: feedback.message,
+                expire: (new Date().getTime() + 4900)
+            };
+            commit('addFeedback', item);
+
+            // clear out any info and successes automatically
+            
+            setTimeout(function() {
+               app.$store.dispatch('clearFeedback');
+            }, 5000);
+           
+        },
+
+        clearFeedback({ commit }) {
+            commit('clearFeedback'); 
+        },
+
+        clearErrorsFeedback({ commit }) {
+            commit('clearErrorsFeedback');
+        },
+
+        menu({ commit, state }, menu) {
+            commit('menu', menu);
         }
 
     }
 });
 
+// Send the jwt token when we talk to laravel
 Vue.http.headers.common['Authorization'] = store.state.user.token;
 
 const app = new Vue({
@@ -124,18 +187,19 @@ const app = new Vue({
 
                 this.$router.push('/login');
 
-                this.$store.commit('addFeedback', {'type': 'success', 'message': 'Logged Out'});
-
-                // we should probably disconnect here from socket
+                this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged Out'});
 
             }, (response) => {
-
+                // we have timed out or our token is invalid so lets go to the login page
+                
+                this.$router.push('/login');
             });
 
         }
     },
 
     created: function () {
+
         if (!this.$store.state.user.authenticated) {
             this.$router.push('/login');
         } else {
@@ -143,7 +207,15 @@ const app = new Vue({
         }
 
         socket.on('public.info', function (data) {
-            this.$store.commit('addFeedback', {'type': 'info', 'message': data});
+            this.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
+        }.bind(this));
+
+        socket.on('App\\Events\\UserUpdated', function (data) {
+            this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        }.bind(this));
+
+        socket.on('App\\Events\\AuthAnnouncement', function (data) {
+            this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         }.bind(this));
 
     }

@@ -86,7 +86,7 @@
 
                     Vue.http.headers.common['Authorization'] = 'Bearer ' + response.data.token;
 
-                    this.$store.commit('addFeedback', {'type': 'success', 'message': 'Logged In'});
+                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
 
                     this.$http.post('/api/users/my-info').then((response) => {
                         this.$store.dispatch('userInfo', response.data); 
@@ -94,15 +94,24 @@
                     
                     });
 
-                    // load the home page now that we are logged in
-                    this.$router.push('/home');
-
+                    this.$http.post('/api/menu').then((response) => {
+                        this.$store.dispatch('menu', response.data); 
+                    }, (response) => {
                     
+                    });
+
+                    // load the home page now that we are logged in
+                    if (this.$store.state.intended != '/login' && this.$store.state.intended.length > 0) {
+                        this.$router.push(this.$store.state.intended);
+                        this.$store.state.intended = '';
+                    } else {
+                        this.$router.push('/home');
+                    }
 
                 }, (response) => {
 
                     // login failed provide the feedback
-                    this.$store.commit('addFeedback', {'type': 'error', 'message': 'Logged Failed'});
+                    this.$store.dispatch('addFeedback', {'type': 'error', 'message': 'Logged Failed'});
 
                     // HACK 
                     $('input.input-password').val('').focus();

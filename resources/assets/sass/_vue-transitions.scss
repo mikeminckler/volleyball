@@ -19,6 +19,7 @@
 
 .feedback-item {
     transition: all .25s;
+    position: relative;
 }
 
 .feedback-enter, .feedback-leave-active {
@@ -27,5 +28,4 @@
 }
 
 .feedback-leave-active {
-    position: absolute;
 }

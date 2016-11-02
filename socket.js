@@ -23,26 +23,21 @@ io.on('connection', socketioJwt.authorize({
 
 io.on('authenticated', function (socket) {
 
-    // we can access the token props via socket.decoded_token
-    // these are set in App\User::getJWTCustomClaims()
-    //
-    // socket.decoded_token.userid
-    // socket.decoded_token.email
-    // socket.decoded_token.name
-    
-    //socket.join('auth.info');
-    //console.log('authenticated');
-    
+    /** we can access the token props via socket.decoded_token
+     *  these are set in App\User::getJWTCustomClaims()
+     *
+     *  socket.decoded_token.userid
+     *  socket.decoded_token.email
+     *  socket.decoded_token.name
+     */
+
     socket.on('auth.info', function (message) {
-        socket.broadcast.emit('auth.info', message);
+        socket.broadcast.to('auth.info').emit('auth.info', message);
     });
-
+ 
     socket.join('user.' + socket.decoded_token.userid);
+    socket.join('auth.info');
      
-    socket.on('disconnect', function (socket) {
-        //console.log('close');
-    });
-
 });
 
 /*
@@ -52,18 +47,33 @@ io.on('join-channel', function( socket ) {
 */
 
 io.on('connection', function( socket ) {
+
+    socket.join('public.info');
+
     socket.on('public.info', function (message) {
-        socket.broadacast.emit('public.info', message);
+        socket.broadcast.to('public.info').emit('public.info', message);
     });
+
+
 });
 
+/** this will match anything that starts with user
+ *  users, or user.id
+ */
 
+redis.subscribe('auth.info');
 redis.subscribe('public.info');
 
-redis.on('message', function(channel, response) {
-    console.log(channel);
-    let res = JSON.parse(response);
-    io.sockets.emit(channel, res.data.message);
+redis.psubscribe('user.*');
+
+redis.on('message', function(channel, message) {
+    message = JSON.parse(message);
+    io.emit(message.event, message.data);
+});
+
+redis.on('pmessage', function(channel, pattern, message) {
+    message = JSON.parse(message);
+    io.to(pattern).emit(message.event, message.data);
 });
 
 server.listen(process.env.SOCKETIO_PORT);
