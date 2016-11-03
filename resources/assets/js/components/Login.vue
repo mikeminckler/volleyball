@@ -77,44 +77,49 @@
                     'password': this.login.password,
                     'remember': this.login.remember
                 };
-                this.$http.post(e.target.action, post_data).then((response) => {
+
+                var self = this;
+
+                self.$http.post(e.target.action, post_data).then( function(response) {
 
                     // Set authenticated and the JWT Token 
-                    this.$store.dispatch('setToken', response.data.token);
+                    self.$store.dispatch('setToken', response.data.token);
 
                     window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
 
-                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
+                    self.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
 
-                    this.$http.post('/api/users/my-info').then((response) => {
-                        this.$store.dispatch('userInfo', response.data); 
-                    }, (response) => {
-                    
+                    self.$http.post('/api/users/my-info').then( function(response) {
+                        self.$store.dispatch('userInfo', response.data); 
+                    }, function(error) {
+                        self.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your info'});
                     });
 
-                    this.$http.post('/api/menu').then((response) => {
-                        this.$store.dispatch('menu', response.data); 
-                    }, (response) => {
-                    
+                    self.$http.post('/api/menu').then( function(response) {
+                        self.$store.dispatch('menu', response.data); 
+                    }, function(error) {
+                        self.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading the menu'});
                     });
 
                     // load the home page now that we are logged in
-                    if (this.$store.state.intended != '/login' && this.$store.state.intended.length > 0) {
-                        this.$router.push(this.$store.state.intended);
-                        this.$store.state.intended = '';
+                    if (self.$store.state.intended != '/login' && self.$store.state.intended.length > 0) {
+                        self.$router.push(self.$store.state.intended);
+                        self.$store.state.intended = '';
                     } else {
-                        this.$router.push('/home');
+                        self.$router.push('/home');
                     }
 
-                }, (response) => {
+                }, function(error) {
 
                     // login failed provide the feedback
-                    this.$store.dispatch('addFeedback', {'type': 'error', 'message': response.data.error});
+                    self.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data.error});
 
                     // HACK 
                     $('input.input-password').val('').focus();
 
                 });
+
+
             }
         },
 

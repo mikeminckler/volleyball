@@ -46,7 +46,13 @@
                         </div>
                         <div class="form-input">
                             <div v-show="show_password">
-                                <input id="password" type="password" class="input input-password" name="password" v-model="password" placeholder="New password" >
+                                <input id="password" type="password" 
+                                    class="input input-password" 
+                                    name="password" 
+                                    v-model="password" 
+                                    placeholder="New password" 
+                                    :required="show_password"
+                                >
                             </div>
                         </div>
                     </div>
@@ -56,7 +62,13 @@
                             <label for="password_confirmation" class="label">Confirm Password</label>
                         </div>
                         <div class="form-input">
-                            <input id="password_confirmation" type="password" class="input input-password" name="password_confirmation" v-model="password_confirmation" placeholder="Confirm password">
+                            <input id="password_confirmation" type="password" 
+                                class="input input-password" 
+                                name="password_confirmation" 
+                                v-model="password_confirmation" 
+                                placeholder="Confirm password"
+                                :required="show_password"
+                            >
                         </div>
                     </div>
 
@@ -65,7 +77,7 @@
 
             <div class="form-block">
                 <div class="form-label">
-                    <div class="button" @click="toggleShowPassword">Update Password</div>
+                    <div class="button" @click="toggleShowPassword" v-if="user.id">Update Password</div>
                 </div>
                 <div class="form-input">
                     <button type="submit" class="">Save User</button>
@@ -102,18 +114,23 @@
 
         methods: {
             loadInfo: function() {
-                let user_id = this.$route.params.id;
+                var self = this;
+                let user_id = self.$route.params.id;
                 if (!user_id) {
-                    user_id = this.$store.state.user.id;
+                    user_id = self.$store.state.user.id;
                 }
                 if (user_id != 'create') {
-                    this.$http.post('/api/users/load/' + user_id).then((response) => {
-                        this.user = response.data;
+                    self.$http.post('/api/users/load/' + user_id).then( function(response) {
+                        self.user = response.data;
                     });
+                } else {
+                    this.show_password = true;
                 }
             },
 
             submit: function(e) {
+
+                var self = this;
 
                 let post_data = {
                     'id': this.user.id,
@@ -124,28 +141,28 @@
                     'password_confirmation': this.password_confirmation
                 };
 
-                this.$http.post(e.target.action, post_data).then((response) => {
+                self.$http.post(e.target.action, post_data).then( function(response) {
 
-                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Saved User'});
-                    this.$router.push('/users');
+                    self.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Saved User'});
+                    self.$router.push('/users');
 
-                }, (response) => {
+                }, function(error) {
 
                     // this needs to go into a function 
-                    if (response.status == 422) {
-                        for(let input in response.data) {
+                    if (error.response.status == 422) {
+                        for(let input in error.response.data) {
 
                             // we need to show feedback on the form itself
                             //$("input[name='" + input + "']").addClass('input-error');
 
-                            for (let error in response.data[input]) {
-                                this.$store.dispatch('addFeedback', {'type': 'error', 'message': response.data[input][error], 'input': input});
+                            for (let error in error.response.data[input]) {
+                                self.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data[input][error], 'input': input});
                             }
                         }
                     }
 
-                    if (response.status == 500) {
-                        this.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was a server error'});
+                    if (error.response.status == 500) {
+                        self.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was a server error'});
                     }
 
                 });
@@ -164,7 +181,6 @@
         },
 
         mounted() {
-            
         }
 
     }

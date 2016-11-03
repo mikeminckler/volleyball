@@ -22,7 +22,7 @@ const router = new VueRouter({
     ]
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach( function(to, from, next) {
     if (to.path != '/login') {
         if (store.state.user.authenticated) {
             store.dispatch('clearErrorsFeedback');
@@ -82,7 +82,7 @@ const store = new Vuex.Store({
         },
 
         clearFeedback (state) {
-            state.feedback = state.feedback.filter(function(item) {
+            state.feedback = state.feedback.filter( function(item) {
                 //console.log(new Date().getTime() + '::' + item.expire);
                 let now = new Date().getTime();
                 if (item.expire < now && item.type != 'error') {
@@ -94,7 +94,7 @@ const store = new Vuex.Store({
         },
 
         clearErrorsFeedback (state) {
-            state.feedback = state.feedback.filter(function(item) {
+            state.feedback = state.feedback.filter( function(item) {
                 return item.type != 'error';
             });
         },
@@ -173,9 +173,6 @@ const store = new Vuex.Store({
     }
 });
 
-// Send the jwt token when we talk to laravel
-//window.axios.defaults.headers.common['Authorization'] = store.state.user.token;
-
 const app = new Vue({
     el: '#app',
     router,
@@ -183,22 +180,22 @@ const app = new Vue({
 
     methods: {
         logout: function(e){
-            this.$http.post(e.target.action).then((response) => {
+            var self = this;
+            self.$http.post(e.target.action).then( function(response) {
 
                 // call the action for the store update
-                this.$store.dispatch('removeToken').then(() => {
+                self.$store.dispatch('removeToken').then( function() {
                     socket.removeListener('auth.info');
                     socket.close();
                 });
 
-                this.$router.push('/login');
+                self.$router.push('/login');
 
-                this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged Out'});
+                self.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged Out'});
 
-            }, (response) => {
+            }, function(error) {
                 // we have timed out or our token is invalid so lets go to the login page
-                
-                this.$router.push('/login');
+                self.$router.push('/login');
             });
 
         }
@@ -206,31 +203,33 @@ const app = new Vue({
 
     created: function () {
 
-        if (!this.$store.state.user.authenticated) {
-            this.$router.push('/login');
+        var self = this;
+
+        if (!self.$store.state.user.authenticated) {
+            self.$router.push('/login');
         } else {
-            this.$router.push('/home');
+            self.$router.push('/home');
         }
 
         socket.on('public.info', function (data) {
-            this.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
-        }.bind(this));
+            self.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
+        });
 
         socket.on('App\\Events\\UserUpdated', function (data) {
 
-            this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+            self.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
 
-            this.$http.post('/api/users/my-info').then((response) => {
-                this.$store.dispatch('userInfo', response.data); 
-            }, (response) => {
+            self.$http.post('/api/users/my-info').then( function(response) {
+                self.$store.dispatch('userInfo', response.data); 
+            }, function(error) {
             
             });
 
-        }.bind(this));
+        });
 
         socket.on('App\\Events\\AuthAnnouncement', function (data) {
-            this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
-        }.bind(this));
+            self.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        });
 
     }
 

@@ -36,8 +36,9 @@
         },
 
         beforeMount() {
-            this.$http.post('/api/users').then((response) => {
-                this.users = response.data;
+            var self = this;
+            self.$http.post('/api/users').then( function(response) {
+                self.users = response.data;
             });
         }
 

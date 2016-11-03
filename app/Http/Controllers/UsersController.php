@@ -24,7 +24,7 @@ class UsersController extends Controller
 
     public function users()
     {
-        return $this->user->all();
+        return $this->user->all()->sortBy('last_name')->values()->all();
     }
 
     public function create(Requests\UserCreate $request)
