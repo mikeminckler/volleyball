@@ -1,6 +1,6 @@
 
 .fade-enter-active, .fade-leave-active {
-    transition: opacity .25s
+    transition: opacity .1s ease-out, transform .1s ease-out;
 }
 
 .fade-enter, .fade-leave-active {
@@ -8,7 +8,7 @@
 }
 
 .slide-down-enter-active, .slide-down-leave-active {
-    transition: all .5s
+    transition: opacity .5s ease-out, transform .5s ease-out;
 }
 
 .slide-down-enter, .slide-down-leave-active {
@@ -18,13 +18,12 @@
 /* FEEDBACK */
 
 .feedback-item {
-    transition: all .25s;
-    position: relative;
+    transition: opacity .5s ease-out, transform .5s ease-out;
 }
 
 .feedback-enter, .feedback-leave-active {
     opacity: 0;
-    transform: translateX(-100px);
+    transform: translateX(-200px);
 }
 
 .feedback-leave-active {

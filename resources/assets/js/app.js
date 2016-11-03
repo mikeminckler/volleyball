@@ -5,12 +5,18 @@ window.io = require('socket.io-client');
 //var socket = io('http://localhost:3000', {query: 'jwt=' + store.state.user.token}); 
 var socket = io('http://localhost:3000');
 
+Vue.prototype.$http = window.axios;
+
+Vue.component('feedback', require('./components/Feedback.vue'));
+
 const router = new VueRouter({
     routes: [
         { path: '/login', component: require('./components/Login.vue') },
         { path: '/home', component: require('./components/Home.vue') },
         { path: '/users', component: require('./components/Users.vue') },
         { path: '/users/:id', component: require('./components/User.vue') },
+        { path: '/my-account', component: require('./components/User.vue') },
+        { path: '/users/create', component: require('./components/User.vue') },
         //{ path: '/not-found', component: require('./components/404.vue') },
         //{ path: '/*', redirect: '/not-found' }
     ]
@@ -168,7 +174,7 @@ const store = new Vuex.Store({
 });
 
 // Send the jwt token when we talk to laravel
-Vue.http.headers.common['Authorization'] = store.state.user.token;
+//window.axios.defaults.headers.common['Authorization'] = store.state.user.token;
 
 const app = new Vue({
     el: '#app',
@@ -211,7 +217,15 @@ const app = new Vue({
         }.bind(this));
 
         socket.on('App\\Events\\UserUpdated', function (data) {
+
             this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+
+            this.$http.post('/api/users/my-info').then((response) => {
+                this.$store.dispatch('userInfo', response.data); 
+            }, (response) => {
+            
+            });
+
         }.bind(this));
 
         socket.on('App\\Events\\AuthAnnouncement', function (data) {

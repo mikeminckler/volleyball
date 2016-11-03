@@ -40,6 +40,7 @@
                 </div>
 
                 <div class="right-menu">
+                    <div class="menu-item"><router-link to="/my-account">@{{ $store.getters.user_name }}</div>
                     <form id="logout-form" action="/api/logout" method="POST" @submit.prevent="logout">
                         <button class="logout">Logout</button>
                     </form>
@@ -47,16 +48,12 @@
             </div>
         </transition>
         
-        <div class="feedback">
-            <transition-group name="feedback" tag="div">
-                <div class="feedback-item" v-bind:key="feedback" v-bind:class="feedback.type" v-for="feedback in $store.state.feedback">
-                @{{ feedback.message }}
-                </div>
-            </transition-group>
-        </div>
+        <feedback></feedback>
 
         <div class="container">
-            <router-view></router-view>
+            <transition name="fade" mode="out-in">
+                <router-view :key="$route.fullPath"></router-view>
+            </transition>
         </div>
 
         <div class="footer">

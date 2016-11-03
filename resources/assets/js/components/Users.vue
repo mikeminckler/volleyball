@@ -2,9 +2,14 @@
 
     <div class="content">
 
-        <h1>Users</h1>
+        <section>
 
-        <div class="section">
+            <div class="h1">Users</div>
+            <router-link class="button" to="/users/create">Create User</router-link>
+
+        </section>
+
+        <section>
 
             <div class="row" v-for="user in users">
                 <div class="column">
@@ -15,7 +20,7 @@
                 </div>
             </div>
 
-        </div>
+        </section>
 
     </div>
 

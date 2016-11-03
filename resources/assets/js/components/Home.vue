@@ -1,9 +1,11 @@
 <template>
-    <div class="section">
 
-        <div class="content"></div>
+    <div class="content">
 
+        <section></section>
+    
     </div>
+
 </template>
 
 <script>

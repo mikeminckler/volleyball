@@ -1,6 +1,5 @@
 <template>
 
-<transition name="fade">
     <div class="login-container">
         <div class="login">
 
@@ -55,7 +54,6 @@
 
         </div>
     </div>
-</transition>
 
 </template>
 
@@ -84,7 +82,7 @@
                     // Set authenticated and the JWT Token 
                     this.$store.dispatch('setToken', response.data.token);
 
-                    Vue.http.headers.common['Authorization'] = 'Bearer ' + response.data.token;
+                    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
 
                     this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
 
@@ -111,7 +109,7 @@
                 }, (response) => {
 
                     // login failed provide the feedback
-                    this.$store.dispatch('addFeedback', {'type': 'error', 'message': 'Logged Failed'});
+                    this.$store.dispatch('addFeedback', {'type': 'error', 'message': response.data.error});
 
                     // HACK 
                     $('input.input-password').val('').focus();

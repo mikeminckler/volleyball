@@ -5,6 +5,7 @@
     "dev": "gulp watch"
   },
   "devDependencies": {
+    "axios": "^0.15.2 ",
     "dotenv": "^2.0.0",
     "font-awesome": "^4.6.3",
     "gulp": "^3.9.1",
@@ -18,7 +19,6 @@
     "socketio-jwt": "^4.5.0",
     "vue": "^2.0.1",
     "vuex": "^2.0.0",
-    "vue-resource": "^1.0.3",
     "vue-router": "^2.0.1"
   }
 }

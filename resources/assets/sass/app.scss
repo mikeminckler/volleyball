@@ -76,6 +76,7 @@ div.header {
     display: inline-block;
     font-size: var(--input-font-size);
     font-weight: var(--font-weight);
+    cursor: pointer;
 }
 
 .button a {
@@ -92,10 +93,15 @@ div.menu {
 div.menu-item {
     flex: 1;
     text-align: center;
+    padding: 0px 10px;
 }
 
 div.home-link, div.right-menu {
     padding: 0px 10px;
+}
+
+div.right-menu {
+    display: flex;
 }
 
 div.footer {
@@ -115,12 +121,24 @@ div.footer a {
     color: var(--font-color);
 }
 
-h1, h2, h3 {
+div.h1, div.h2, div.h3 {
     font-weight: var(--font-weight);
     line-height: normal;
     margin: 0px;
     padding: 0px;
-    padding-bottom: var(--section-padding);
+    display: inline-block;
+}
+
+div.h1 {
+    font-size: 22px;
+}
+
+div.h2 {
+    font-size: 20px;
+}
+
+div.h3 {
+    font-size: 18px;
 }
 
 a {
@@ -132,7 +150,7 @@ a {
     text-align: center;
 }
 
-div.section {
+section {
     flex: 1;
     padding-bottom: var(--section-padding);
 }
@@ -160,6 +178,7 @@ div.form-label {
 
 div.form-input {
     max-width: 400px;
+    line-height: 25px;
 }
 
 button {
@@ -239,14 +258,17 @@ div.feedback {
     position: fixed;
     bottom: 45px;
     left: 15px;
+    width: 20%;
 }
 
 div.feedback-item {
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
-    padding: 2px 10px 2px 2px;
-    margin: 2px;
-    white-space: nowrap;
+    cursor: pointer;
+    display: flex;
+    margin: 4px;
+    align-items: center;
+    padding-right: 5px;
 }
 
 div.feedback-item.success {
@@ -270,6 +292,7 @@ div.feedback-item::before {
     width: 18px;
     display: inline-block;
     text-align: center;
+    padding: 3px;
 }
 
 div.feedback-item.error:before {

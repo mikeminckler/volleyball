@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests;
 
 use App\User;
 
@@ -26,27 +27,27 @@ class UsersController extends Controller
         return $this->user->all();
     }
 
-    public function create(Request $request)
+    public function create(Requests\UserCreate $request)
     {
         $user = $this->user->saveUser($request->all());
         return $user;
     }
 
-    public function show($id)
+    public function load($id)
     {
         $user = $this->user->findOrFail($id);
         return $user;
     }
 
-    public function store(Request $request, $id)
+    public function store(Requests\UserSave $request, $id)
     {
         $user = $this->user->saveUser($request->all(), $id);
         return $user;
     }
 
-    public function saveMyAccount(Request $request)
+    public function saveMyInfo(Requests\UserSave $request)
     {
-        $user = $this->user->saveUser($request->all(), auth()->user()->id);
+        $user = $this->user->saveUser($request->all(), $request->input('id'));
         return $user;
     }
 

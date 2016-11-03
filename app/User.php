@@ -73,6 +73,8 @@ class User extends Model implements
 
     public function saveUser($input, $id = null) {
 
+        $messages = [];
+
         if ($id) {
             $user = $this->findOrFail($id);
         } else {
@@ -86,13 +88,24 @@ class User extends Model implements
         if (array_key_exists('password', $input)) {
             if (strlen(trim($input['password'])) > 0) {
                 $user->password = bcrypt($input['password']);
+                $messages[] = 'Your password has been updated';
             }
         }
 
         $user->save();
 
-        $message = 'Your info has been updated by '.auth()->user()->full_name;
-        event(new UserUpdated($message, $user));
+        $messages[] = 'Your info has been updated';
+
+        // broadcast an update event so our info is up to date in browser
+
+        foreach ($messages as $message) {
+
+            if (!auth()->user()->id == $user->id) {
+                $message .= ' by '.auth()->user()->full_name;
+            }
+
+            event(new UserUpdated($message, $user));
+        }
 
         return $user;
     }

@@ -66,11 +66,11 @@ class LoginController extends Controller
             $token = $this->auth->attempt($credentials);
             if (!$token) {
                 $this->incrementLoginAttempts($request);
-                return response()->json(['error' => 'invalid_credentials'], 401);
+                return response()->json(['error' => 'Invalid Credentials'], 401);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
-            return response()->json(['error' => 'could_not_create_token'], 500);
+            return response()->json(['error' => 'Could Not Create Token'], 500);
         }
 
         // all good so return the token
