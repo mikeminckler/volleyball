@@ -8,6 +8,7 @@ var socket = io('http://localhost:3000');
 Vue.prototype.$http = window.axios;
 
 Vue.component('feedback', require('./components/Feedback.vue'));
+Vue.component('app-menu', require('./components/Menu.vue'));
 
 const router = new VueRouter({
     routes: [
@@ -52,7 +53,8 @@ const store = new Vuex.Store({
             first_name: '',
             last_name: '',
             email: '',
-            id: ''
+            id: '',
+            roles: []
         },
 
         feedback: [],
@@ -100,11 +102,14 @@ const store = new Vuex.Store({
         },
 
         userInfo (state, info) {
-            //state.user.name = info.first_name + ' ' + info.last_name;
             state.user.first_name = info.first_name;
             state.user.last_name = info.last_name;
             state.user.email = info.email;
             state.user.id = info.id;
+        },
+
+        userRoles (state, info) {
+            state.user.roles = info;
         },
 
         menu (state, menu) {
@@ -129,6 +134,11 @@ const store = new Vuex.Store({
                 app.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
             }.bind(app));
 
+        },
+
+        userRoles({ commit, state }, info) {
+            commit('userRoles', info);
+            app.$store.dispatch('addFeedback', {'type': 'info', 'message': 'Your groups have been loaded'});
         },
         
         userInfo({ commit, state }, info) {
@@ -168,6 +178,7 @@ const store = new Vuex.Store({
 
         menu({ commit, state }, menu) {
             commit('menu', menu);
+            app.$store.dispatch('addFeedback', {'type': 'info', 'message': 'Your menu is ready'});
         }
 
     }
@@ -179,56 +190,79 @@ const app = new Vue({
     store,
 
     methods: {
+
         logout: function(e){
-            var self = this;
-            self.$http.post(e.target.action).then( function(response) {
+            var vue = this;
+            vue.$http.post(e.target.action).then( function(response) {
 
                 // call the action for the store update
-                self.$store.dispatch('removeToken').then( function() {
+                vue.$store.dispatch('removeToken').then( function() {
                     socket.removeListener('auth.info');
                     socket.close();
                 });
 
-                self.$router.push('/login');
+                vue.$router.push('/login');
 
-                self.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged Out'});
+                vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged Out'});
 
             }, function(error) {
                 // we have timed out or our token is invalid so lets go to the login page
-                self.$router.push('/login');
+                vue.$router.push('/login');
             });
 
         }
+
     },
 
     created: function () {
 
-        var self = this;
+        var vue = this;
 
-        if (!self.$store.state.user.authenticated) {
-            self.$router.push('/login');
+        if (!vue.$store.state.user.authenticated) {
+            vue.$router.push('/login');
         } else {
-            self.$router.push('/home');
+            vue.$router.push('/home');
         }
 
         socket.on('public.info', function (data) {
-            self.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
+            vue.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
         });
+
+        /**
+         *  Socket Events
+         *  we use the laravel class as the event to listen for
+         */
 
         socket.on('App\\Events\\UserUpdated', function (data) {
 
-            self.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
 
-            self.$http.post('/api/users/my-info').then( function(response) {
-                self.$store.dispatch('userInfo', response.data); 
+            vue.$http.post('/api/users/my-info').then( function(response) {
+                vue.$store.dispatch('userInfo', response.data); 
             }, function(error) {
             
             });
 
         });
 
+        socket.on('App\\Events\\UserRolesUpdated', function (data) {
+
+            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+
+            vue.$http.post('/api/users/my-roles').then( function(response) {
+                vue.$store.dispatch('userRoles', response.data); 
+            }, function(error) {
+                vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your groups'});
+            });
+
+        });
+
         socket.on('App\\Events\\AuthAnnouncement', function (data) {
-            self.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        });
+
+        socket.on('App\\Events\\UserCreated', function (data) {
+            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         });
 
     }

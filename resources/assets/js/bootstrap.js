@@ -12,32 +12,15 @@ window.Vuex = require('vuex');
 //window.Vue.use(window.Vuex);
 window.axios = require('axios');
 
-/*
-window.axios.interceptors.request.use(function (config) {
-    // Do something before request is sent
-    return config;
+/**
+ * We may need to catch timeout errors here
+ 
+axios.interceptors.response.use(function (response) {
+    // Do something with response data
+    return response;
 }, function (error) {
-    // Do something with request error
+    // Do something with response error
     return Promise.reject(error);
 });
 
-
-Vue.http.interceptors.push((request, next) => {
-    request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
-
-    next();
-});
 */
-
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-
-// import Echo from "laravel-echo"
-
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: 'your-pusher-key'
-// });

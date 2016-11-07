@@ -2,11 +2,9 @@
 
     <div class="content">
 
-        <section>
-
+        <section class="header">
             <div class="h1">Users</div>
-            <router-link class="button" to="/users/create">Create User</router-link>
-
+            <div><router-link class="button" to="/users/create">Create User</router-link></div>
         </section>
 
         <section>
@@ -15,8 +13,9 @@
                 <div class="column">
                     <router-link :to="{path: '/users/' + user.id}">{{ user.first_name + ' ' + user.last_name }}</router-link>
                 </div>
+                <div class="column">{{ user.email }}</div>
                 <div class="column">
-                    {{ user.email }}
+                    <a @click.prevent="remove" class="delete fa fa-times icon" :href="'/api/users/delete/' + user.id"></a>
                 </div>
             </div>
 
@@ -35,11 +34,35 @@
             }
         },
 
+        methods: {
+
+            loadUsers: function() {
+
+                var vue = this;
+                vue.$http.post('/api/users').then( function(response) {
+                    vue.users = response.data;
+                });
+            
+            },
+
+            remove: function(e) {
+
+                var vue = this;
+                
+                vue.$http.post(e.target.href).then( function(response) {
+
+                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'User Deleted'});
+
+                    vue.loadUsers();
+
+                }, function (error) {
+                
+                });
+            }
+        },
+
         beforeMount() {
-            var self = this;
-            self.$http.post('/api/users').then( function(response) {
-                self.users = response.data;
-            });
+            this.loadUsers();
         }
 
     }

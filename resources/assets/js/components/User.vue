@@ -1,11 +1,11 @@
 <template>
 
     <div class="content">
+
         <section>
-
             <div class="h1">{{ user.id ? 'Edit' : 'Create' }} User {{ user.first_name + ' ' + user.last_name }}</div>
-
         </section>
+
         <section>
 
             <form role="form" method="POST" :action="'/api' + $route.path" @submit.prevent="submit">
@@ -87,6 +87,34 @@
             </form>
 
         </section>
+
+        <transition name="fade">
+            <div v-show="user.id">
+
+                <section>
+                    <div class="h2">Groups</h2>
+                </section>
+
+                <section>
+                    <div class="form-block" v-for="role in roles">
+                        <div class="form-label">
+                            <label :for="role.id">{{ role.role_name }}</label>
+                        </div>
+                        <div class="form-input">
+                            <input type="checkbox" 
+                                :id="role.id" 
+                                :value="role.id" 
+                                @click="toggleRole" 
+                                :checked="_.includes(groups, role.id)"
+                            >
+                            {{ _.includes(groups, role.id) }}
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </transition>
+
     </div>
 
 </template>
@@ -104,7 +132,9 @@
                 },
                 password: '',
                 password_confirmation: '',
-                show_password: false
+                show_password: false,
+                roles: [],
+                groups: []
             }
         },
 
@@ -113,24 +143,113 @@
         },
 
         methods: {
-            loadInfo: function() {
-                var self = this;
-                let user_id = self.$route.params.id;
+
+            toggleRole: function(e) {
+
+                var vue = this;
+                let val = parseInt(e.target.value);
+                let user_id = vue.$route.params.id;
                 if (!user_id) {
-                    user_id = self.$store.state.user.id;
+                    user_id = vue.$store.state.user.id;
+                }
+
+                let post_data = {
+                    'role_id':  val
+                }
+
+                if (_.includes(this.groups, val)) {
+
+                    // remove the role
+                    let index = _.findIndex(this.groups, function(o) { return o == val; });
+                    this.groups.splice(index, 1);
+
+
+                    vue.$http.post('/api/users/remove-role/' + user_id, post_data).then( function(response) {
+
+                        vue.loadMenu();
+                        vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Group saved'});
+
+                    }, function(error) {
+                    
+                    });
+
+
+                } else {
+
+                    this.groups.push(val);
+
+                    vue.$http.post('/api/users/save-role/' + user_id, post_data).then( function(response) {
+
+                        vue.loadMenu();
+                        vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Group saved'});
+
+                    }, function(error) {
+                    
+                    });
+
+                }
+            },
+
+            loadMenu: function() {
+
+                var vue = this;
+                vue.$http.post('/api/menu').then( function(response) {
+                    vue.$store.dispatch('menu', response.data); 
+                }, function(error) {
+                    vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading the menu'});
+                });
+
+            },
+
+            loadInfo: function() {
+
+                var vue = this;
+
+                let user_id = vue.$route.params.id;
+                if (!user_id) {
+                    user_id = vue.$store.state.user.id;
                 }
                 if (user_id != 'create') {
-                    self.$http.post('/api/users/load/' + user_id).then( function(response) {
-                        self.user = response.data;
+
+                    vue.$http.post('/api/users/load/' + user_id).then( function(response) {
+                        vue.user = response.data;
                     });
+
                 } else {
                     this.show_password = true;
                 }
             },
 
+            loadRoles: function() {
+
+                var vue = this;
+
+                vue.$http.post('/api/roles').then( function(response) {
+                    vue.roles = response.data;
+
+                    let user_id = vue.$route.params.id;
+
+                    if (!user_id) {
+                        user_id = vue.$store.state.user.id;
+                    }
+
+                    if (user_id != 'create') {
+
+                        vue.$http.post('/api/users/roles/' + user_id).then( function(response) {
+                            vue.groups = response.data;
+                        });
+
+                    }
+
+                });
+
+            },
+
             submit: function(e) {
 
-                var self = this;
+                var vue = this;
+
+                $('input.input-error').removeClass('input-error');
 
                 let post_data = {
                     'id': this.user.id,
@@ -141,10 +260,10 @@
                     'password_confirmation': this.password_confirmation
                 };
 
-                self.$http.post(e.target.action, post_data).then( function(response) {
+                vue.$http.post(e.target.action, post_data).then( function(response) {
 
-                    self.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Saved User'});
-                    self.$router.push('/users');
+                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Saved User'});
+                    vue.$router.push('/users');
 
                 }, function(error) {
 
@@ -155,14 +274,17 @@
                             // we need to show feedback on the form itself
                             //$("input[name='" + input + "']").addClass('input-error');
 
-                            for (let error in error.response.data[input]) {
-                                self.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data[input][error], 'input': input});
+                            //document.getElementById(input).classList.add('input-error');
+                            $('input[name="' + input + '"]').addClass('input-error');
+
+                            for (let info in error.response.data[input]) {
+                                vue.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data[input][info], 'input': input});
                             }
                         }
                     }
 
                     if (error.response.status == 500) {
-                        self.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was a server error'});
+                        vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was a server error'});
                     }
 
                 });
@@ -177,6 +299,7 @@
         },
 
         beforeMount() {
+            this.loadRoles();
             this.loadInfo();
         },
 

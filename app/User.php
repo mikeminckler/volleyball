@@ -12,7 +12,11 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
+use App\Role;
+
 use App\Events\UserUpdated;
+use App\Events\UserCreated;
+use App\Events\UserRolesUpdated;
 
 class User extends Model implements
     AuthenticatableContract,
@@ -71,28 +75,28 @@ class User extends Model implements
         return $this->first_name.' '.$this->last_name;
     }
 
-    public function saveUser($input, $id = null) {
+    public function saveUser($input) {
 
         $messages = [];
 
-        if ($id) {
-            $user = $this->findOrFail($id);
+        if (!$this->id) {
+            $created = true;
         } else {
-            $user = new User;
+            $created = false;
         }
 
-        $user->first_name = $input['first_name'];
-        $user->last_name = $input['last_name'];
-        $user->email = $input['email'];
+        $this->first_name = $input['first_name'];
+        $this->last_name = $input['last_name'];
+        $this->email = $input['email'];
 
         if (array_key_exists('password', $input)) {
             if (strlen(trim($input['password'])) > 0) {
-                $user->password = bcrypt($input['password']);
+                $this->password = bcrypt($input['password']);
                 $messages[] = 'Your password has been updated';
             }
         }
 
-        $user->save();
+        $this->save();
 
         $messages[] = 'Your info has been updated';
 
@@ -100,14 +104,61 @@ class User extends Model implements
 
         foreach ($messages as $message) {
 
-            if (!auth()->user()->id == $user->id) {
+            if (!auth()->user()->id == $this->id) {
                 $message .= ' by '.auth()->user()->full_name;
             }
 
-            event(new UserUpdated($message, $user));
+            event(new UserUpdated($message, $this));
         }
 
-        return $user;
+        if ($created) {
+            event(new UserCreated($this->full_name.' has been created'));
+        }
+
+        return $this;
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany('App\Role');
+    }
+
+    public function addRole($role)
+    {
+
+        if (!$role instanceof Role) {
+            $role = Role::findOrFail($role);
+        }
+
+        if (!$this->roles->contains($role)) {
+            $this->roles()->attach($role);
+            event(new UserRolesUpdated('You are now in the '.$role->role_name.' group', $this));
+        }
+
+        return $this;
+    }
+
+    public function removeRole($role)
+    {
+
+        if (!$role instanceof Role) {
+            $role = Role::findOrFail($role);
+        }
+
+        if ($this->roles->contains($role)) {
+            $this->roles()->detach($role);
+            event(new UserRolesUpdated('You have been removed from the '.$role->role_name.' group', $this));
+        }
+
+        return $this;
+    }
+
+    public function hide()
+    {
+        $this->hidden = true;
+        $this->save();
+        return $this;
+    }
+
 
 }

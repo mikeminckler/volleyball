@@ -71,6 +71,18 @@
         },
 
         methods: {
+            
+            loadMenu: function() {
+
+                var vue = this;
+                vue.$http.post('/api/menu').then( function(response) {
+                    vue.$store.dispatch('menu', response.data); 
+                }, function(error) {
+                    vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading the menu'});
+                });
+
+            },
+
             login: function(e) {
                 let post_data = {
                     'email':    this.login.email,
@@ -78,41 +90,43 @@
                     'remember': this.login.remember
                 };
 
-                var self = this;
+                var vue = this;
 
-                self.$http.post(e.target.action, post_data).then( function(response) {
+                vue.$http.post(e.target.action, post_data).then( function(response) {
 
                     // Set authenticated and the JWT Token 
-                    self.$store.dispatch('setToken', response.data.token);
+                    vue.$store.dispatch('setToken', response.data.token);
 
                     window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
 
-                    self.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
+                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
 
-                    self.$http.post('/api/users/my-info').then( function(response) {
-                        self.$store.dispatch('userInfo', response.data); 
+                    vue.$http.post('/api/users/my-info').then( function(response) {
+                        vue.$store.dispatch('userInfo', response.data); 
                     }, function(error) {
-                        self.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your info'});
+                        vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your info'});
                     });
 
-                    self.$http.post('/api/menu').then( function(response) {
-                        self.$store.dispatch('menu', response.data); 
+                    vue.$http.post('/api/users/my-roles').then( function(response) {
+                        vue.$store.dispatch('userRoles', response.data); 
                     }, function(error) {
-                        self.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading the menu'});
+                        vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your groups'});
                     });
+
+                    vue.loadMenu();
 
                     // load the home page now that we are logged in
-                    if (self.$store.state.intended != '/login' && self.$store.state.intended.length > 0) {
-                        self.$router.push(self.$store.state.intended);
-                        self.$store.state.intended = '';
+                    if (vue.$store.state.intended != '/login' && vue.$store.state.intended.length > 0) {
+                        vue.$router.push(vue.$store.state.intended);
+                        vue.$store.state.intended = '';
                     } else {
-                        self.$router.push('/home');
+                        vue.$router.push('/home');
                     }
 
                 }, function(error) {
 
                     // login failed provide the feedback
-                    self.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data.error});
+                    vue.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data.error});
 
                     // HACK 
                     $('input.input-password').val('').focus();

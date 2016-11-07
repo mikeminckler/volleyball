@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 use App\User;
 
-class UserUpdated implements ShouldBroadcast
+class UserRolesUpdated implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
 

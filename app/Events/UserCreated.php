@@ -9,24 +9,15 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-use App\User;
-
-class UserUpdated implements ShouldBroadcast
+class UserCreated implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
 
     public $message;
-    public $user;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct($message, User $user)
+    public function __construct($message)
     {
         $this->message = $message;
-        $this->user = $user;
     }
 
     /**
@@ -36,6 +27,6 @@ class UserUpdated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['user.'.$this->user->id];
+        return ['auth.info'];
     }
 }

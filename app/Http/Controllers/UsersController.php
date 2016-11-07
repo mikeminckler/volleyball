@@ -22,42 +22,61 @@ class UsersController extends Controller
         return auth()->user();
     }
 
+    public function myRoles()
+    {
+        return auth()->user()->roles->pluck('role_name');
+    }
+
     public function users()
     {
-        return $this->user->all()->sortBy('last_name')->values()->all();
+        return $this->user->where('hidden', '0')->get()
+            ->sortBy('last_name')
+            ->values()
+            ->all();
     }
 
     public function create(Requests\UserCreate $request)
     {
-        $user = $this->user->saveUser($request->all());
-        return $user;
+        $user = new User;
+        return $this->user
+            ->saveUser($request->only('first_name', 'last_name', 'email', 'password'));
     }
 
     public function load($id)
     {
-        $user = $this->user->findOrFail($id);
-        return $user;
+        return $this->user->findOrFail($id);
     }
 
     public function store(Requests\UserSave $request, $id)
     {
-        $user = $this->user->saveUser($request->all(), $id);
-        return $user;
+        return $this->user->findOrFail($id)
+            ->saveUser($request->only('first_name', 'last_name', 'email', 'password'));
     }
 
     public function saveMyInfo(Requests\UserSave $request)
     {
-        $user = $this->user->saveUser($request->all(), $request->input('id'));
-        return $user;
+        return auth()->user()
+            ->saveUser($request->only('first_name', 'last_name', 'email', 'password'));
     }
 
-    public function menu()
+    public function destroy(Request $request, $id)
     {
+        return $this->user->findOrFail($id)->hide();
+    }
 
-        $menu = [];
-        $menu[] = ['url' => 'users', 'name' => 'Users'];
+    public function roles($id) 
+    {
+        return $this->user->findOrFail($id)->roles->pluck('id');
+    }
 
-        return $menu;
+    public function saveRole(Request $request, $id) 
+    {
+        return $this->user->findOrFail($id)->addRole($request->input('role_id'));
+    }
+
+    public function removeRole(Request $request, $id) 
+    {
+        return $this->user->findOrFail($id)->removeRole($request->input('role_id'));
     }
 
 }

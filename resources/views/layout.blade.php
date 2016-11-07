@@ -32,13 +32,9 @@
                 <div class="home-link">
                     <div class="button"><router-link to="/home">Home</router-link></div>
                 </div>
+                
+                <app-menu></app-menu>
         
-                <div class="menu">
-                    <div class="menu-item" v-for="item in $store.state.menu">
-                        <router-link :to="{path: '/' + item.url}">@{{ item.name }}</router-link>
-                    </div>
-                </div>
-
                 <div class="right-menu">
                     <div class="menu-item"><router-link to="/my-account">@{{ $store.getters.user_name }}</div>
                     <form id="logout-form" action="/api/logout" method="POST" @submit.prevent="logout">

@@ -1,5 +1,6 @@
 @import url(//fonts.googleapis.com/css?family=Maven+Pro);
 
+@import "feedback";
 @import "rows";
 @import "vue-transitions";
 @import "node_modules/font-awesome/scss/font-awesome";
@@ -23,7 +24,11 @@
     --line-height: 18px;
     --border-radius: 5px;
     --light-bg: rgba(155,174,200,0.1);
-    --section-padding: 20px;
+    --section-padding: 5px;
+    --icon-padding: 0px;
+    --icon-text-color: #fff;
+    --icon-text-size: 18px;
+    --input-error-color: #ffdda2;
 }
 
 body, html {
@@ -77,6 +82,7 @@ div.header {
     font-size: var(--input-font-size);
     font-weight: var(--font-weight);
     cursor: pointer;
+    margin-bottom: 2px;
 }
 
 .button a {
@@ -152,7 +158,16 @@ a {
 
 section {
     flex: 1;
+    padding-top: var(--section-padding);
     padding-bottom: var(--section-padding);
+}
+
+section.header {
+    display: flex;
+}
+
+section.header div.h1 {
+    flex: 1;
 }
 
 /* FORMS */
@@ -194,6 +209,14 @@ input, textarea {
 
 input:not([type="checkbox"]) {
     width: 100%;
+}
+
+input.input-error {
+    background-color: var(--input-error-color) !important;
+}
+
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+
 }
 
 /* LOGIN */
@@ -252,61 +275,10 @@ a.forgot-password {
     font-size: var(--small-font);
 }
 
-/* FEEDBACK */
+/* ICONS */
 
-div.feedback {
-    position: fixed;
-    bottom: 45px;
-    left: 15px;
-    width: 20%;
-}
-
-div.feedback-item {
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    display: flex;
-    margin: 4px;
-    align-items: center;
-    padding-right: 5px;
-}
-
-div.feedback-item.success {
-    background-color: #408050;
-}
-
-div.feedback-item.error {
-    background-color: #dd0000;
-}
-
-div.feedback-item.info {
-    background-color: #405a80;
-}
-
-div.feedback-item.announcement {
-    background-color: #968600;
-}
-
-div.feedback-item::before {
-    font-family: FontAwesome;
-    width: 18px;
-    display: inline-block;
-    text-align: center;
-    padding: 3px;
-}
-
-div.feedback-item.error:before {
-    content: "\f00d";
-}
-
-div.feedback-item.success:before {
-    content: "\f00c";
-}
-
-div.feedback-item.info:before {
-    content: "\f129";
-}
-
-div.feedback-item.announcement:before {
-    content: "\f0a1";
+.icon {
+    padding: var(--icon-padding);
+    color: var(--icon-text-color);    
+    font-size: var(--icon-text-size);    
 }
