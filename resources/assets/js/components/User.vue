@@ -89,7 +89,7 @@
         </section>
 
         <transition name="fade">
-            <div v-show="user.id">
+            <div v-show="user.id" v-if="userHasRole('admin')">
 
                 <section>
                     <div class="h2">Groups</h2>
@@ -107,7 +107,6 @@
                                 @click="toggleRole" 
                                 :checked="_.includes(groups, role.id)"
                             >
-                            {{ _.includes(groups, role.id) }}
                         </div>
                     </div>
                 </section>
@@ -120,6 +119,9 @@
 </template>
 
 <script>
+
+    import UserMixins from './UserMixins'
+
     export default {
 
         data: function () {
@@ -137,6 +139,8 @@
                 groups: []
             }
         },
+
+        mixins: [UserMixins],
 
         watch: {
             '$route': 'loadInfo'
@@ -166,7 +170,6 @@
 
                     vue.$http.post('/api/users/remove-role/' + user_id, post_data).then( function(response) {
 
-                        vue.loadMenu();
                         vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Group saved'});
 
                     }, function(error) {
@@ -180,7 +183,6 @@
 
                     vue.$http.post('/api/users/save-role/' + user_id, post_data).then( function(response) {
 
-                        vue.loadMenu();
                         vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Group saved'});
 
                     }, function(error) {
@@ -188,17 +190,6 @@
                     });
 
                 }
-            },
-
-            loadMenu: function() {
-
-                var vue = this;
-                vue.$http.post('/api/menu').then( function(response) {
-                    vue.$store.dispatch('menu', response.data); 
-                }, function(error) {
-                    vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading the menu'});
-                });
-
             },
 
             loadInfo: function() {

@@ -9,7 +9,12 @@
 </template>
 
 <script>
+
+    import UserMixins from './UserMixins'
+
     export default {
+
+        mixins: [UserMixins],
 
         methods: {
 
@@ -17,14 +22,14 @@
                 var vue = this;
                 var hasRole = false;
                 _.forEach(roles, function(role) {
-                    if (_.includes(vue.$store.state.user.roles, role)) {
+                    if (vue.userHasRole(role)) {
                         hasRole = true;
                     }
                 });
                 return hasRole;
             }
 
-        }
+        },
 
     }
 

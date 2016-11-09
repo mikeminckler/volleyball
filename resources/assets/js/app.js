@@ -1,8 +1,15 @@
 
-require('./bootstrap');
+window._ = require('lodash');
+window.$ = window.jQuery = require('jquery');
+
+
+window.Vue = require('vue');
+window.VueRouter = require('vue-router');
+window.Vue.use(window.VueRouter);
+window.Vuex = require('vuex');
+window.axios = require('axios');
 
 window.io = require('socket.io-client');
-//var socket = io('http://localhost:3000', {query: 'jwt=' + store.state.user.token}); 
 var socket = io('http://localhost:3000');
 
 Vue.prototype.$http = window.axios;
