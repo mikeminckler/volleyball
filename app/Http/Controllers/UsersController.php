@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\User;
+use App\Events\UserRemoved;
 
 class UsersController extends Controller
 {
@@ -59,9 +60,20 @@ class UsersController extends Controller
             ->saveUser($request->only('first_name', 'last_name', 'email', 'password'));
     }
 
+    /**
+     * This is lame, for some reason we can't set hidden to true 
+     * in the user model. It's failing with an array_flip error 
+     * when laravel tries to convert the user to json. So for now
+     * we will have to do it in the controller.
+     */
+
     public function destroy(Request $request, $id)
     {
-        return $this->user->findOrFail($id)->hide();
+        $user = $this->user->findOrFail($id);
+        $user->hidden = true;
+        $user->save();
+        event(new UserRemoved($user->full_name.' has been removed'));
+        return $user;
     }
 
     public function roles($id) 

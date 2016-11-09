@@ -10,7 +10,7 @@ window.Vuex = require('vuex');
 window.axios = require('axios');
 
 window.io = require('socket.io-client');
-var socket = io('http://localhost:3000');
+window.socket = io('http://localhost:3000');
 
 Vue.prototype.$http = window.axios;
 
@@ -131,13 +131,13 @@ const store = new Vuex.Store({
             commit('setToken', token);
 
             // connect incase we had logged out before
-            socket.connect();
+            window.socket.connect();
 
             // authenticate our token
-            socket.emit('authenticate', {token: token});
+            window.socket.emit('authenticate', {token: token});
 
             // add our listeners
-            socket.on('auth.info', function (data) {
+            window.socket.on('auth.info', function (data) {
                 app.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
             }.bind(app));
 
@@ -150,12 +150,10 @@ const store = new Vuex.Store({
         
         userInfo({ commit, state }, info) {
             commit('userInfo', info);
-            socket.emit('auth.info', store.getters.user_name + ' has connected');
         },
 
         removeToken({ commit, state }) {
             commit('removeToken');
-            socket.emit('auth.info', store.getters.user_name + ' has disconnected');
         },
 
         addFeedback({ commit, state }, feedback) {
@@ -202,10 +200,12 @@ const app = new Vue({
             var vue = this;
             vue.$http.post(e.target.action).then( function(response) {
 
+                window.socket.emit('auth.info', store.getters.user_name + ' has disconnected');
+
                 // call the action for the store update
                 vue.$store.dispatch('removeToken').then( function() {
-                    socket.removeListener('auth.info');
-                    socket.close();
+                    window.socket.removeListener('auth.info');
+                    window.socket.close();
                 });
 
                 vue.$router.push('/login');
@@ -231,7 +231,7 @@ const app = new Vue({
             vue.$router.push('/home');
         }
 
-        socket.on('public.info', function (data) {
+        window.socket.on('public.info', function (data) {
             vue.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
         });
 
@@ -240,7 +240,7 @@ const app = new Vue({
          *  we use the laravel class as the event to listen for
          */
 
-        socket.on('App\\Events\\UserUpdated', function (data) {
+        window.socket.on('App\\Events\\UserUpdated', function (data) {
 
             vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
 
@@ -252,7 +252,7 @@ const app = new Vue({
 
         });
 
-        socket.on('App\\Events\\UserRolesUpdated', function (data) {
+        window.socket.on('App\\Events\\UserRolesUpdated', function (data) {
 
             vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
 
@@ -264,11 +264,15 @@ const app = new Vue({
 
         });
 
-        socket.on('App\\Events\\AuthAnnouncement', function (data) {
+        window.socket.on('App\\Events\\AuthAnnouncement', function (data) {
             vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         });
 
-        socket.on('App\\Events\\UserCreated', function (data) {
+        window.socket.on('App\\Events\\UserCreated', function (data) {
+            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        });
+
+        window.socket.on('App\\Events\\UserRemoved', function (data) {
             vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         });
 

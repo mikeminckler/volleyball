@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 
 use App\User;
+use App\Role;
 
 class UsersTableSeeder extends Seeder
 {
@@ -13,6 +14,10 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+
+        // Define some roles so we can attach users to them as we go
+        $admin = Role::where('role_name', 'admin')->first();
+
         $mike = new User;
         $mike->first_name = 'Mike';
         $mike->last_name = 'Minckler';
@@ -20,11 +25,35 @@ class UsersTableSeeder extends Seeder
         $mike->password = bcrypt('password');
         $mike->save();
 
+        $mike->addRole($admin);
+
         $jb = new User;
         $jb->first_name = 'John';
         $jb->last_name = 'Bonham';
-        $jb->email = 'info@bluehealth.ca';
+        $jb->email = 'bonzo@zep.com';
         $jb->password = bcrypt('password');
         $jb->save();
+
+        $jp = new User;
+        $jp->first_name = 'Jimmy';
+        $jp->last_name = 'Page';
+        $jp->email = 'jimmy@zep.com';
+        $jp->password = bcrypt('password');
+        $jp->save();
+
+        $jpj = new User;
+        $jpj->first_name = 'John Paul';
+        $jpj->last_name = 'Jones';
+        $jpj->email = 'jpj@zep.com';
+        $jpj->password = bcrypt('password');
+        $jpj->save();
+
+        $rp = new User;
+        $rp->first_name = 'Robert';
+        $rp->last_name = 'Plant';
+        $rp->email = 'percy@zep.com';
+        $rp->password = bcrypt('password');
+        $rp->save();
+
     }
 }

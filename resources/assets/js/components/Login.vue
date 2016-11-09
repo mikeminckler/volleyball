@@ -102,7 +102,8 @@
                     vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
 
                     vue.$http.post('/api/users/my-info').then( function(response) {
-                        vue.$store.dispatch('userInfo', response.data); 
+                        vue.$store.dispatch('userInfo', response.data);
+                        window.socket.emit('auth.info', vue.$store.getters.user_name + ' has connected');
                     }, function(error) {
                         vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your info'});
                     });

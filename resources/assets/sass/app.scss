@@ -6,29 +6,38 @@
 @import "node_modules/font-awesome/scss/font-awesome";
 
 :root {
+
     --screen-width: 320px;
     --font: 'Maven Pro', sans-serif; 
-    --link-color: #2b90d9;
+
+    --link-color: #252c41;
+    --bg-color: #f4f5f9;
+    --text-color: #252c41;
+    --border-color: #c9d6de;
+    --button-color: #fff;
+    --button-text-color: #252c41;
+    --footer-font-color: #999;
+    --light-bg: rgba(155,174,200,0.1);
+    --input-error-color: #ffdda2;
+
     --font-size: 15px;
     --small-font: 13px;
     --header-font-size: 13px;
     --footer-font-size: 12px;
-    --footer-font-color: #999;
     --font-weight: 300;
     --input-font-size: 14px;
-    --bg-color: #282c37;
-    --text-color: #d9e1e8;
-    --border-color: rgba(155,174,200,0.5);
-    --button-color: #405a80;
-    --button-text-color: #fff;
     --line-height: 18px;
     --border-radius: 5px;
-    --light-bg: rgba(155,174,200,0.1);
     --section-padding: 5px;
+
     --icon-padding: 0px;
-    --icon-text-color: #fff;
+    --icon-text-color: #000;
     --icon-text-size: 18px;
-    --input-error-color: #ffdda2;
+
+    --feedback-success: #daffe3;
+    --feedback-error: #ffd9d9;
+    --feedback-info: #d8e8ff;
+    --feedback-announcement: #fffbda;
 }
 
 body, html {
@@ -205,6 +214,7 @@ input, textarea {
     border-radius: var(--border-radius);
     font-size: var(--input-font-size);
     padding: 2px;
+    border: 1px solid var(--border-color);
 }
 
 input:not([type="checkbox"]) {
@@ -217,6 +227,11 @@ input.input-error {
 
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
+    -webkit-text-fill-color: var(--link-color) !important;
 }
 
 /* LOGIN */
@@ -257,7 +272,7 @@ form.login {
 }
 
 form.login div.form-block {
-    width: 300px;
+    width: 320px;
 }
 
 div.login div.form-label {

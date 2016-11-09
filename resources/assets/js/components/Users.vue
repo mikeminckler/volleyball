@@ -4,7 +4,7 @@
 
         <section class="header">
             <div class="h1">Users</div>
-            <div><router-link class="button" to="/users/create">Create User</router-link></div>
+            <div v-if="userHasRole('admin')"><router-link class="button" to="/users/create">Create User</router-link></div>
         </section>
 
         <section>
@@ -26,6 +26,9 @@
 </template>
 
 <script>
+
+    import UserMixins from './UserMixins'
+
     export default {
 
         data: function () {
@@ -33,6 +36,8 @@
                 users: []
             }
         },
+
+        mixins: [UserMixins],
 
         methods: {
 
@@ -63,7 +68,26 @@
 
         beforeMount() {
             this.loadUsers();
+        },
+
+        mounted() {
+            
+            var vue = this;
+
+            window.socket.on('App\\Events\\UserUpdated', function (data) {
+                vue.loadUsers();
+            });
+
+            window.socket.on('App\\Events\\UserCreated', function (data) {
+                vue.loadUsers();
+            });
+
+            window.socket.on('App\\Events\\UserRemoved', function (data) {
+                vue.loadUsers();
+            });
+
         }
+
 
     }
 </script>

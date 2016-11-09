@@ -16,6 +16,7 @@ use App\Role;
 
 use App\Events\UserUpdated;
 use App\Events\UserCreated;
+use App\Events\UserRemoved;
 use App\Events\UserRolesUpdated;
 
 class User extends Model implements
@@ -152,13 +153,5 @@ class User extends Model implements
 
         return $this;
     }
-
-    public function hide()
-    {
-        $this->hidden = true;
-        $this->save();
-        return $this;
-    }
-
 
 }
