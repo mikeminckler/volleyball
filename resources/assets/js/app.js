@@ -16,6 +16,7 @@ Vue.prototype.$http = window.axios;
 
 Vue.component('feedback', require('./components/Feedback.vue'));
 Vue.component('app-menu', require('./components/Menu.vue'));
+Vue.component('autocomplete', require('./components/AutoComplete.vue'));
 
 const router = new VueRouter({
     routes: [

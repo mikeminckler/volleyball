@@ -154,4 +154,26 @@ class User extends Model implements
         return $this;
     }
 
+    public function search($term)
+    {
+        return $this->where(function($query) use($term) {
+            $query->where('first_name', 'like', '%'.$term.'%')
+                ->orWhere('last_name', 'like', '%'.$term.'%');
+        })->get();
+    }
+
+    public function searchResultsArray($objects)
+    {
+        $users = array();
+        foreach ($objects as $user) {
+                $user_array = array();
+                $user_array['id'] = $user->id;
+                $user_array['value'] = $user->full_name;
+                $user_array['label'] = $user->full_name;
+                $users[] = $user_array;
+        }
+
+        return $users;
+    }
+
 }

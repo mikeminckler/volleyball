@@ -23,4 +23,6 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('users/save-role/{id}', ['as' => 'users.save-role', 'uses' => 'UsersController@saveRole'])->where('id', '\d+');
     Route::post('users/remove-role/{id}', ['as' => 'users.remove-role', 'uses' => 'UsersController@removeRole'])->where('id', '\d+');
 
+    Route::post('search/users', ['as' => 'search.users', 'uses' => 'SearchController@users']);
+
 });

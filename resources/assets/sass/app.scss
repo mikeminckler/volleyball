@@ -213,7 +213,7 @@ button {
 input, textarea {
     border-radius: var(--border-radius);
     font-size: var(--input-font-size);
-    padding: 2px;
+    padding: 2px 5px;
     border: 1px solid var(--border-color);
 }
 
@@ -296,4 +296,32 @@ a.forgot-password {
     padding: var(--icon-padding);
     color: var(--icon-text-color);    
     font-size: var(--icon-text-size);    
+}
+
+/* SEARCH */
+
+div.results {
+    line-height: normal;
+    background-color: var(--button-color);
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    margin: 0px 2px;
+}
+
+div.results-item {
+    border-bottom: 1px solid var(--border-color);
+    font-size: var(--small-font);
+    border-left: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    padding: 3px 5px;
+    cursor: pointer;
+}
+
+div.results-item:hover {
+    background-color: var(--light-bg);
+}
+
+div.results-item:last-child {
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
 }
