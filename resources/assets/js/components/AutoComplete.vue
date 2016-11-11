@@ -1,15 +1,23 @@
 <template>
 
     <div class="search">
-        <input id="terms" class="input" name="terms" v-model="terms">
+        <input id="terms" class="input" name="terms" v-model="terms" :class="(id ? 'selected' : '')">
 
         <div class="results">
-            <transition-group name="feedback" tag="div">
+            <transition-group 
+                name="autocomplete" 
+                tag="div"
+                v-bind:css="false"
+                v-on:before-enter="beforeEnter"
+                v-on:enter="enter"
+                v-on:leave="leave"
+            >
                 <div class="results-item" 
                     v-for="(result, index) in results" 
-                    :key="result" 
+                    :key="result.id" 
                     :id="result.id"
                     :data-label="result.label"
+                    :data-index="index"
                     @click="select" 
                 >
                     {{ result.label }}
@@ -21,6 +29,8 @@
 </template>
 
 <script>
+    import Velocity from 'velocity-animate'
+
     export default {
 
         props: ['object', 'afterSearching'],
@@ -37,6 +47,7 @@
         watch: {
             terms: function (terms) {
                 if (!this.clicked) {
+                    this.id = '';
                     this.search();
                 } else {
                     this.clicked = false;
@@ -70,18 +81,18 @@
                         this[this.afterSearching]();
                     }
 
-                }, 500 // length to wait before running the function
+                }, 250 // length to wait before running the function
             ),
 
-            select: function(e) {
+            select: function(el) {
 
-                this.id = e.target.id;
+                this.id = el.target.id;
 
-                if (e.target.dataset.label != this.terms) {
+                if (el.target.dataset.label != this.terms) {
                     this.clicked = true;
                 }
 
-                this.terms = e.target.dataset.label;
+                this.terms = el.target.dataset.label;
                 this.results = [];
 
             },
@@ -92,6 +103,44 @@
              */
 
             
+            /**
+             * customizing the transition states
+             */
+
+            beforeEnter: function (el) {
+                el.style.opacity = 0
+                el.style.height = 0
+            },
+
+            enter: function (el, done) {
+                var delay = el.dataset.index * 25
+                var dur = 400 - (el.dataset.index * 20);
+                if (dur < 25) {
+                    dur = 25;
+                }
+                setTimeout(function () {
+                Velocity(
+                    el,
+                        { opacity: 1, height: '30px' },
+                        { complete: done, duration: dur }
+                    )
+                }, delay)
+            },
+
+            leave: function (el, done) {
+                var delay = el.dataset.index * 25
+                var dur = 200 - (el.dataset.index * 10);
+                if (dur < 25) {
+                    dur = 25;
+                }
+                setTimeout(function () {
+                Velocity(
+                    el,
+                        { opacity: 0, height: 0 },
+                        { complete: done, duration: dur }
+                    )
+                }, delay)
+            }
 
         }
 

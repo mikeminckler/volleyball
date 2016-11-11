@@ -74,15 +74,7 @@
             
             var vue = this;
 
-            window.socket.on('App\\Events\\UserUpdated', function (data) {
-                vue.loadUsers();
-            });
-
-            window.socket.on('App\\Events\\UserCreated', function (data) {
-                vue.loadUsers();
-            });
-
-            window.socket.on('App\\Events\\UserRemoved', function (data) {
+            window.socket.on('App\\Events\\UsersRefresh', function (data) {
                 vue.loadUsers();
             });
 

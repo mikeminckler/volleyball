@@ -25,4 +25,11 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::post('search/users', ['as' => 'search.users', 'uses' => 'SearchController@users']);
 
+
+    Route::post('teams', ['as' => 'teams', 'uses' => 'TeamsController@teams']);
+    Route::post('teams/{id}', ['as' => 'teams.store', 'uses' => 'TeamsController@store'])->where('id', '\d+');
+    Route::post('teams/load/{id}', ['as' => 'teams.show', 'uses' => 'TeamsController@load'])->where('id', '\d+');
+    Route::post('teams/create', ['as' => 'teams.create', 'uses' => 'TeamsController@create']);
+    Route::post('teams/delete/{id}', ['as' => 'teams.delete', 'uses' => 'TeamsController@destroy'])->where('id', '\d+');
+
 });

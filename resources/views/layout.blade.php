@@ -30,7 +30,7 @@
             <div class="header" v-if="$store.state.user.authenticated">
 
                 <div class="home-link">
-                    <div class="button"><router-link to="/home">Home</router-link></div>
+                    <router-link to="/home" class="button">Home</router-link>
                 </div>
                 
                 <app-menu></app-menu>

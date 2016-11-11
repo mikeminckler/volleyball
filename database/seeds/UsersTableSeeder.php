@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
         $mike->first_name = 'Mike';
         $mike->last_name = 'Minckler';
         $mike->email = 'mikeminckler@gmail.com';
-        $mike->password = bcrypt('password');
+        $mike->password = bcrypt('q');
         $mike->save();
 
         $mike->addRole($admin);

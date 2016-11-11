@@ -19,6 +19,7 @@
     --footer-font-color: #999;
     --light-bg: rgba(155,174,200,0.1);
     --input-error-color: #ffdda2;
+    --border-highlight-color: #76a7c5;
 
     --font-size: 15px;
     --small-font: 13px;
@@ -34,10 +35,22 @@
     --icon-text-color: #000;
     --icon-text-size: 18px;
 
-    --feedback-success: #daffe3;
-    --feedback-error: #ffd9d9;
-    --feedback-info: #d8e8ff;
-    --feedback-announcement: #fffbda;
+    --success-bg: #daffe3;
+    --success-border: #a5ecb7;
+    --success-color: #444;
+
+    --error-bg: #ffd9d9;
+    --error-border: #eda6a6;
+    --error-color: #444;
+
+    --info-bg: #d8e8ff;
+    --info-border: #a6c4ed;
+    --info-color: #444;
+
+    --announcement-bg: #fffbda;
+    --announcement-border: #ede6a6;
+    --announcement-color: #444;
+
 }
 
 body, html {
@@ -85,7 +98,7 @@ div.header {
     border-radius: var(--border-radius);
     background-color: var(--button-color);
     color: var(--button-text-color);
-    padding: 0px 5px 2px 5px;
+    padding: 3px 8px;
     line-height: var(--line-height);
     display: inline-block;
     font-size: var(--input-font-size);
@@ -96,7 +109,14 @@ div.header {
 
 .button a {
     color: var(--button-text-color);
+    outline: 0;
 }
+
+.router-link-active {
+    font-weight: 600;
+    color: #000;
+}
+
 
 div.menu {
     flex: 1;
@@ -181,13 +201,34 @@ section.header div.h1 {
 
 /* FORMS */
 
+input:focus, textarea:focus, button:focus, a:focus {
+    outline-color: transparent;
+    outline-style: none;
+    border: 1px solid var(--border-highlight-color);
+}
+
+a:focus {
+    border: 0;
+    font-weight: 600;
+}
+
+button:focus {
+    background-color: var(--light-bg);
+}
+
+input.selected {
+    background-color: var(--success-bg);
+    border: 1px solid var(--success-border);
+    color: var(--success-color);
+}
+
 label, button {
     cursor: pointer;
 }
 
 div.form-block {
     display: flex;
-    padding: 2px;
+    padding: 1px;
 }
 
 div.form-label, div.form-input {
@@ -197,12 +238,12 @@ div.form-label, div.form-input {
 
 div.form-label {
     max-width: 200px;
-    line-height: 25px;
+    line-height: 29px;
 }
 
 div.form-input {
     max-width: 400px;
-    line-height: 25px;
+    line-height: 29px;
 }
 
 button {
@@ -213,7 +254,7 @@ button {
 input, textarea {
     border-radius: var(--border-radius);
     font-size: var(--input-font-size);
-    padding: 2px 5px;
+    padding: 5px;
     border: 1px solid var(--border-color);
 }
 
@@ -223,10 +264,6 @@ input:not([type="checkbox"]) {
 
 input.input-error {
     background-color: var(--input-error-color) !important;
-}
-
-input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
-
 }
 
 input:-webkit-autofill {
@@ -301,11 +338,7 @@ a.forgot-password {
 /* SEARCH */
 
 div.results {
-    line-height: normal;
-    background-color: var(--button-color);
-    border-bottom-left-radius: var(--border-radius);
-    border-bottom-right-radius: var(--border-radius);
-    margin: 0px 2px;
+    margin: 0px 1px;
 }
 
 div.results-item {
@@ -313,8 +346,10 @@ div.results-item {
     font-size: var(--small-font);
     border-left: 1px solid var(--border-color);
     border-right: 1px solid var(--border-color);
-    padding: 3px 5px;
+    padding: 0px 5px;
     cursor: pointer;
+    overflow: hidden;
+    background-color: var(--button-color);
 }
 
 div.results-item:hover {

@@ -17,6 +17,7 @@ class CreateTeamsTable extends Migration
             $table->increments('id');
 
             $table->string('team_name');
+            $table->boolean('hidden')->default(0);
 
             $table->timestamps();
         });

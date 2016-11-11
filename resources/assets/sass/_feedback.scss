@@ -15,19 +15,27 @@ div.feedback-item {
 }
 
 div.feedback-item.success {
-    background-color: var(--feedback-success);
+    background-color: var(--success-bg);
+    border: 1px solid var(--success-border);
+    color: var(--success-color);
 }
 
 div.feedback-item.error {
-    background-color: var(--feedback-error);
+    background-color: var(--error-bg);
+    border: 1px solid var(--error-border);
+    color: var(--error-color);
 }
 
 div.feedback-item.info {
-    background-color: var(--feedback-info);
+    background-color: var(--info-bg);
+    border: 1px solid var(--info-border);
+    color: var(--info-color);
 }
 
 div.feedback-item.announcement {
-    background-color: var(--feedback-announcement);
+    background-color: var(--announcement-bg);
+    border: 1px solid var(--announcement-border);
+    color: var(--announcement-color);
 }
 
 div.feedback-item::before {

@@ -18,6 +18,7 @@ use App\Events\UserUpdated;
 use App\Events\UserCreated;
 use App\Events\UserRemoved;
 use App\Events\UserRolesUpdated;
+use App\Events\UsersRefresh;
 
 class User extends Model implements
     AuthenticatableContract,
@@ -105,7 +106,7 @@ class User extends Model implements
 
         foreach ($messages as $message) {
 
-            if (!auth()->user()->id == $this->id) {
+            if (auth()->user()->id != $this->id) {
                 $message .= ' by '.auth()->user()->full_name;
             }
 
@@ -115,6 +116,8 @@ class User extends Model implements
         if ($created) {
             event(new UserCreated($this->full_name.' has been created'));
         }
+
+        event(new UsersRefresh());
 
         return $this;
     }
@@ -156,10 +159,11 @@ class User extends Model implements
 
     public function search($term)
     {
-        return $this->where(function($query) use($term) {
-            $query->where('first_name', 'like', '%'.$term.'%')
-                ->orWhere('last_name', 'like', '%'.$term.'%');
-        })->get();
+        return $this->where('hidden', '0')
+            ->where(function($query) use($term) {
+                $query->where('first_name', 'like', '%'.$term.'%')
+                    ->orWhere('last_name', 'like', '%'.$term.'%');
+            })->get();
     }
 
     public function searchResultsArray($objects)

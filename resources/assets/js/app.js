@@ -22,10 +22,17 @@ const router = new VueRouter({
     routes: [
         { path: '/login', component: require('./components/Login.vue') },
         { path: '/home', component: require('./components/Home.vue') },
+
+        { path: '/my-account', component: require('./components/User.vue') },
         { path: '/users', component: require('./components/Users.vue') },
         { path: '/users/:id', component: require('./components/User.vue') },
-        { path: '/my-account', component: require('./components/User.vue') },
         { path: '/users/create', component: require('./components/User.vue') },
+
+        { path: '/teams', component: require('./components/Teams.vue') },
+        { path: '/teams/:id', component: require('./components/Team.vue') },
+        { path: '/teams/create', component: require('./components/Team.vue') },
+
+
         //{ path: '/not-found', component: require('./components/404.vue') },
         //{ path: '/*', redirect: '/not-found' }
     ]
@@ -241,6 +248,9 @@ const app = new Vue({
          *  we use the laravel class as the event to listen for
          */
 
+
+        // User Events
+
         window.socket.on('App\\Events\\UserUpdated', function (data) {
 
             vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
@@ -274,6 +284,17 @@ const app = new Vue({
         });
 
         window.socket.on('App\\Events\\UserRemoved', function (data) {
+            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        });
+
+
+        // Team Events
+        
+        window.socket.on('App\\Events\\TeamCreated', function (data) {
+            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        });
+
+        window.socket.on('App\\Events\\TeamRemoved', function (data) {
             vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         });
 
