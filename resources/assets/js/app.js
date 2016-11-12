@@ -219,7 +219,7 @@ const app = new Vue({
 
                 // call the action for the store update
                 vue.$store.dispatch('removeToken').then( function() {
-                    window.socket.removeListener('auth.info');
+                    //window.socket.removeListener('auth.info');
                     window.socket.close();
                 });
 
@@ -308,6 +308,25 @@ const app = new Vue({
     }
 
 });
+
+window.axios.interceptors.request.use(function (config) {
+    // Do something before request is sent
+    document.getElementById('loading').style.opacity = 1;
+    return config;
+  }, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  });
+
+window.axios.interceptors.response.use(function (response) {
+    // Do something with response data
+    document.getElementById('loading').style.opacity = 0;
+    return response;
+  }, function (error) {
+    // Do something with response error
+    return Promise.reject(error);
+  });
+
 
 /** 
  * A little Jquery to set css vars for windows size

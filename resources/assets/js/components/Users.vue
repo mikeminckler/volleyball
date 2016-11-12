@@ -92,6 +92,11 @@
                 vue.loadUsers();
             });
 
+        },
+
+
+        beforeDestroy() {
+            window.socket.removeListener('App\\Events\\UsersRefresh');
         }
 
 

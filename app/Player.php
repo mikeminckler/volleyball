@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Player extends Model
 {
+    use UserAttributes;
+
     public function user()
     {
         return $this->belongsTo('App\User');

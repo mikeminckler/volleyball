@@ -43,13 +43,17 @@ io.on('authenticated', function (socket) {
      */
 
     socket.on('join-room', function (room) {
+        //console.log('JOIN:' + room);
         socket.join(room);
         io.sockets.in('user.' + socket.decoded_token.userid).emit('auth.info', 'You have joined room ' + room);
+        //console.log(socket.rooms);
     });
 
     socket.on('leave-room', function (room) {
+        //console.log('LEAVE:' + room);
         socket.leave(room);
         io.sockets.in('user.' + socket.decoded_token.userid).emit('auth.info', 'You have left room ' + room);
+        //console.log(socket.rooms);
     });
      
 });

@@ -16,10 +16,12 @@ class TeamUpdated implements ShouldBroadcast
     use InteractsWithSockets, SerializesModels;
 
     public $team;
+    public $message;
 
-    public function __construct(Team $team)
+    public function __construct(Team $team, $message)
     {
         $this->team = $team;
+        $this->message = $message;
     }
 
     /**

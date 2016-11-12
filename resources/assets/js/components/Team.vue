@@ -86,6 +86,7 @@
 
     import UserMixins from './UserMixins'
     import ListTransition from './ListTransition'
+    import Helpers from './Helpers'
 
     export default {
 
@@ -99,7 +100,7 @@
             }
         },
 
-        mixins: [UserMixins, ListTransition],
+        mixins: [UserMixins, ListTransition, Helpers],
 
         watch: {
             '$route': 'loadInfo'
@@ -112,8 +113,7 @@
                 var vue = this;
                 let team_id = vue.$route.params.id;
 
-                if (team_id != 'create') {
-
+                if (vue.isNumeric(team_id)) {
 
                     vue.$http.post('/api/teams/load/' + team_id).then( function(response) {
                         vue.team = response.data;
@@ -144,8 +144,6 @@
                 }
                 
                 vue.$http.post(e.target.href, post_data).then( function(response) {
-
-                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Player Removed'});
 
                 }, function (error) {
                 
@@ -204,21 +202,25 @@
             var vue = this;
 
             let team_id = vue.$route.params.id;
-            if (team_id != 'create') {
+            if (vue.isNumeric(team_id)) {
                 window.socket.emit('join-room', 'team.' + team_id);
             }
 
             // we should only listen for this teams update events
             window.socket.on('App\\Events\\TeamUpdated', function (data) {
-                vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Team Updated'});
+                vue.$store.dispatch('addFeedback', {'type': 'success', 'message': data.message});
                 vue.loadTeam();
             });
+
+            //console.log(window.socket);
         },
 
         beforeDestroy() {
 
-            if (!isNaN(parseFloat(this.team.id)) && isFinite(this.team.id)) {
-                window.socket.emit('leave-room', 'team.' + team_id);
+            window.socket.removeListener('App\\Events\\TeamUpdated');
+
+            if (this.isNumeric(this.team.id)) {
+                window.socket.emit('leave-room', 'team.' + this.team.id);
             }
 
         }

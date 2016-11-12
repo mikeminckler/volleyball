@@ -57,6 +57,8 @@
         </div>
     </div>
 
+    <div id="loading" class="spinner"></div>
+
     <script src="/js/app.js"></script>
 </body>
 

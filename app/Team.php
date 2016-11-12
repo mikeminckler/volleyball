@@ -81,7 +81,7 @@ class Team extends Model
             $this->players()->attach($player);
         }
 
-        event(new TeamUpdated($this));
+        event(new TeamUpdated($this, 'Added player '.$player->full_name));
 
         return $this;
     }
@@ -94,7 +94,7 @@ class Team extends Model
 
         $this->players()->detach($player);
 
-        event(new TeamUpdated($this));
+        event(new TeamUpdated($this, 'Removed player '.$player->full_name));
         
         return $this;
 
