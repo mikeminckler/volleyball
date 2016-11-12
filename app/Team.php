@@ -4,8 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Player;
+
 use App\Events\TeamsRefresh;
 use App\Events\TeamCreated;
+use App\Events\TeamUpdated;
 
 class Team extends Model
 {
@@ -51,4 +54,50 @@ class Team extends Model
 
         return $teams;
     }
+
+    public function players()
+    {
+        return $this->belongsToMany('App\Player')->with('user')->withPivot('number');
+    }
+
+    public function addPlayer($user)
+    {
+
+        if (!$user instanceof User) {
+            $user = User::findOrFail($user);
+        }
+
+        if ($user->player instanceof Player) {
+            $player = $user->player;
+        } else {
+            $player = new Player;
+            $player->user_id = $user->id;
+            $player->save();
+
+            $user->addRole('player');
+        }
+
+        if (!$this->players->contains($player)) {
+            $this->players()->attach($player);
+        }
+
+        event(new TeamUpdated($this));
+
+        return $this;
+    }
+
+    public function removePlayer($player) {
+
+        if (!$player instanceof Player) {
+            $player = Player::findOrFail($player);
+        }
+
+        $this->players()->detach($player);
+
+        event(new TeamUpdated($this));
+        
+        return $this;
+
+    }
+
 }

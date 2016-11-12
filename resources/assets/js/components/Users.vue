@@ -9,15 +9,28 @@
 
         <section>
 
-            <div class="row" v-for="user in users">
-                <div class="column">
-                    <router-link :to="{path: '/users/' + user.id}">{{ user.first_name + ' ' + user.last_name }}</router-link>
+            <transition-group 
+                name="list" 
+                tag="div"
+                v-bind:css="false"
+                v-on:before-enter="beforeEnter"
+                v-on:enter="enter"
+                v-on:leave="leave"
+            >
+                <div class="row" 
+                    v-for="(user, index) in users"
+                    :key="user.id"
+                    :data-index="index"
+                >
+                    <div class="column">
+                        <router-link :to="{path: '/users/' + user.id}">{{ user.first_name + ' ' + user.last_name }}</router-link>
+                    </div>
+                    <div class="column">{{ user.email }}</div>
+                    <div class="column">
+                        <a @click.prevent="remove" class="delete fa fa-times icon" :href="'/api/users/delete/' + user.id"></a>
+                    </div>
                 </div>
-                <div class="column">{{ user.email }}</div>
-                <div class="column">
-                    <a @click.prevent="remove" class="delete fa fa-times icon" :href="'/api/users/delete/' + user.id"></a>
-                </div>
-            </div>
+            </transition-group>
 
         </section>
 
@@ -28,6 +41,7 @@
 <script>
 
     import UserMixins from './UserMixins'
+    import ListTransition from './ListTransition'
 
     export default {
 
@@ -37,7 +51,7 @@
             }
         },
 
-        mixins: [UserMixins],
+        mixins: [UserMixins, ListTransition],
 
         methods: {
 

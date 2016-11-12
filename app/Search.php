@@ -5,16 +5,20 @@ namespace App;
 use Illuminate\Support\Collection;
 
 use App\User;
+use App\Player;
 
 class Search {
 
     protected $user;
+    protected $player;
 
     public function __construct(
-            User $user
+            User $user,
+            Player $player
         )
     {
         $this->user = $user;
+        $this->player = $player;
     }
 
     public function search($object, $input)

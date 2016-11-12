@@ -154,6 +154,9 @@ const store = new Vuex.Store({
         userRoles({ commit, state }, info) {
             commit('userRoles', info);
             app.$store.dispatch('addFeedback', {'type': 'info', 'message': 'Your groups have been loaded'});
+            if (app.userHasRole('admin')) {
+                window.socket.emit('join-room', 'auth.info');
+            }
         },
         
         userInfo({ commit, state }, info) {
@@ -197,10 +200,14 @@ const store = new Vuex.Store({
     }
 });
 
+import UserMixins from './components/UserMixins'
+
 const app = new Vue({
     el: '#app',
     router,
     store,
+
+    mixins: [UserMixins],
 
     methods: {
 

@@ -5,7 +5,7 @@
 
         <div class="results">
             <transition-group 
-                name="autocomplete" 
+                name="list" 
                 tag="div"
                 v-bind:css="false"
                 v-on:before-enter="beforeEnter"
@@ -29,11 +29,12 @@
 </template>
 
 <script>
-    import Velocity from 'velocity-animate'
+
+    import ListTransition from './ListTransition'
 
     export default {
 
-        props: ['object', 'afterSearching'],
+        props: ['object', 'afterSearching', 'clear'],
 
         data: function () {
             return {
@@ -43,6 +44,8 @@
                 results: []
             }
         },
+
+        mixins: [ListTransition],
 
         watch: {
             terms: function (terms) {
@@ -72,14 +75,6 @@
                     
                     });
 
-                    /**
-                     * after we have finished the search, call a function
-                     * if one is defined in the props from the tag
-                     */
-
-                    if ( _.isFunction(this[this.afterSearching])) {
-                        this[this.afterSearching]();
-                    }
 
                 }, 250 // length to wait before running the function
             ),
@@ -95,6 +90,28 @@
                 this.terms = el.target.dataset.label;
                 this.results = [];
 
+                /**
+                 * after we have selected someone from the search, 
+                 * call a function if one is defined in the 
+                 * props from the tag
+                 */
+
+                let postFunction = this.afterSearching;
+                let postOptions = '';
+                if (postFunction.indexOf('(')) {
+                    postOptions = postFunction.substring(postFunction.indexOf('(') + 1, postFunction.indexOf(')'));
+                    postFunction = postFunction.substring(0, postFunction.indexOf('('));
+                }
+
+                if ( _.isFunction(this[postFunction])) {
+                    this[postFunction](postOptions);
+                }
+
+                if (this.clear) {
+                    this.terms = '';
+                    this.id = '';
+                }
+
             },
 
             /**
@@ -102,45 +119,21 @@
              *  we have search results. Adding to lists ans such
              */
 
+            addPlayerToTeam: function(team_id) {
+                var vue = this;
+                let post_data = {
+                    'user_id': this.id,
+                    'team_id': team_id
+                }
+
+                vue.$http.post('/api/teams/add-player/' + team_id, post_data).then( function(response) {
+                    
+                }, function (error) {
+                
+                });
+
+            },
             
-            /**
-             * customizing the transition states
-             */
-
-            beforeEnter: function (el) {
-                el.style.opacity = 0
-                el.style.height = 0
-            },
-
-            enter: function (el, done) {
-                var delay = el.dataset.index * 25
-                var dur = 400 - (el.dataset.index * 20);
-                if (dur < 25) {
-                    dur = 25;
-                }
-                setTimeout(function () {
-                Velocity(
-                    el,
-                        { opacity: 1, height: '30px' },
-                        { complete: done, duration: dur }
-                    )
-                }, delay)
-            },
-
-            leave: function (el, done) {
-                var delay = el.dataset.index * 25
-                var dur = 200 - (el.dataset.index * 10);
-                if (dur < 25) {
-                    dur = 25;
-                }
-                setTimeout(function () {
-                Velocity(
-                    el,
-                        { opacity: 0, height: 0 },
-                        { complete: done, duration: dur }
-                    )
-                }, delay)
-            }
 
         }
 

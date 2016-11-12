@@ -9,14 +9,27 @@
 
         <section>
 
-            <div class="row" v-for="team in teams">
-                <div class="column">
-                    <router-link :to="{path: '/teams/' + team.id}">{{ team.team_name }}</router-link>
+            <transition-group 
+                name="list" 
+                tag="div"
+                v-bind:css="false"
+                v-on:before-enter="beforeEnter"
+                v-on:enter="enter"
+                v-on:leave="leave"
+            >
+            <div class="row" 
+                v-for="(team, index) in teams"
+                :key="team.id"
+                :data-index="index"
+            >
+                    <div class="column">
+                        <router-link :to="{path: '/teams/' + team.id}">{{ team.team_name }}</router-link>
+                    </div>
+                    <div class="column">
+                        <a @click.prevent="remove" class="delete fa fa-times icon" :href="'/api/teams/delete/' + team.id"></a>
+                    </div>
                 </div>
-                <div class="column">
-                    <a @click.prevent="remove" class="delete fa fa-times icon" :href="'/api/teams/delete/' + team.id"></a>
-                </div>
-            </div>
+            </transition-group>
 
         </section>
 
@@ -27,6 +40,7 @@
 <script>
 
     import UserMixins from './UserMixins'
+    import ListTransition from './ListTransition'
 
     export default {
 
@@ -36,7 +50,7 @@
             }
         },
 
-        mixins: [UserMixins],
+        mixins: [UserMixins, ListTransition],
 
         methods: {
 

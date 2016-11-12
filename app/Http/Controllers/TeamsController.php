@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\Team;
+use App\Player;
+use App\User;;
 
 use App\Events\TeamRemoved;
 
@@ -13,10 +15,14 @@ class TeamsController extends Controller
 {
     
     protected $team;
+    protected $player;
+    protected $user;
 
-    public function __construct(Team $team) 
+    public function __construct(Team $team, Player $player, User $user) 
     {
         $this->team = $team;
+        $this->player = $player;
+        $this->user = $user;
     }
 
     public function teams()
@@ -52,5 +58,31 @@ class TeamsController extends Controller
         $team->save();
         event(new TeamRemoved($team->team_name.' has been removed'));
         return $team;
+    }
+
+    public function players($id) 
+    {
+        return $this->team->findOrFail($id)->players->sortBy(function($player) {
+            return $player->user->last_name;
+        })->values()->all();
+    }
+
+    /**
+     * We pass in the user id here instead of the player id
+     * which allows us to create a player object if we 
+     * need to. 
+     */
+
+    public function addPlayer(Request $request, $id)
+    {
+        $user = $this->user->findOrFail($request->input('user_id'));
+        return $this->team->findOrFail($id)->addPlayer($user);
+    }
+
+    public function removePlayer(Request $request, $id)
+    {
+        $player = $this->player->findOrFail($request->input('player_id'));
+        return $this->team->findOrFail($id)->removePlayer($player);
+
     }
 }

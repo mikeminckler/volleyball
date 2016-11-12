@@ -58,6 +58,7 @@
 </template>
 
 <script>
+
     export default {
 
         data: function () {
@@ -109,7 +110,9 @@
                     });
 
                     vue.$http.post('/api/users/my-roles').then( function(response) {
+
                         vue.$store.dispatch('userRoles', response.data); 
+
                     }, function(error) {
                         vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your groups'});
                     });

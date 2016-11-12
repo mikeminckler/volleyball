@@ -31,20 +31,28 @@ io.on('authenticated', function (socket) {
      *  socket.decoded_token.name
      */
 
+    socket.join('user.' + socket.decoded_token.userid);
+
     socket.on('auth.info', function (message) {
         socket.broadcast.to('auth.info').emit('auth.info', message);
     });
- 
-    socket.join('user.' + socket.decoded_token.userid);
-    socket.join('auth.info');
+
+    /**
+     * these listeners will join and leave rooms
+     * we send requests from the client to join
+     */
+
+    socket.on('join-room', function (room) {
+        socket.join(room);
+        io.sockets.in('user.' + socket.decoded_token.userid).emit('auth.info', 'You have joined room ' + room);
+    });
+
+    socket.on('leave-room', function (room) {
+        socket.leave(room);
+        io.sockets.in('user.' + socket.decoded_token.userid).emit('auth.info', 'You have left room ' + room);
+    });
      
 });
-
-/*
-io.on('join-channel', function( socket ) {
-    console.log('JOIN');
-});
-*/
 
 io.on('connection', function( socket ) {
 
@@ -53,7 +61,6 @@ io.on('connection', function( socket ) {
     socket.on('public.info', function (message) {
         socket.broadcast.to('public.info').emit('public.info', message);
     });
-
 
 });
 
@@ -65,6 +72,8 @@ redis.subscribe('auth.info');
 redis.subscribe('public.info');
 
 redis.psubscribe('user.*');
+redis.psubscribe('team.*');
+redis.psubscribe('game.*');
 
 redis.on('message', function(channel, message) {
     message = JSON.parse(message);

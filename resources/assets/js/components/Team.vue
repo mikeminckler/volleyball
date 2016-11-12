@@ -29,6 +29,55 @@
 
         </section>
 
+
+        <div v-show="team.id" v-if="userCanManageTeam(team.id)">
+
+            <section>
+                <div class="h2">Players</h2>
+            </section>
+
+            <section>
+
+                <transition-group 
+                    name="list" 
+                    tag="div"
+                    v-bind:css="false"
+                    v-on:before-enter="beforeEnter"
+                    v-on:enter="enter"
+                    v-on:leave="leave"
+                >
+                    <div class="row" 
+                        v-for="(player, index) in players"
+                        :key="player.id"
+                        :data-index="index"
+                    >
+
+                        <div class="column">{{ player.user.first_name + ' ' + player.user.last_name }}</div>
+                        <div class="column">
+                            <a @click.prevent="removePlayer" 
+                                :data-player-id="player.id" 
+                                class="delete fa fa-times icon" 
+                                :href="'/api/teams/delete-player/' + team.id"
+                            >
+                            </a>
+                        </div>
+
+                    </div>
+                </transition-group>
+
+                <div class="form-block">
+                    <div class="form-label">
+                        <label for="terms" class="label">Add Players</label>
+                    </div>
+                    <div class="form-input">
+                        <autocomplete object="users" clear="true" :afterSearching="'addPlayerToTeam(' + team.id + ')'"></autocomplete>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+
     </div>
 
 </template>
@@ -36,6 +85,7 @@
 <script>
 
     import UserMixins from './UserMixins'
+    import ListTransition from './ListTransition'
 
     export default {
 
@@ -44,11 +94,12 @@
                 team: {
                     id: '',
                     team_name: '',
-                }
+                },
+                players: []
             }
         },
 
-        mixins: [UserMixins],
+        mixins: [UserMixins, ListTransition],
 
         watch: {
             '$route': 'loadInfo'
@@ -63,11 +114,43 @@
 
                 if (team_id != 'create') {
 
+
                     vue.$http.post('/api/teams/load/' + team_id).then( function(response) {
                         vue.team = response.data;
+
+                        vue.loadPlayers();
+
                     });
 
                 }
+            },
+
+            loadPlayers: function() {
+
+                var vue = this;
+
+                vue.$http.post('/api/teams/players/' + this.team.id).then( function(response) {
+                    vue.players = response.data;
+                });
+            },
+
+            removePlayer: function(e) {
+
+                var vue = this;
+            
+                let player_id = e.target.dataset.playerId;
+                let post_data = {
+                    'player_id': player_id
+                }
+                
+                vue.$http.post(e.target.href, post_data).then( function(response) {
+
+                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Player Removed'});
+
+                }, function (error) {
+                
+                });
+             
             },
 
             submit: function(e) {
@@ -117,6 +200,27 @@
         },
 
         mounted() {
+
+            var vue = this;
+
+            let team_id = vue.$route.params.id;
+            if (team_id != 'create') {
+                window.socket.emit('join-room', 'team.' + team_id);
+            }
+
+            // we should only listen for this teams update events
+            window.socket.on('App\\Events\\TeamUpdated', function (data) {
+                vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Team Updated'});
+                vue.loadTeam();
+            });
+        },
+
+        beforeDestroy() {
+
+            if (!isNaN(parseFloat(this.team.id)) && isFinite(this.team.id)) {
+                window.socket.emit('leave-room', 'team.' + team_id);
+            }
+
         }
 
     }

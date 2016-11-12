@@ -131,7 +131,15 @@ class User extends Model implements
     {
 
         if (!$role instanceof Role) {
-            $role = Role::findOrFail($role);
+            if (is_numeric($role)) {
+                $role = Role::findOrFail($role);
+            } else {
+                $role = Role::where('role_name', $role)->first();
+            }
+        }
+
+        if (!$role instanceof Role) {
+            return false;
         }
 
         if (!$this->roles->contains($role)) {

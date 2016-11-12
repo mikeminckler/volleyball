@@ -9,6 +9,10 @@ export default {
                 return false;
             }
            
+        },
+
+        userCanManageTeam(team_id) {
+            return true;
         }
     }
 

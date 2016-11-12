@@ -31,28 +31,28 @@ class UsersTableSeeder extends Seeder
         $jb->first_name = 'John';
         $jb->last_name = 'Bonham';
         $jb->email = 'bonzo@zep.com';
-        $jb->password = bcrypt('password');
+        $jb->password = bcrypt('q');
         $jb->save();
 
         $jp = new User;
         $jp->first_name = 'Jimmy';
         $jp->last_name = 'Page';
         $jp->email = 'jimmy@zep.com';
-        $jp->password = bcrypt('password');
+        $jp->password = bcrypt('q');
         $jp->save();
 
         $jpj = new User;
         $jpj->first_name = 'John Paul';
         $jpj->last_name = 'Jones';
         $jpj->email = 'jpj@zep.com';
-        $jpj->password = bcrypt('password');
+        $jpj->password = bcrypt('q');
         $jpj->save();
 
         $rp = new User;
         $rp->first_name = 'Robert';
         $rp->last_name = 'Plant';
         $rp->email = 'percy@zep.com';
-        $rp->password = bcrypt('password');
+        $rp->password = bcrypt('q');
         $rp->save();
 
     }
