@@ -30,7 +30,7 @@ class UsersController extends Controller
 
     public function users()
     {
-        return $this->user->where('hidden', '0')->get()
+        return $this->user->where('removed', false)->get()
             ->sortBy('last_name')
             ->values()
             ->all();
@@ -60,17 +60,10 @@ class UsersController extends Controller
             ->saveUser($request->only('first_name', 'last_name', 'email', 'password'));
     }
 
-    /**
-     * This is lame, for some reason we can't set hidden to true 
-     * in the user model. It's failing with an array_flip error 
-     * when laravel tries to convert the user to json. So for now
-     * we will have to do it in the controller.
-     */
-
     public function destroy(Request $request, $id)
     {
         $user = $this->user->findOrFail($id);
-        $user->hidden = true;
+        $user->removed = true;
         $user->save();
         event(new UserRemoved($user->full_name.' has been removed'));
         return $user;

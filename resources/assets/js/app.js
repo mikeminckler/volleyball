@@ -1,22 +1,30 @@
 
-window._ = require('lodash');
+const _ = require('lodash');
+
 window.$ = window.jQuery = require('jquery');
+require('./libs/jquery-ui');
+require('./libs/timepicker');
 
+const Vue = require('vue');
+const VueRouter = require('vue-router');
+const Vuex = require('vuex');
 
-window.Vue = require('vue');
-window.VueRouter = require('vue-router');
-window.Vue.use(window.VueRouter);
-window.Vuex = require('vuex');
-window.axios = require('axios');
+Vue.use(VueRouter);
+Vue.use(Vuex);
 
-window.io = require('socket.io-client');
+const axios = require('axios');
+const fullCalendar = require('fullcalendar');
+const moment = require('moment');
+
+const io = require('socket.io-client');
 window.socket = io('http://localhost:3000');
 
-Vue.prototype.$http = window.axios;
+Vue.prototype.$http = axios;
 
 Vue.component('feedback', require('./components/Feedback.vue'));
 Vue.component('app-menu', require('./components/Menu.vue'));
 Vue.component('autocomplete', require('./components/AutoComplete.vue'));
+Vue.component('scoreboard', require('./components/Scoreboard.vue'));
 
 const router = new VueRouter({
     routes: [
@@ -31,7 +39,13 @@ const router = new VueRouter({
         { path: '/teams', component: require('./components/Teams.vue') },
         { path: '/teams/:id', component: require('./components/Team.vue') },
         { path: '/teams/create', component: require('./components/Team.vue') },
+        { path: '/teams/games/:id', component: require('./components/TeamGames.vue') },
 
+        { path: '/games', component: require('./components/Games.vue') },
+        { path: '/games/:id', component: require('./components/Game.vue') },
+        { path: '/games/create', component: require('./components/Game.vue') },
+
+        { path: '/games/stats/:id', component: require('./components/GameStats.vue') },
 
         //{ path: '/not-found', component: require('./components/404.vue') },
         //{ path: '/*', redirect: '/not-found' }
@@ -143,12 +157,6 @@ const store = new Vuex.Store({
 
             // authenticate our token
             window.socket.emit('authenticate', {token: token});
-
-            // add our listeners
-            window.socket.on('auth.info', function (data) {
-                app.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
-            }.bind(app));
-
         },
 
         userRoles({ commit, state }, info) {
@@ -201,13 +209,14 @@ const store = new Vuex.Store({
 });
 
 import UserMixins from './components/UserMixins'
+import Helpers from './components/Helpers'
 
 const app = new Vue({
     el: '#app',
     router,
     store,
 
-    mixins: [UserMixins],
+    mixins: [UserMixins, Helpers],
 
     methods: {
 
@@ -249,6 +258,10 @@ const app = new Vue({
         window.socket.on('public.info', function (data) {
             vue.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
         });
+
+        window.socket.on('auth.info', function (data) {
+            app.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
+        }.bind(app));
 
         /**
          *  Socket Events
@@ -305,13 +318,24 @@ const app = new Vue({
             vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         });
 
+
+        // Game Events
+
+        window.socket.on('App\\Events\\GameCreated', function (data) {
+            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        });
+
+        window.socket.on('App\\Events\\GameRemoved', function (data) {
+            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        });
     }
 
 });
 
+/*
 window.axios.interceptors.request.use(function (config) {
     // Do something before request is sent
-    document.getElementById('loading').style.opacity = 1;
+    app.showLoading();
     return config;
   }, function (error) {
     // Do something with request error
@@ -320,13 +344,13 @@ window.axios.interceptors.request.use(function (config) {
 
 window.axios.interceptors.response.use(function (response) {
     // Do something with response data
-    document.getElementById('loading').style.opacity = 0;
+    app.hideLoading();
     return response;
   }, function (error) {
     // Do something with response error
     return Promise.reject(error);
   });
-
+*/
 
 /** 
  * A little Jquery to set css vars for windows size
@@ -337,6 +361,38 @@ window.axios.interceptors.response.use(function (response) {
 var supportsTouch = 'ontouchstart' in window || navigator.msMaxTouchPoints;
 
 $(function(){
+
+    /**
+     * Date Time Picker using jQuery UI
+     */
+
+	$(document).on('focus', 'input.datepicker', function(){
+		$(this).datepicker({
+			dateFormat: 'yy-mm-dd',
+			showAnim: 'slideDown',
+            changeMonth: true,
+            changeYear: true,
+		});
+	});
+
+
+	$(document).on('focus', 'input.datetimepicker', function(){
+
+		$(this).datetimepicker({
+			dateFormat: 'yy-mm-dd',
+			showAnim: 'slideDown',
+			stepMinute: 5,
+            changeMonth: true,
+            changeYear: true,
+		});
+	});
+
+	$(document).on('focus', 'input.timepicker', function() {
+		$(this).timepicker({
+			showAnim: 'slideDown',
+			stepMinute: 5
+		});
+	});
 
     setWidth();
 

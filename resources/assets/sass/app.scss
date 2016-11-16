@@ -1,7 +1,10 @@
 @import url('//fonts.googleapis.com/css?family=Lato:400,700');
 
 @import "feedback";
+@import "jquery-ui";
 @import "rows";
+@import "scoreboard";
+@import "stats";
 @import "vue-transitions";
 @import "node_modules/font-awesome/scss/font-awesome";
 
@@ -18,6 +21,8 @@
     --button-text-color: #252c41;
     --footer-font-color: #999;
     --light-bg: rgba(155,174,200,0.1);
+    --search-results-highlight: #e5f0ff;
+    --existing-bg: #f2fff5;
     --input-error-color: #ffdda2;
     --border-highlight-color: #76a7c5;
 
@@ -31,7 +36,7 @@
     --input-line-height: 30px;
     --line-height: 18px;
     --border-radius: 5px;
-    --section-padding: 5px;
+    --section-padding: 10px;
 
     --icon-padding: 0px;
     --icon-text-color: #000;
@@ -224,6 +229,10 @@ input.selected {
     color: var(--success-color);
 }
 
+input.existing:not(.selected):not(:focus) {
+    background-color: var(--existing-bg);
+}
+
 label, button {
     cursor: pointer;
 }
@@ -272,6 +281,22 @@ input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
     -webkit-text-fill-color: var(--link-color) !important;
 }
+
+/*
+input[type="checkbox"] {
+    position: absolute;
+    left: -999em;
+}
+
+input[type="checkbox"]:after {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: #fff;
+    content: " ";
+}
+*/
 
 /* LOGIN */
 
@@ -343,6 +368,10 @@ a.forgot-password {
 
 div.results {
     margin: 0px 1px;
+    overflow: visible;
+    position: relative;
+    z-index: 10;
+    height: 0;
 }
 
 div.results-item {
@@ -357,7 +386,7 @@ div.results-item {
 }
 
 div.results-item:hover {
-    background-color: var(--light-bg);
+    background-color: var(--search-results-highlight);
 }
 
 div.results-item:last-child {

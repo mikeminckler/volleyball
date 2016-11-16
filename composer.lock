@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "13cfdf5ffdfd5b2ff881c457ecc5d190",
-    "content-hash": "1a60e27e7b5db3c073a64dc0a5e4f6f7",
+    "hash": "efa3379357b920e49581d3a8898843f3",
+    "content-hash": "96f1c9b2b11775387288e2d44b8730d6",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -3615,6 +3615,46 @@
                 "validate"
             ],
             "time": "2016-08-09 15:02:57"
+        },
+        {
+            "name": "zachleigh/laravel-vue-generators",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zachleigh/laravel-vue-generators.git",
+                "reference": "4e48cf3df0623855d299bedfea5cd6b51c61e4eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zachleigh/laravel-vue-generators/zipball/4e48cf3df0623855d299bedfea5cd6b51c61e4eb",
+                "reference": "4e48cf3df0623855d299bedfea5cd6b51c61e4eb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "laravel/laravel": "5.3.*",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "VueGenerators\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Zach Leigh",
+                    "email": "zachleigh@fastmail.jp"
+                }
+            ],
+            "description": "Generate Vue js files via artisan commands.",
+            "time": "2016-11-09 22:57:51"
         }
     ],
     "aliases": [],

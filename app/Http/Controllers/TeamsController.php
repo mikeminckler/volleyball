@@ -10,6 +10,7 @@ use App\Player;
 use App\User;;
 
 use App\Events\TeamRemoved;
+use App\Events\TeamsRefresh;
 
 class TeamsController extends Controller
 {
@@ -27,7 +28,7 @@ class TeamsController extends Controller
 
     public function teams()
     {
-        return $this->team->where('hidden', '0')->get()
+        return $this->team->where('removed', false)->get()
             ->sortBy('team_name')
             ->values()
             ->all();
@@ -36,7 +37,7 @@ class TeamsController extends Controller
     public function create(Requests\TeamSave $request)
     {
         $team = new Team;
-        return $this->team
+        return $team
             ->saveTeam($request->only('team_name'));
     }
 
@@ -54,9 +55,10 @@ class TeamsController extends Controller
     public function destroy(Request $request, $id)
     {
         $team = $this->team->findOrFail($id);
-        $team->hidden = true;
+        $team->removed = true;
         $team->save();
         event(new TeamRemoved($team->team_name.' has been removed'));
+        event(new TeamsRefresh());
         return $team;
     }
 

@@ -15,7 +15,8 @@
         "phpunit/phpunit": "~5.0",
         "symfony/css-selector": "3.1.*",
         "symfony/dom-crawler": "3.1.*",
-        "tymon/jwt-auth": "1.0.0-alpha.3"
+        "tymon/jwt-auth": "1.0.0-alpha.3",
+        "zachleigh/laravel-vue-generators": "^0.1.1"
     },
     "autoload": {
         "classmap": [

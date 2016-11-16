@@ -6,19 +6,23 @@ use Illuminate\Support\Collection;
 
 use App\User;
 use App\Player;
+use App\Team;
 
 class Search {
 
     protected $user;
     protected $player;
+    protected $team;
 
     public function __construct(
             User $user,
-            Player $player
+            Player $player,
+            Team $team
         )
     {
         $this->user = $user;
         $this->player = $player;
+        $this->team = $team;
     }
 
     public function search($object, $input)

@@ -59,6 +59,8 @@
 
 <script>
 
+    import axios from 'axios'
+
     export default {
 
         data: function () {
@@ -98,13 +100,13 @@
                     // Set authenticated and the JWT Token 
                     vue.$store.dispatch('setToken', response.data.token);
 
-                    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
 
                     vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
 
                     vue.$http.post('/api/users/my-info').then( function(response) {
                         vue.$store.dispatch('userInfo', response.data);
-                        window.socket.emit('auth.info', vue.$store.getters.user_name + ' has connected');
+                        socket.emit('auth.info', vue.$store.getters.user_name + ' has connected');
                     }, function(error) {
                         vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your info'});
                     });
@@ -132,7 +134,6 @@
                     // login failed provide the feedback
                     vue.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data.error});
 
-                    // HACK 
                     $('input.input-password').val('').focus();
 
                 });

@@ -17,7 +17,7 @@ class CreatePlayersTable extends Migration
             $table->increments('id');
 
             $table->integer('user_id');
-            $table->boolean('hidden')->default(0);
+            $table->boolean('removed')->default(false);
 
             $table->timestamps();
         });

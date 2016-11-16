@@ -65,12 +65,16 @@
                     </div>
                 </transition-group>
 
+            </section>
+
+            <section>
+
                 <div class="form-block">
                     <div class="form-label">
                         <label for="terms" class="label">Add Players</label>
                     </div>
                     <div class="form-input">
-                        <autocomplete object="users" clear="true" :afterSearching="'addPlayerToTeam(' + team.id + ')'"></autocomplete>
+                        <autocomplete object="users" name="" clear="true" :afterSearching="'addPlayerToTeam(' + team.id + ')'"></autocomplete>
                     </div>
                 </div>
 
@@ -208,6 +212,7 @@
 
             // we should only listen for this teams update events
             window.socket.on('App\\Events\\TeamUpdated', function (data) {
+                vue.hideLoading();
                 vue.$store.dispatch('addFeedback', {'type': 'success', 'message': data.message});
                 vue.loadTeam();
             });

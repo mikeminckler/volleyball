@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 
 use App\User;
 use App\Role;
+use App\Team;
 
 class UsersTableSeeder extends Seeder
 {
@@ -27,12 +28,15 @@ class UsersTableSeeder extends Seeder
 
         $mike->addRole($admin);
 
+        $zep = Team::where('team_name', 'Led Zeppelin')->first();
+
         $jb = new User;
         $jb->first_name = 'John';
         $jb->last_name = 'Bonham';
         $jb->email = 'bonzo@zep.com';
         $jb->password = bcrypt('q');
         $jb->save();
+        $zep->addPlayer($jb);
 
         $jp = new User;
         $jp->first_name = 'Jimmy';
@@ -40,6 +44,7 @@ class UsersTableSeeder extends Seeder
         $jp->email = 'jimmy@zep.com';
         $jp->password = bcrypt('q');
         $jp->save();
+        $zep->addPlayer($jp);
 
         $jpj = new User;
         $jpj->first_name = 'John Paul';
@@ -47,6 +52,7 @@ class UsersTableSeeder extends Seeder
         $jpj->email = 'jpj@zep.com';
         $jpj->password = bcrypt('q');
         $jpj->save();
+        $zep->addPlayer($jpj);
 
         $rp = new User;
         $rp->first_name = 'Robert';
@@ -54,6 +60,7 @@ class UsersTableSeeder extends Seeder
         $rp->email = 'percy@zep.com';
         $rp->password = bcrypt('q');
         $rp->save();
+        $zep->addPlayer($rp);
 
     }
 }

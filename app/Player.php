@@ -20,7 +20,7 @@ class Player extends Model
 
     public function search($term)
     {
-        return $this->where('hidden', '0')
+        return $this->where('removed', false)
             ->where(function($query) use($term) {
 
                 $query->whereHas('user', function($query) use($term) {

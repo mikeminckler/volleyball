@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     // Search routes
     Route::post('search/users', ['as' => 'search.users', 'uses' => 'SearchController@users']);
     Route::post('search/players', ['as' => 'search.players', 'uses' => 'SearchController@players']);
+    Route::post('search/teams', ['as' => 'search.teams', 'uses' => 'SearchController@teams']);
 
 
     Route::post('teams', ['as' => 'teams', 'uses' => 'TeamsController@teams']);
@@ -36,5 +37,16 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('teams/players/{id}', ['as' => 'teams.players', 'uses' => 'TeamsController@players'])->where('id', '\d+');
     Route::post('teams/add-player/{id}', ['as' => 'teams.add-player', 'uses' => 'TeamsController@addPlayer'])->where('id', '\d+');
     Route::post('teams/delete-player/{id}', ['as' => 'teams.delete-player', 'uses' => 'TeamsController@removePlayer'])->where('id', '\d+');
+
+
+    Route::post('games', ['as' => 'games', 'uses' => 'GamesController@games']);
+    Route::post('games/load/{id}', ['as' => 'games.show', 'uses' => 'GamesController@load'])->where('id', '\d+');
+    Route::post('games/{id}', ['as' => 'games.store', 'uses' => 'GamesController@store'])->where('id', '\d+');
+    Route::post('games/create', ['as' => 'games.create', 'uses' => 'GamesController@create']);
+    Route::post('games/delete/{id}', ['as' => 'games.delete', 'uses' => 'GamesController@destroy'])->where('id', '\d+');
+    Route::post('games/sets/{id}', ['as' => 'games.sets', 'uses' => 'GamesController@gameSets'])->where('id', '\d+');
+    Route::post('games/add-point/{id}', ['as' => 'games.add-point', 'uses' => 'GamesController@addPoint'])->where('id', '\d+');
+    Route::post('games/remove-point/{id}', ['as' => 'games.remove-point', 'uses' => 'GamesController@removePoint'])->where('id', '\d+');
+    Route::post('games/add-set/{id}', ['as' => 'games.add-set', 'uses' => 'GamesController@addSet'])->where('id', '\d+');
 
 });

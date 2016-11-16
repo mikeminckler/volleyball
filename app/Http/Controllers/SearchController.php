@@ -26,4 +26,9 @@ class SearchController extends Controller
         return $this->search->search('player', $request->only('terms'));
     }
 
+    public function teams(Request $request)
+    {
+        return $this->search->search('team', $request->only('terms'));
+    }
+
 }

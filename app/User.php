@@ -167,7 +167,7 @@ class User extends Model implements
 
     public function search($term)
     {
-        return $this->where('hidden', '0')
+        return $this->where('removed', false)
             ->where(function($query) use($term) {
                 $query->where('first_name', 'like', '%'.$term.'%')
                     ->orWhere('last_name', 'like', '%'.$term.'%');

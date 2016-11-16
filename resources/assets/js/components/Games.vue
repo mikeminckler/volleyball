@@ -3,8 +3,8 @@
     <div class="content">
 
         <section class="header">
-            <div class="h1">Teams</div>
-            <div v-if="userHasRole('admin')"><router-link class="button" to="/teams/create">Create Team</router-link></div>
+            <div class="h1">Games</div>
+            <div v-if="userHasRole('admin')"><router-link class="button" to="/games/create">Create Game</router-link></div>
         </section>
 
         <section>
@@ -18,20 +18,28 @@
                 v-on:leave="leave"
             >
             <div class="row" 
-                v-for="(team, index) in teams"
-                :key="team.id"
+                v-for="(game, index) in games"
+                :key="game.id"
                 :data-index="index"
             >
                     <div class="column">
-                        <router-link :to="{path: '/teams/' + team.id}">{{ team.team_name }}</router-link>
+                        <router-link :to="{path: '/games/' + game.id}">{{ game.team1.team_name }} vs {{ game.team2.team_name }}</router-link>
                     </div>
 
                     <div class="column">
-                        <router-link :to="{path: '/teams/games/' + team.id}">Games</router-link>
+                        <router-link :to="{path: '/games/stats/' + game.id}">Stats</router-link>
                     </div>
 
                     <div class="column">
-                        <a @click.prevent="remove" class="delete fa fa-times icon" :href="'/api/teams/delete/' + team.id"></a>
+                        {{ game.score }}
+                    </div>
+
+                    <div class="column">
+                        {{ displayDateTime(game.start_time) }}
+                    </div>
+
+                    <div class="column">
+                        <a @click.prevent="remove" class="delete fa fa-times icon" :href="'/api/games/delete/' + game.id"></a>
                     </div>
                 </div>
             </transition-group>
@@ -42,28 +50,30 @@
 
 </template>
 
+
 <script>
 
     import UserMixins from './UserMixins'
     import ListTransition from './ListTransition'
+    import Helpers from './Helpers'
 
     export default {
 
         data: function () {
             return {
-                teams: []
+                games: []
             }
         },
-
-        mixins: [UserMixins, ListTransition],
+    
+        mixins: [UserMixins, ListTransition, Helpers],
 
         methods: {
-
-            loadTeams: function() {
+                    
+            loadGames: function() {
 
                 var vue = this;
-                vue.$http.post('/api/teams').then( function(response) {
-                    vue.teams = response.data;
+                vue.$http.post('/api/games').then( function(response) {
+                    vue.games = response.data;
                 });
             
             },
@@ -74,34 +84,28 @@
                 
                 vue.$http.post(e.target.href).then( function(response) {
 
-                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Team Deleted'});
-
-                    vue.loadTeams();
+                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Game Deleted'});
 
                 }, function (error) {
                 
                 });
             }
+
         },
 
         beforeMount() {
-            this.loadTeams();
+            this.loadGames();
         },
-
+        
         mounted() {
             
             var vue = this;
 
-            window.socket.on('App\\Events\\TeamsRefresh', function (data) {
-                vue.loadTeams();
+            window.socket.on('App\\Events\\GamesRefresh', function (data) {
+                vue.loadGames();
             });
 
-        },
-
-        beforeDestroy() {
-            window.socket.removeListener('App\\Events\\TeamsRefresh');
         }
-
-
     }
+
 </script>

@@ -88,31 +88,29 @@
 
         </section>
 
-        <transition name="fade">
-            <div v-show="user.id" v-if="userHasRole('admin')">
+        <div v-show="user.id" v-if="userHasRole('admin')">
 
-                <section>
-                    <div class="h2">Groups</h2>
-                </section>
+            <section>
+                <div class="h2">Groups</h2>
+            </section>
 
-                <section>
-                    <div class="form-block" v-for="role in roles">
-                        <div class="form-label">
-                            <label :for="role.id">{{ role.role_name }}</label>
-                        </div>
-                        <div class="form-input">
-                            <input type="checkbox" 
-                                :id="role.id" 
-                                :value="role.id" 
-                                @click="toggleRole" 
-                                :checked="_.includes(groups, role.id)"
-                            >
-                        </div>
+            <section>
+                <div class="form-block" v-for="role in roles">
+                    <div class="form-label">
+                        <label :for="role.id">{{ role.role_name }}</label>
                     </div>
-                </section>
+                    <div class="form-input">
+                        <input type="checkbox" 
+                            :id="role.id" 
+                            :value="role.id" 
+                            @click="toggleRole" 
+                            :checked="roleCheck(role.id)"
+                        >
+                    </div>
+                </div>
+            </section>
 
-            </div>
-        </transition>
+        </div>
 
     </div>
 
@@ -285,6 +283,10 @@
                 this.password = '';
                 this.password_confirmation = '';
                 this.show_password = !this.show_password;
+            },
+
+            roleCheck: function(role_id) {
+                return _.includes(this.groups, role_id);
             }
 
         },

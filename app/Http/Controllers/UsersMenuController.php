@@ -10,6 +10,7 @@ class UsersMenuController extends Controller
     {
         $menu = [];
         $menu[] = ['url' => 'users', 'name' => 'Users', 'roles' => ['admin']];
+        $menu[] = ['url' => 'games', 'name' => 'Games', 'roles' => ['admin']];
         $menu[] = ['url' => 'teams', 'name' => 'Teams', 'roles' => ['admin']];
         return $menu;
     }

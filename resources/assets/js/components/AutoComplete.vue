@@ -1,8 +1,9 @@
 <template>
 
     <div class="search">
-        <input id="terms" class="input" name="terms" v-model="terms" :class="(id ? 'selected' : '')">
-
+        <input id="terms" class="input" name="terms" v-model="terms" :class="[( value ? 'existing' : ''), ( id ? 'selected' : '')]" autocomplete="off" @blur="results = []">
+        <input :id="name" class="input" type="hidden" :name="name" :value="value" :required="required">
+ 
         <div class="results">
             <transition-group 
                 name="list" 
@@ -31,23 +32,35 @@
 <script>
 
     import ListTransition from './ListTransition'
+    import Helpers from './Helpers'
 
     export default {
 
-        props: ['object', 'afterSearching', 'clear'],
+        props: ['object', 'afterSearching', 'clear', 'name', 'required', 'oldid', 'text'],
 
         data: function () {
             return {
                 terms: '',
                 id: '',
                 clicked: false,
-                results: []
+                results: [],
             }
         },
 
-        mixins: [ListTransition],
+        computed: {
+            value: function() {
+                return (! this.id && this.oldid ? this.oldid : this.id);
+            }
+        },
+
+        mixins: [ListTransition, Helpers],
 
         watch: {
+            // we need to watch the prop as it gets asynced in
+            text: function (text) {
+                this.clicked = true;
+                this.terms = text;
+            },
             terms: function (terms) {
                 if (!this.clicked) {
                     this.id = '';
@@ -120,11 +133,14 @@
              */
 
             addPlayerToTeam: function(team_id) {
+
                 var vue = this;
                 let post_data = {
                     'user_id': this.id,
                     'team_id': team_id
                 }
+
+                vue.showLoading();
 
                 vue.$http.post('/api/teams/add-player/' + team_id, post_data).then( function(response) {
                     
@@ -135,7 +151,7 @@
             },
             
 
-        }
+        },
 
     }
 </script>
