@@ -2,6 +2,12 @@
 
     <div class="scoreboard">
 
+        <div class="score">
+            <div class="score-initials score-left">{{ game.team1.initials }}</div>
+            <div class="score-dash"></div>
+            <div class="score-initials score-right">{{ game.team2.initials }}</div>
+        </div>
+
         <div class="score score-numbers">
 
             <div class="score-controls" v-if="controls">
@@ -20,11 +26,6 @@
 
         </div>
 
-        <div class="score">
-            <div class="score-initials score-left">{{ game.team1.initials }}</div>
-            <div class="score-dash"></div>
-            <div class="score-initials score-right">{{ game.team2.initials }}</div>
-        </div>
 
         <div class="score">
             <div v-for="gameSet in otherSets" class="score-sets">

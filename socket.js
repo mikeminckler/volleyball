@@ -43,19 +43,41 @@ io.on('authenticated', function (socket) {
      */
 
     socket.on('join-room', function (room) {
-        //console.log('JOIN:' + room);
+        
         socket.join(room);
         io.sockets.in('user.' + socket.decoded_token.userid).emit('auth.info', 'You have joined room ' + room);
-        //console.log(socket.rooms);
+        io.sockets.in(room).emit('update-room', room);
+
+        socket.broadcast.to(room).emit('room-info', socket.decoded_token.name + ' has joined ' + room);
     });
 
     socket.on('leave-room', function (room) {
-        //console.log('LEAVE:' + room);
+
         socket.leave(room);
         io.sockets.in('user.' + socket.decoded_token.userid).emit('auth.info', 'You have left room ' + room);
-        //console.log(socket.rooms);
+        io.sockets.in(room).emit('update-room', room);
+
+        socket.broadcast.to(room).emit('room-info', socket.decoded_token.name + ' has left ' + room);
     });
      
+    socket.on('room-list', function(room) {
+
+        if (io.sockets.adapter.rooms[room] != undefined) {
+            let users = [];
+           
+            for (let user in io.sockets.adapter.rooms[room].sockets) {
+                users.push(
+                    {
+                        'id': io.sockets.connected[user].decoded_token.userid,
+                        'name': io.sockets.connected[user].decoded_token.name
+                    }
+                );
+            }
+
+            io.sockets.in(room).emit('room-list', {'users': users, 'room': room});
+        }
+
+    });
 });
 
 io.on('connection', function( socket ) {
@@ -85,8 +107,22 @@ redis.on('message', function(channel, message) {
 });
 
 redis.on('pmessage', function(channel, pattern, message) {
+
     message = JSON.parse(message);
-    io.to(pattern).emit(message.event, message.data);
+
+    /** 
+     * We are going to handle most game updates in Vue
+     * instead of waiting for the queue to push things 
+     * out to us, this will avoid the 1 second queue
+     * delay for interaction on screen
+     */
+
+    if (pattern.startsWith('game')) {
+        io.to(pattern).emit(message.event, message.data, send_to_self=false);
+    } else {
+        io.to(pattern).emit(message.event, message.data);
+    }
+
 });
 
 server.listen(process.env.SOCKETIO_PORT);

@@ -8,6 +8,8 @@ class Player extends Model
 {
     use UserAttributes;
 
+    protected $appends = ['full_name'];
+
     public function user()
     {
         return $this->belongsTo('App\User');

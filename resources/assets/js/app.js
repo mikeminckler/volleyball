@@ -25,6 +25,8 @@ Vue.component('feedback', require('./components/Feedback.vue'));
 Vue.component('app-menu', require('./components/Menu.vue'));
 Vue.component('autocomplete', require('./components/AutoComplete.vue'));
 Vue.component('scoreboard', require('./components/Scoreboard.vue'));
+Vue.component('room-list', require('./components/RoomList.vue'));
+Vue.component('team-game-stats', require('./components/TeamGameStats.vue'));
 
 const router = new VueRouter({
     routes: [
@@ -327,6 +329,11 @@ const app = new Vue({
 
         window.socket.on('App\\Events\\GameRemoved', function (data) {
             vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        });
+
+        // Room Events
+        window.socket.on('room-info', function (data) {
+            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data});
         });
     }
 

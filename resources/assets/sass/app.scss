@@ -421,3 +421,40 @@ div.results-item:last-child {
     0%    { transform: rotate(0deg); }
     100%  { transform: rotate(360deg); }
 }
+
+/* ROOM LIST */
+
+div.room-list {
+    position: fixed;
+    z-index: 10;
+    bottom: 25px;
+    right: 0px;
+    border-left: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
+    border-top-left-radius: var(--border-radius);
+    background-color: var(--button-color);
+    font-size: var(--small-font);
+}
+
+div.room-item, div.room-title {
+    padding: 0px 5px;
+}
+
+div.room-title {
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+div.room-item {
+    cursor: pointer;
+    line-height: var(--input-line-height);
+}
+
+div.room-item:not(:last-child) {
+    border-bottom: 1px solid var(--border-color);
+}
+
+div.room-item:nth-child(even) {
+    background-color: var(--light-bg);
+}
+

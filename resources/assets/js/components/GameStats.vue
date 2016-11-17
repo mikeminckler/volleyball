@@ -2,6 +2,8 @@
 
     <div class="content">
 
+        <room-list :room="'game.' + game.id"></room-list>
+
         <section>
             <div class="stats-header">
                 <div class="h3 stats-header-item">{{ game.team1.team_name }}  vs {{ game.team2.team_name }}</div>
@@ -12,6 +14,13 @@
                     <button class="add-set" @click.prevent="addSet">New Set</button>
                 </div>
         </section>
+
+        <section>
+
+            <team-game-stats :team_id="game.team1.id"></team-game-stats>
+
+        </section>
+
 
     </div>
 </template>

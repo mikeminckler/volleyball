@@ -2,6 +2,8 @@
 
     <div class="content">
 
+        <room-list :room="'team.' + team.id"></room-list>
+
         <section>
             <div class="h1">{{ team.id ? 'Edit' : 'Create' }} Team {{ team.team_name }}</div>
         </section>
@@ -47,12 +49,12 @@
                     v-on:leave="leave"
                 >
                     <div class="row" 
-                        v-for="(player, index) in players"
+                        v-for="(player, index) in team.players"
                         :key="player.id"
                         :data-index="index"
                     >
 
-                        <div class="column">{{ player.user.first_name + ' ' + player.user.last_name }}</div>
+                        <div class="column">{{ player.full_name }}</div>
                         <div class="column">
                             <a @click.prevent="removePlayer" 
                                 :data-player-id="player.id" 
@@ -89,22 +91,13 @@
 <script>
 
     import UserMixins from './UserMixins'
+    import TeamMixins from './TeamMixins'
     import ListTransition from './ListTransition'
     import Helpers from './Helpers'
 
     export default {
 
-        data: function () {
-            return {
-                team: {
-                    id: '',
-                    team_name: '',
-                },
-                players: []
-            }
-        },
-
-        mixins: [UserMixins, ListTransition, Helpers],
+        mixins: [UserMixins, ListTransition, Helpers, TeamMixins],
 
         watch: {
             '$route': 'loadInfo'
@@ -112,35 +105,10 @@
 
         methods: {
 
-            loadTeam: function() {
-
-                var vue = this;
-                let team_id = vue.$route.params.id;
-
-                if (vue.isNumeric(team_id)) {
-
-                    vue.$http.post('/api/teams/load/' + team_id).then( function(response) {
-                        vue.team = response.data;
-
-                        vue.loadPlayers();
-
-                    });
-
-                }
-            },
-
-            loadPlayers: function() {
-
-                var vue = this;
-
-                vue.$http.post('/api/teams/players/' + this.team.id).then( function(response) {
-                    vue.players = response.data;
-                });
-            },
-
             removePlayer: function(e) {
 
                 var vue = this;
+                vue.showLoading();
             
                 let player_id = e.target.dataset.playerId;
                 let post_data = {
@@ -198,7 +166,9 @@
         },
 
         beforeMount() {
-            this.loadTeam();
+            var vue = this;
+            let team_id = vue.$route.params.id;
+            this.loadTeam(team_id);
         },
 
         mounted() {
@@ -214,7 +184,7 @@
             window.socket.on('App\\Events\\TeamUpdated', function (data) {
                 vue.hideLoading();
                 vue.$store.dispatch('addFeedback', {'type': 'success', 'message': data.message});
-                vue.loadTeam();
+                vue.loadTeam(team_id);
             });
 
             //console.log(window.socket);
