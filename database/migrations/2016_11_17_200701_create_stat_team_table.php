@@ -21,12 +21,12 @@ class CreateStatTeamTable extends Migration
             $table->integer('team_id')->unsigned()->index();
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
 
-            $table->decimal('score_high', 5 , 2);
-            $table->decimal('score_low', 5 , 2);
+            $table->decimal('score_high', 5 , 2)->nullable();
+            $table->decimal('score_low', 5 , 2)->nullable();
 
-            $table->decimal('target_low', 5 , 2);
-            $table->decimal('target_mid', 5 , 2);
-            $table->decimal('target_high', 5 , 2);
+            $table->decimal('target_low', 5 , 2)->nullable();
+            $table->decimal('target_mid', 5 , 2)->nullable();
+            $table->decimal('target_high', 5 , 2)->nullable();
 
             $table->timestamps();
         });

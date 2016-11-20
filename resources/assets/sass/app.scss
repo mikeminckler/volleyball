@@ -20,7 +20,7 @@
     --button-color: #fff;
     --button-text-color: #252c41;
     --footer-font-color: #999;
-    --light-bg: rgba(155,174,200,0.1);
+    --light-bg: #f2f8ff;
     --search-results-highlight: #e5f0ff;
     --existing-bg: #f2fff5;
     --input-error-color: #ffdda2;
@@ -89,6 +89,10 @@ div.container {
     padding: 50px 15px 35px 15px;
 }
 
+div.content {
+    padding-bottom: 50px;
+}
+
 div.header {
     position: fixed;
     height: 35px;
@@ -97,7 +101,7 @@ div.header {
     line-height: 35px;
     font-size: var(--header-font-size);
     display: flex;
-    background-color: rgba(0,0,0,0.1);
+    background-color: var(--light-bg);
 }
 
 .button, button {
@@ -244,7 +248,7 @@ div.form-block {
 
 div.form-label, div.form-input {
     flex: 1;
-    padding: 2px;
+    padding: 0px 2px;
 }
 
 div.form-label {
@@ -265,7 +269,7 @@ button {
 input, textarea {
     border-radius: var(--border-radius);
     font-size: var(--input-font-size);
-    padding: 5px;
+    padding: 4px 5px;
     border: 1px solid var(--border-color);
 }
 

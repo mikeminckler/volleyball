@@ -17,7 +17,7 @@
 
         <section>
 
-            <team-game-stats :team_id="game.team1.id"></team-game-stats>
+            <team-game-stats :team_id="game.team1.id" v-if="game.team1.id"></team-game-stats>
 
         </section>
 

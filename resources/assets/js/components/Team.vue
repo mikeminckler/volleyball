@@ -29,60 +29,100 @@
                 </div>
             </div>
 
+            </form>
+
+        </section>
+
+        <section>
+            <div class="h2">Stats Settings</h2>
+        </section>
+
+        <section v-if="team.id">
+
+            <div class="form-block">
+                <div class="form-label"></div>
+                <div class="form-input">High</div>
+                <div class="form-input">Low</div>
+                <div class="form-input">Target Low</div>
+                <div class="form-input">Target Mid</div>
+                <div class="form-input">Target High</div>
+            </div>
+
+            <transition-group 
+                name="form-list" 
+                tag="div"
+                v-bind:css="false"
+                v-on:before-enter="beforeEnter"
+                v-on:enter="enter"
+                v-on:leave="leave"
+            >
+
+                <div class="form-block" v-for="(stat, index) in stats"
+                    :key="stat.id"
+                    :data-index="index"
+                >
+
+                    <div class="form-label">{{ stat.stat_name }}</div>
+
+                    <div class="form-input" v-for="type in statSettings">
+                        <team-stat-setting :type="type" :team="team" :stat="stat"></team-stat-setting>
+                    </div>
+
+                </div>
+
+            </transition-group>
+
+
         </section>
 
 
-        <div v-show="team.id" v-if="userCanManageTeam(team.id)">
+        <section v-show="team.id" v-if="userCanManageTeam(team.id)">
+            <div class="h2">Players</h2>
+        </section>
 
-            <section>
-                <div class="h2">Players</h2>
-            </section>
+        <section v-show="team.id" v-if="userCanManageTeam(team.id)">
 
-            <section>
-
-                <transition-group 
-                    name="list" 
-                    tag="div"
-                    v-bind:css="false"
-                    v-on:before-enter="beforeEnter"
-                    v-on:enter="enter"
-                    v-on:leave="leave"
+            <transition-group 
+                name="list" 
+                tag="div"
+                v-bind:css="false"
+                v-on:before-enter="beforeEnter"
+                v-on:enter="enter"
+                v-on:leave="leave"
+            >
+                <div class="row" 
+                    v-for="(player, index) in team.players"
+                    :key="player.id"
+                    :data-index="index"
                 >
-                    <div class="row" 
-                        v-for="(player, index) in team.players"
-                        :key="player.id"
-                        :data-index="index"
-                    >
 
-                        <div class="column">{{ player.full_name }}</div>
-                        <div class="column">
-                            <a @click.prevent="removePlayer" 
-                                :data-player-id="player.id" 
-                                class="delete fa fa-times icon" 
-                                :href="'/api/teams/delete-player/' + team.id"
-                            >
-                            </a>
-                        </div>
-
+                    <div class="column">{{ player.full_name }}</div>
+                    <div class="column">
+                        <a @click.prevent="removePlayer" 
+                            :data-player-id="player.id" 
+                            class="delete fa fa-times icon" 
+                            :href="'/api/teams/delete-player/' + team.id"
+                        >
+                        </a>
                     </div>
-                </transition-group>
 
-            </section>
-
-            <section>
-
-                <div class="form-block">
-                    <div class="form-label">
-                        <label for="terms" class="label">Add Players</label>
-                    </div>
-                    <div class="form-input">
-                        <autocomplete object="users" name="" clear="true" :afterSearching="'addPlayerToTeam(' + team.id + ')'"></autocomplete>
-                    </div>
                 </div>
+            </transition-group>
 
-            </section>
+        </section>
 
-        </div>
+        <section>
+
+            <div class="form-block">
+                <div class="form-label">
+                    <label for="terms" class="label">Add Players</label>
+                </div>
+                <div class="form-input">
+                    <autocomplete object="users" name="" clear="true" :afterSearching="'addPlayerToTeam(' + team.id + ')'"></autocomplete>
+                </div>
+            </div>
+
+        </section>
 
     </div>
 
@@ -92,16 +132,19 @@
 
     import UserMixins from './UserMixins'
     import TeamMixins from './TeamMixins'
+    import StatMixins from './StatMixins'
     import ListTransition from './ListTransition'
     import Helpers from './Helpers'
 
     export default {
 
-        mixins: [UserMixins, ListTransition, Helpers, TeamMixins],
-
-        watch: {
-            '$route': 'loadInfo'
+        data: function() {
+            return {
+                statSettings: ['score_high', 'score_low', 'target_high', 'target_mid', 'target_low']
+            }
         },
+
+        mixins: [UserMixins, ListTransition, Helpers, TeamMixins, StatMixins],
 
         methods: {
 
@@ -169,6 +212,7 @@
             var vue = this;
             let team_id = vue.$route.params.id;
             this.loadTeam(team_id);
+            this.loadStats();
         },
 
         mounted() {

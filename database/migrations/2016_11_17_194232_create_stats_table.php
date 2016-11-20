@@ -17,6 +17,7 @@ class CreateStatsTable extends Migration
             $table->increments('id');
 
             $table->string('stat_name');
+            $table->boolean('removed')->default(false);
 
             $table->timestamps();
         });

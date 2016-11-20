@@ -100,4 +100,9 @@ class Team extends Model
 
     }
 
+    public function stats()
+    {
+        return $this->belongsToMany('App\Stat')->withPivot('score_high', 'score_low', 'target_high', 'target_mid', 'target_low');
+    }
+
 }

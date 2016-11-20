@@ -7,7 +7,7 @@ use App\Http\Requests;
 
 use App\Team;
 use App\Player;
-use App\User;;
+use App\User;
 
 use App\Events\TeamRemoved;
 use App\Events\TeamsRefresh;

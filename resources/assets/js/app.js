@@ -27,6 +27,7 @@ Vue.component('autocomplete', require('./components/AutoComplete.vue'));
 Vue.component('scoreboard', require('./components/Scoreboard.vue'));
 Vue.component('room-list', require('./components/RoomList.vue'));
 Vue.component('team-game-stats', require('./components/TeamGameStats.vue'));
+Vue.component('team-stat-setting', require('./components/TeamStatSetting.vue'));
 
 const router = new VueRouter({
     routes: [
@@ -48,6 +49,10 @@ const router = new VueRouter({
         { path: '/games/create', component: require('./components/Game.vue') },
 
         { path: '/games/stats/:id', component: require('./components/GameStats.vue') },
+
+        { path: '/stats', component: require('./components/Stats.vue') },
+        { path: '/stats/:id', component: require('./components/Stat.vue') },
+        { path: '/stats/create', component: require('./components/Stat.vue') },
 
         //{ path: '/not-found', component: require('./components/404.vue') },
         //{ path: '/*', redirect: '/not-found' }

@@ -1,8 +1,6 @@
 <template>
 
     <div class="room-list">
-        <div class="room-title">Active Users</div>
-
         <transition-group 
             name="list" 
             tag="div"
