@@ -131,4 +131,12 @@ class Game extends Model
         return $this->currentSet()->points->sortByDesc('created_at')->values()->first();
     }
 
+    public function opposingTeam($team) {
+        if ($this->team1->id != $team->id) {
+            return $this->team1;
+        } else {
+            return $this->team2;
+        }
+    }
+
 }

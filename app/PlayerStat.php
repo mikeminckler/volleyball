@@ -67,7 +67,7 @@ class PlayerStat extends Model
 
         $player_stat->save();
 
-        event( new PlayerGameStatsUpdated($player, $game) );
+        event( new PlayerGameStatsUpdated($player, $game, $stat) );
 
         return $player_stat;
 

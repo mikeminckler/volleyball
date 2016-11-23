@@ -21,7 +21,7 @@ class TeamStatsController extends Controller
     public function stats($id) 
     {
         return $this->team->findOrFail($id)->stats()->get()->sortBy(function($stat) {
-            return $stat->stat_name;
+            return $stat->id;
         })->values()->all();
     }
 

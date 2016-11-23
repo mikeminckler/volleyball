@@ -11,6 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 use App\Player;
 use App\Game;
+use App\Stat;
 
 class PlayerGameStatsUpdated implements ShouldBroadcast
 {
@@ -18,11 +19,13 @@ class PlayerGameStatsUpdated implements ShouldBroadcast
 
     public $player;
     public $game;
+    public $stat;
 
-    public function __construct(Player $player, Game $game)
+    public function __construct(Player $player, Game $game, Stat $stat)
     {
         $this->player = $player;
         $this->game = $game;
+        $this->stat = $stat;
     }
 
     /**

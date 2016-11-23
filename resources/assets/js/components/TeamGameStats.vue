@@ -2,6 +2,13 @@
 
     <div class="team-game-stats">
 
+        <div class="row stats-player">
+            <div class="column player-name"></div>
+            <div class="column" v-for="stat in stats">
+                {{ stat.stat_name }}
+            </div>
+        </div>
+
         <transition-group 
             name="form-list" 
             tag="div"
@@ -17,7 +24,7 @@
                 :data-index="index"
             >
 
-                <div class="column">{{ player.full_name }}</div>
+                <div class="column player-name">{{ player.full_name }}</div>
 
                 <div class="column" v-for="stat in stats">
 
@@ -64,8 +71,12 @@
             });
 
             window.socket.on('App\\Events\\PlayerGameStatsUpdated', function (data) {
-                let index = _.findIndex(vue.team.players, function(o) {return o.id == data.player.id});
-                vue.team.players[index].updated_at = new Date().getTime();
+                let player_index = _.findIndex(vue.team.players, function(o) {return o.id == data.player.id});
+                let stat_index = _.findIndex(vue.stats, function(o) {return o.id == data.stat.id});
+                let time = new Date().getTime();
+
+                vue.team.players[player_index].updated_at = time;
+                vue.stats[stat_index].updated_at = time;
             });
         
         },

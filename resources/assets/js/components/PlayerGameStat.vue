@@ -1,12 +1,14 @@
 <template>
 
-    <div class="player-game-stat">
+    <div class="player-game-stat" :class="buttonCountClass"> 
         
         <div class="stat-buttons" v-for="value in buttons">
             <button class="stat" @click.prevent="takeStat(value)">{{ value }}</button>
         </div>
-        <div class="stat-score">{{ score.score }}</div>
-        <div class="stat-attempts" v-if="score.attempts">({{ score.attempts }})</div>
+        <div class="stat-score-container" :class="statClass">
+            <div class="stat-score">{{ score.score }}</div>
+            <div class="stat-attempts" v-if="score.attempts">({{ score.attempts }})</div>
+        </div>
 
     </div>
 
@@ -26,15 +28,25 @@
                     score: 0,
                     attempts: 0
                 },
-                buttons: []
+                buttons: [],
+                changed: ''
             }
         },
 
         props: ['player', 'team', 'game', 'stat'],
 
         computed: {
-            updated_at: function() {
+            player_updated_at: function() {
                 return this.player.updated_at;
+            },
+            stat_updated_at: function() {
+                return this.stat.updated_at;
+            },
+            statClass: function() {
+                return (this.changed ? ' changed' : '');
+            },
+            buttonCountClass: function() {
+                return 'buttons-' + this.buttons.length;
             }
         },
 
@@ -47,10 +59,25 @@
         },
 
         watch: {
-            'updated_at': 'getScore'
+            'player_updated_at': 'updateScore'
         },
 
         methods: {
+
+            updateScore: function() {
+
+                var vue = this;
+
+                if (this.player_updated_at == this.stat.updated_at) {
+                    this.changed = true;
+                    this.getScore();                
+
+                    setTimeout(function() {
+                       vue.changed = false;
+                    }, 250);
+                }
+
+            },
 
             getButtons: function() {
 

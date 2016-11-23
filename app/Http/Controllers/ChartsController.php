@@ -44,7 +44,7 @@ class ChartsController extends Controller
             return $player_stat->created_at;
         })->values();
 
-        $chart_headers = collect(['Touch']);
+        $chart_headers = collect(['Touch', 'Total']);
 
         $team_stats = $team->stats;
 
@@ -56,18 +56,36 @@ class ChartsController extends Controller
         }
 
         $chart_data = new Collection;
-        $chart_data->push($chart_headers);
+        $total = 0;
+        $set_count = 1;
 
-        $chart_data->push(collect([0, $scores])->flatten());
+        if ($player_stats->count()) {
+            $previous_game_set_id = $player_stats->first()->game_set_id;
+        }
+
+        $chart_data->push($chart_headers);
+        $chart_data->push(collect([0, $total, $scores])->flatten());
+
+
+        $ticks = new Collection;
+        $ticks->push(['v' => '0', 'f' => 'vs '.$game->opposingTeam($team)->team_name]);
 
         foreach ($player_stats as $key => $player_stat) {
 
             $scores[$player_stat->stat->id] += $player_stat->chartScore($team);
+            $total += $player_stat->chartScore($team);
 
-            $chart_data->push(collect([($key + 1), $scores])->flatten());
+            $chart_data->push(collect([($key + 1), $total, $scores])->flatten());
+
+            if ($previous_game_set_id != $player_stat->game_set_id) {
+                $set_count ++;
+                $ticks->push(['v' => $key, 'f' => 'Set '.$set_count]);
+                $previous_game_set_id = $player_stat->game_set_id;
+            }
+
         }
 
-        return $chart_data;
+        return ['chart' => $chart_data, 'ticks' => array_values($ticks->toArray())];
 
     }
 }

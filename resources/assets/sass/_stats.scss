@@ -38,6 +38,10 @@ div.stat-score {
     top: 1px;
 }
 
+div.stats-player.row {
+    justify-content: center;
+}
+
 div.stat-attempts {
     font-size: 12px;
     font-weight: 200;
@@ -46,3 +50,20 @@ div.stat-attempts {
     position: relative;
     top: 2px;
 }
+
+div.stat-score-container {
+    border-radius: var(--border-radius);
+    transition: all .2s;
+    display: flex;
+    width: 55px;
+    height: 24px;
+    line-height: 22px;
+    margin-top: 4px;
+    margin-left: 2px;
+}
+
+div.stat-score-container.changed {
+    background-color: var(--announcement-bg);
+    color: #413b00; 
+}
+
