@@ -2,7 +2,7 @@
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth:api'], function() {
+Route::group(['middleware' => 'auth:api', ], function() {
 
     Route::post('home', ['as' => 'home', 'uses' => 'UsersController@home']);
     Route::post('menu', ['as' => 'menu', 'uses' => 'UsersMenuController@index']);
@@ -39,7 +39,7 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('teams/delete-player/{id}', ['as' => 'teams.delete-player', 'uses' => 'TeamsController@removePlayer'])->where('id', '\d+');
     Route::post('teams/get-stat/{id}', ['as' => 'teams.get-stat', 'uses' => 'TeamStatsController@getStat'])->where('id', '\d+');
     Route::post('teams/set-stat/{id}', ['as' => 'teams.set-stat', 'uses' => 'TeamStatsController@setStat'])->where('id', '\d+');
-
+    Route::post('teams/stats/{id}', ['as' => 'teams.stats', 'uses' => 'TeamStatsController@stats'])->where('id', '\d+');
 
     Route::post('games', ['as' => 'games', 'uses' => 'GamesController@games']);
     Route::post('games/load/{id}', ['as' => 'games.show', 'uses' => 'GamesController@load'])->where('id', '\d+');
@@ -56,5 +56,10 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::post('stats/load/{id}', ['as' => 'stats.show', 'uses' => 'StatsController@load'])->where('id', '\d+');
     Route::post('stats/create', ['as' => 'stats.create', 'uses' => 'StatsController@create']);
     Route::post('stats/delete/{id}', ['as' => 'stats.delete', 'uses' => 'StatsController@destroy'])->where('id', '\d+');
+
+    Route::post('players/get-game-stat-score/{id}', ['as' => 'players.get-game-stat-score', 'uses' => 'PlayerGameController@getStatScore'])->where('id', '\d+');
+    Route::post('players/add-game-stat-score/{id}', ['as' => 'players.add-game-stat-score', 'uses' => 'PlayerGameController@addStatScore'])->where('id', '\d+');
+
+    Route::post('charts/team-games', ['as' => 'charts.team-games', 'uses' => 'ChartsController@teamGames']);
 
 });

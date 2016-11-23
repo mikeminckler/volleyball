@@ -53,8 +53,9 @@ class Game extends Model
              */
             
             $this->addGameSet();
+            $this->addPoint();
 
-            event(new GameCreated($this->team1->team_name.' vs '.$this->team2->team_name.' been created'));
+            event(new GameCreated($this->team1->team_name.' vs '.$this->team2->team_name.' been created', '/games/stats/'.$this->id));
         }
 
         event(new GamesRefresh());
@@ -79,19 +80,25 @@ class Game extends Model
         return $this->gameSets()->get()->implode('full_score', ', ');
     }
 
-    public function addPoint($team_id)
+    public function addPoint($team = null)
     {
 
         $game_set = $this->currentSet();
-        $team = Team::findOrFail($team_id);
+        if ($team) {
+            $team = Team::findOrFail($team);
+        }
 
         $point = new Point;
-        $point->team_id = $team->id;
+        if ($team instanceof Team) {
+            $point->team_id = $team->id;
+        }
         $point->game_set_id = $game_set->id;
         $point->save();
 
-        event(new GamesRefresh());
-        event(new GameUpdated($this, $team->team_name.' has scored a point'));
+        if ($team instanceof Team) {
+            event(new GamesRefresh());
+            event(new GameUpdated($this, $team->team_name.' has scored a point'));
+        }
 
         return $this;
 
@@ -117,6 +124,11 @@ class Game extends Model
     public function currentSet()
     {
         return $this->gameSets->sortByDesc('created_at')->values()->first();
+    }
+
+    public function currentPoint()
+    {
+        return $this->currentSet()->points->sortByDesc('created_at')->values()->first();
     }
 
 }

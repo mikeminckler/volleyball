@@ -40,4 +40,5 @@ class Stat extends Model
         event(new StatsRefresh());
         return $this;
     }
+
 }

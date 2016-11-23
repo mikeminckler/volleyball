@@ -9,17 +9,17 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class GameCreated implements ShouldBroadcast
+use App\PlayerStat;
+
+class TeamGameChartUpdated implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
 
-    public $message;
-    public $link;
+    public $player_stat;
 
-    public function __construct($message, $link)
+    public function __construct(PlayerStat $player_stat)
     {
-        $this->message = $message;
-        $this->link = $link;
+        $this->player_stat = $player_stat;
     }
 
     /**
@@ -29,6 +29,6 @@ class GameCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['auth.info'];
+        return ['game.'.$this->player_stat->game_id];
     }
 }

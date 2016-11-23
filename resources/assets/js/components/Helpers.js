@@ -4,10 +4,6 @@ export default {
 
     methods: {
 
-        isNumeric: function(n) {
-              return !isNaN(parseFloat(n)) && isFinite(n);
-        },
-
         showLoading: function() {
             document.getElementById('loading').style.opacity = 1;
         },

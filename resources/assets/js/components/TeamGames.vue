@@ -30,7 +30,7 @@
                 var vue = this;
                 let team_id = vue.$route.params.id;
 
-                if (vue.isNumeric(team_id)) {
+                if (_.toNumber(team_id)) {
 
                     vue.$http.post('/api/teams/load/' + team_id).then( function(response) {
                         vue.team = response.data;

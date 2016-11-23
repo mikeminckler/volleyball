@@ -27,7 +27,9 @@ Vue.component('autocomplete', require('./components/AutoComplete.vue'));
 Vue.component('scoreboard', require('./components/Scoreboard.vue'));
 Vue.component('room-list', require('./components/RoomList.vue'));
 Vue.component('team-game-stats', require('./components/TeamGameStats.vue'));
+Vue.component('team-game-chart', require('./components/TeamGameChart.vue'));
 Vue.component('team-stat-setting', require('./components/TeamStatSetting.vue'));
+Vue.component('player-game-stat', require('./components/PlayerGameStat.vue'));
 
 const router = new VueRouter({
     routes: [
@@ -187,6 +189,7 @@ const store = new Vuex.Store({
             let item = {
                 type: feedback.type,
                 message: feedback.message,
+                link: feedback.link,
                 expire: (new Date().getTime() + 4900)
             };
             commit('addFeedback', item);
@@ -329,7 +332,7 @@ const app = new Vue({
         // Game Events
 
         window.socket.on('App\\Events\\GameCreated', function (data) {
-            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message, 'link': data.link});
         });
 
         window.socket.on('App\\Events\\GameRemoved', function (data) {
@@ -364,11 +367,7 @@ window.axios.interceptors.response.use(function (response) {
   });
 */
 
-/** 
- * A little Jquery to set css vars for windows size
- * may be able to ditch all this if we dont need 
- * window size
- */
+google.charts.load('current', {'packages':['corechart']});
 
 var supportsTouch = 'ontouchstart' in window || navigator.msMaxTouchPoints;
 
@@ -405,6 +404,12 @@ $(function(){
 			stepMinute: 5
 		});
 	});
+
+    /** 
+     * A little Jquery to set css vars for windows size
+     * may be able to ditch all this if we dont need 
+     * window size
+     */
 
     setWidth();
 

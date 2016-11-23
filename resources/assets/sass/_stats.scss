@@ -15,3 +15,34 @@ input.stat-setting {
     width: 40px !important;
     text-align: center;
 }
+
+div.player-game-stat {
+    display: flex;
+    flex: 1;
+}
+
+div.stat-buttons {
+    
+}
+
+button.stat {
+    width: 26px;
+    height: 26px;
+    padding: 0px;
+    margin: 0px 1px;
+}
+
+div.stat-score {
+    padding-left: 2px;
+    position: relative;
+    top: 1px;
+}
+
+div.stat-attempts {
+    font-size: 12px;
+    font-weight: 200;
+    padding-left: 2px;
+    font-style: italic;
+    position: relative;
+    top: 2px;
+}

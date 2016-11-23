@@ -10,7 +10,7 @@ export default {
 
             var vue = this;
 
-            if (vue.isNumeric(game_id)) {
+            if (_.toFinite(game_id)) {
 
                 vue.$http.post('/api/games/load/' + game_id).then( function(response) {
                     vue.game = response.data;

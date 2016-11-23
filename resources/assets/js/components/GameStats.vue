@@ -16,9 +16,11 @@
         </section>
 
         <section>
+            <team-game-stats :team_id="game.team1.id" v-if="game.team1.id" :game="game"></team-game-stats>
+        </section>
 
-            <team-game-stats :team_id="game.team1.id" v-if="game.team1.id"></team-game-stats>
-
+        <section>
+            <team-game-chart :team_id="game.team1.id" v-if="game.team1.id" :game="game"></team-game-chart>
         </section>
 
 

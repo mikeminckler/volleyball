@@ -18,6 +18,13 @@ class TeamStatsController extends Controller
         $this->stat = $stat;
     }
 
+    public function stats($id) 
+    {
+        return $this->team->findOrFail($id)->stats()->get()->sortBy(function($stat) {
+            return $stat->stat_name;
+        })->values()->all();
+    }
+
     public function getStat(Request $request, $id)
     {
         $team = $this->team->findOrFail($id);

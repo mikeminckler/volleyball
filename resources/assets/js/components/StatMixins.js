@@ -21,7 +21,7 @@ export default {
 
             var vue = this;
 
-            if (vue.isNumeric(stat_id)) {
+            if (_.toNumber(stat_id)) {
 
                 vue.$http.post('/api/stats/load/' + stat_id).then( function(response) {
                     vue.stat = response.data;
@@ -37,6 +37,14 @@ export default {
             });
         
         },
+
+        loadTeamStats: function(team_id) {
+            
+            var vue = this;
+            vue.$http.post('/api/teams/stats/' + team_id).then( function(response) {
+                vue.stats = response.data;
+            });
+        }
 
     }
 

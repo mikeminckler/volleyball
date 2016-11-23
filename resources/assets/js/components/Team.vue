@@ -220,7 +220,7 @@
             var vue = this;
 
             let team_id = vue.$route.params.id;
-            if (vue.isNumeric(team_id)) {
+            if (_.toNumber(team_id)) {
                 window.socket.emit('join-room', 'team.' + team_id);
             }
 
@@ -238,7 +238,7 @@
 
             window.socket.removeListener('App\\Events\\TeamUpdated');
 
-            if (this.isNumeric(this.team.id)) {
+            if (_.toNumber(this.team.id)) {
                 window.socket.emit('leave-room', 'team.' + this.team.id);
             }
 

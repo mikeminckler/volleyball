@@ -1,9 +1,10 @@
 div.row {
     display: flex;
+    line-height: var(--input-line-height);
 }
 
 div.column {
     flex: 1;
-    padding: 5px 5px 5px 0px;
+    padding-right: 5px;
     border-bottom: 1px solid var(--border-color);
 }
