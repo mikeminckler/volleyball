@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Player;
+use App\Game;
 
 use App\Events\TeamsRefresh;
 use App\Events\TeamCreated;
@@ -12,6 +13,9 @@ use App\Events\TeamUpdated;
 
 class Team extends Model
 {
+
+    protected $appends = ['games'];
+
     public function saveTeam($input)
     {
     
@@ -104,5 +108,97 @@ class Team extends Model
     {
         return $this->belongsToMany('App\Stat')->withPivot('score_high', 'score_low', 'target_high', 'target_mid', 'target_low');
     }
+
+    public function playerStats()
+    {
+        return $this->hasMany('App\PlayerStat');
+    }
+
+    public function gameStatScore(Stat $stat, Game $game)
+    {
+
+        $team_stats = $this->playerStats()
+            ->where('team_id', $this->id)
+            ->where('game_id', $game->id)
+            ->where('stat_id', $stat->id)
+            ->get();
+
+        return $this->statAverage($team_stats, $stat)['score'];
+
+    }
+
+    public function homeGames()
+    {
+        return $this->hasMany('App\Game', 'team1_id');
+    }
+
+    public function awayGames()
+    {
+        return $this->hasMany('App\Game', 'team2_id');
+    }
+
+    public function games()
+    {
+        $home_games = $this->homeGames;
+        $away_games = $this->awayGames;
+        return $home_games->merge($away_games);
+    }
+
+    public function getGamesAttribute()
+    {
+        return $this->games();
+    }
+
+    public function statAverage($player_stats, Stat $stat)
+    {
+
+        $team_stat = $this->stats()->where('stat_id', $stat->id)->first();
+        $score_high = $team_stat->pivot->score_high;
+        $score_low = $team_stat->pivot->score_low;
+
+        if ($player_stats->count()) {
+
+            $attempts = $player_stats->count();
+
+            $total = $player_stats->sum(function($player_stat) {
+                return $player_stat->score;
+            });
+
+            if ($score_low == $score_high) {
+
+                $score = $attempts;
+                $attempts = 0;
+            
+            } else if ($score_low == -1 && $score_high == 1) {
+
+                $successes = $player_stats->filter(function($player_stat) {
+                    if ($player_stat->score == 1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                })->count();
+
+                $errors = $player_stats->filter(function($player_stat) {
+                    if ($player_stat->score == -1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                })->count();
+
+                $score = number_format(((($successes - $errors) / $attempts) * 100), 1, '', '');
+
+            } else {
+                $score = number_format(round(($total / $attempts), 2), 2, '.', '');
+            }
+
+            return ['score' => $score, 'attempts' => $attempts];
+
+        } else {
+            return ['score' => 0, 'attempts' => 0];
+        }
+    }
+
 
 }

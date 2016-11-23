@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth:api', ], function() {
     Route::post('teams/get-stat/{id}', ['as' => 'teams.get-stat', 'uses' => 'TeamStatsController@getStat'])->where('id', '\d+');
     Route::post('teams/set-stat/{id}', ['as' => 'teams.set-stat', 'uses' => 'TeamStatsController@setStat'])->where('id', '\d+');
     Route::post('teams/stats/{id}', ['as' => 'teams.stats', 'uses' => 'TeamStatsController@stats'])->where('id', '\d+');
+    Route::post('teams/games/{id}', ['as' => 'teams.games', 'uses' => 'TeamsController@games'])->where('id', '\d+');
 
     Route::post('games', ['as' => 'games', 'uses' => 'GamesController@games']);
     Route::post('games/load/{id}', ['as' => 'games.show', 'uses' => 'GamesController@load'])->where('id', '\d+');

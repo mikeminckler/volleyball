@@ -14,7 +14,7 @@ use App\Events\GameUpdated;
 class Game extends Model
 {
 
-    protected $appends = ['score'];
+    protected $appends = ['score', 'team1_name', 'team2_name'];
 
     public function team1() 
     {
@@ -78,6 +78,16 @@ class Game extends Model
     public function getScoreAttribute()
     {
         return $this->gameSets()->get()->implode('full_score', ', ');
+    }
+
+    public function getTeam1NameAttribute()
+    {
+        return $this->team1()->get()->first()->team_name;
+    }
+
+    public function getTeam2NameAttribute()
+    {
+        return $this->team2()->get()->first()->team_name;
     }
 
     public function addPoint($team = null)

@@ -17,13 +17,13 @@
                 v-on:enter="enter"
                 v-on:leave="leave"
             >
-            <div class="row" 
-                v-for="(game, index) in games"
-                :key="game.id"
-                :data-index="index"
-            >
+                <div class="row" 
+                    v-for="(game, index) in games"
+                    :key="game.id"
+                    :data-index="index"
+                >
                     <div class="column">
-                        <router-link :to="{path: '/games/' + game.id}">{{ game.team1.team_name }} vs {{ game.team2.team_name }}</router-link>
+                        <router-link :to="{path: '/games/' + game.id}">{{ game.team1_name }} vs {{ game.team2_name }}</router-link>
                     </div>
 
                     <div class="column">
@@ -105,6 +105,10 @@
                 vue.loadGames();
             });
 
+        },
+
+        beforeDestroy() {
+            window.socket.removeListener('App\\Events\\GamesRefresh');
         }
     }
 

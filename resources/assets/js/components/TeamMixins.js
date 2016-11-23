@@ -7,13 +7,14 @@ export default {
             team: {
                 id: '',
                 team_name: '',
-                players: {}
+                players: [],
+                games: []
             },
         }
     },
 
     mixins: [Helpers],
-    
+
     methods: {
 
         loadTeam: function(team_id) {
@@ -38,6 +39,17 @@ export default {
                 });
             }
         },
+
+        loadTeamGames: function(team_id) {
+            var vue = this;
+            if (_.toNumber(team_id)) {
+
+                vue.$http.post('/api/teams/games/' + team_id).then( function(response) {
+                    vue.team.games = response.data;
+                });
+            }
+        
+        }
 
     }
 

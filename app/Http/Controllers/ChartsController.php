@@ -29,63 +29,68 @@ class ChartsController extends Controller
         $games = $this->game->whereIn('id', $request->input('games'))->get();
         $players = $team->players;
 
-        $player_stats = new Collection;
+        $chart_data = new Collection;
+        $ticks = new Collection;
+
+        $scores = array();
+        $team_stats = $team->stats;
+
+        foreach ($team_stats as $team_stat) {
+            $scores[$team_stat->id] = 0;
+        }
+
+        $total = 0;
+        $touch = 0;
+
+        $chart_data->push(collect([$touch, $total, $scores])->flatten());
 
         foreach ($games as $game) {
+
+            $player_stats = new Collection;
+
             foreach ($players as $player) {
                 $player_stats = $player_stats->merge($player->stats()
                     ->where('game_id', $game->id)
                     ->where('team_id', $team->id)->get()
                 );
             }
-        }
 
-        $player_stats = $player_stats->sortBy(function($player_stat) {
-            return $player_stat->created_at;
-        })->values();
+            $player_stats = $player_stats->sortBy(function($player_stat) {
+                return $player_stat->created_at;
+            })->values();
 
-        $chart_headers = collect(['Touch', 'Total']);
-
-        $team_stats = $team->stats;
-
-        $scores = array();
-
-        foreach ($team_stats as $team_stat) {
-            $chart_headers->push($team_stat->stat_name);
-            $scores[$team_stat->id] = 0;
-        }
-
-        $chart_data = new Collection;
-        $total = 0;
-        $set_count = 1;
-
-        if ($player_stats->count()) {
-            $previous_game_set_id = $player_stats->first()->game_set_id;
-        }
-
-        $chart_data->push($chart_headers);
-        $chart_data->push(collect([0, $total, $scores])->flatten());
-
-
-        $ticks = new Collection;
-        $ticks->push(['v' => '0', 'f' => 'vs '.$game->opposingTeam($team)->team_name]);
-
-        foreach ($player_stats as $key => $player_stat) {
-
-            $scores[$player_stat->stat->id] += $player_stat->chartScore($team);
-            $total += $player_stat->chartScore($team);
-
-            $chart_data->push(collect([($key + 1), $total, $scores])->flatten());
-
-            if ($previous_game_set_id != $player_stat->game_set_id) {
-                $set_count ++;
-                $ticks->push(['v' => $key, 'f' => 'Set '.$set_count]);
-                $previous_game_set_id = $player_stat->game_set_id;
+            if ($player_stats->count()) {
+                $previous_game_set_id = $player_stats->first()->game_set_id;
             }
 
+
+            $ticks->push(['v' => $touch, 'f' => 'vs '.$game->opposingTeam($team)->team_name]);
+
+
+            foreach ($player_stats as $player_stat) {
+
+                $scores[$player_stat->stat->id] += $player_stat->chartScore($team);
+                $total += $player_stat->chartScore($team);
+
+                $chart_data->push(collect([$touch, $total, $scores])->flatten());
+
+                if ($previous_game_set_id != $player_stat->game_set_id) {
+                    $ticks->push(['v' => $touch, 'f' => 'Set '.$player_stat->gameSet->number]);
+                    $previous_game_set_id = $player_stat->game_set_id;
+                }
+
+                $touch++;
+            }
         }
 
-        return ['chart' => $chart_data, 'ticks' => array_values($ticks->toArray())];
+        $chart_headers = collect(['Touch', 'Total '.$total]);
+        foreach ($team_stats as $team_stat) {
+            $chart_headers->push($team_stat->stat_name.' '.$team->gameStatScore($team_stat, $game));
+        }
+
+        $chart = collect([$chart_headers])->merge($chart_data);
+
+        return ['chart' => $chart, 'ticks' => array_values($ticks->toArray())];
 
     }
 }

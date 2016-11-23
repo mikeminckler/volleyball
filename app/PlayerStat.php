@@ -16,6 +16,11 @@ class PlayerStat extends Model
 
     public function chartScore($team)
     {
+
+        if (!$team instanceof Team) {
+            $team = Team::findOrFail($team);
+        }
+
         $team_stat = $team->stats()->where('stat_id', $this->stat->id)->first();
         $score_high = $team_stat->pivot->score_high;
         $score_low = $team_stat->pivot->score_low;
