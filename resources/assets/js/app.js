@@ -13,7 +13,7 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 
 const axios = require('axios');
-const fullCalendar = require('fullcalendar');
+//const fullCalendar = require('fullcalendar');
 const moment = require('moment');
 
 const io = require('socket.io-client');

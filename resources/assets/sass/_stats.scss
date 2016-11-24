@@ -69,6 +69,7 @@ div.stat-score-container.changed {
 
 div.tab-header {
     display: flex;
+    padding-left: 10px;
 }
 
 div.tab-button {
@@ -89,6 +90,8 @@ div.tab-button.active {
 }
 
 div.tab-content {
-    border-top: 1px solid var(--border-color);
+    border: 1px solid var(--border-color);
+    padding: 0px 10px;
+    border-radius: var(--border-radius);
 }
 
