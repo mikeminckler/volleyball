@@ -53,6 +53,19 @@
         props: ['team_id', 'game'],
 
         methods: {
+
+            updatePlayerStats: function(player_id) {
+                let time = new Date().getTime();
+                let player_index = _.findIndex(this.team.players, function(o) {return o.id == player_id});
+                this.team.players[player_index].updated_at = time;
+            }, 
+
+            updateStat: function(stat_id) {
+                let time = new Date().getTime();
+                let stat_index = _.findIndex(this.stats, function(o) {return o.id == stat_id});
+                this.stats[stat_index].updated_at = time;
+            }
+
         },
 
         mounted() {
@@ -71,12 +84,8 @@
             });
 
             window.socket.on('App\\Events\\PlayerGameStatsUpdated', function (data) {
-                let player_index = _.findIndex(vue.team.players, function(o) {return o.id == data.player.id});
-                let stat_index = _.findIndex(vue.stats, function(o) {return o.id == data.stat.id});
-                let time = new Date().getTime();
-
-                vue.team.players[player_index].updated_at = time;
-                vue.stats[stat_index].updated_at = time;
+                vue.updatePlayerStats(data.player.id);
+                vue.updateStat(data.stat.id);
             });
         
         },
@@ -84,6 +93,7 @@
         beforeDestroy() {
 
             window.socket.removeListener('App\\Events\\TeamUpdated');
+            window.socket.removeListener('App\\Events\\PlayerGameStatsUpdated');
             window.socket.emit('leave-room', 'team.' + this.team_id);
 
         }

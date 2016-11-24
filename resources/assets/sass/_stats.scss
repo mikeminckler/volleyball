@@ -67,3 +67,28 @@ div.stat-score-container.changed {
     color: #413b00; 
 }
 
+div.tab-header {
+    display: flex;
+}
+
+div.tab-button {
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    background-color: var(--button-color);
+    padding: 3px 5px;
+    cursor: pointer;
+    margin-left: 5px;
+    position: relative;
+    top: 1px;
+}
+
+div.tab-button.active {
+    border-bottom: 1px solid var(--bg-color);
+    background-color: transparent;
+}
+
+div.tab-content {
+    border-top: 1px solid var(--border-color);
+}
+

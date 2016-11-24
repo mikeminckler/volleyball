@@ -25,7 +25,7 @@
             vue.drawTeamChart(this.team_id, [this.game.id]);
 
             window.socket.on('App\\Events\\TeamGameChartUpdated', function (data) {
-                vue.drawTeamChart(vue.team.id, [vue.game.id]);
+                vue.drawTeamChart(vue.team_id, [vue.game.id]);
             });
 
         },
