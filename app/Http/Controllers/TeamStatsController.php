@@ -6,16 +6,19 @@ use Illuminate\Http\Request;
 
 use App\Team;
 use App\Stat;
+use App\Game;
 
 class TeamStatsController extends Controller
 {
     protected $team;
     protected $stat;
+    protected $game;
 
-    public function __construct(Team $team, Stat $stat)
+    public function __construct(Team $team, Stat $stat, Game $game)
     {
         $this->team = $team;
         $this->stat = $stat;
+        $this->game = $game;
     }
 
     public function stats($id) 
@@ -57,6 +60,18 @@ class TeamStatsController extends Controller
 
         return $value;
 
+    }
+
+    public function gameReport(Request $request, $id)
+    {
+        $games = $this->game->whereIn('id', $request->input('game_ids'))->get();
+        return $this->team->findOrFail($id)->gameReport($games);
+    }
+
+    public function playersReport(Request $request, $id)
+    {
+        $games = $this->game->whereIn('id', $request->input('game_ids'))->get();
+        return $this->team->findOrFail($id)->playersReport($games);
     }
 
 }

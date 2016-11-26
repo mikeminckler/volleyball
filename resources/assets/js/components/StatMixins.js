@@ -38,14 +38,6 @@ export default {
         
         },
 
-        loadTeamStats: function(team_id) {
-            
-            var vue = this;
-            vue.$http.post('/api/teams/stats/' + team_id).then( function(response) {
-                vue.stats = response.data;
-            });
-        }
-
     }
 
 };

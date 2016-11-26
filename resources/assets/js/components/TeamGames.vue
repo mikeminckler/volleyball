@@ -49,20 +49,23 @@
 
         </section>
 
-        <section>
-            <transition name="fade">
-                <div v-show="reportGames.length > 0">
-                    <button @click.prevent="generateReport">Generate Report</button>
-                </div>
-            </transition>
+        <transition name="fade">
+            <section v-if="showReport">
+                <div id="team_game_chart"></div>
+            </section>
+        </transition>
+
+        <transition name="fade">
+            <section v-if="showReport">
+                <team-game-report :team="team" :game_ids="reportGames"></team-game-chart>
+            <section>
+        </transition>
+
+        <section v-if="showReport">
+            <team-players-stats-report :team="team" :game_ids="reportGames"></team-players-stats-report>
         </section>
-        
-        <section>
-
-            <div id="team_game_chart"></div>
-
+            
         </section>
-
        
     </div>
 
@@ -80,7 +83,8 @@
 
         data: function () {
             return {
-                reportGames: []
+                reportGames: [],
+                showReport: false
             }
         },
 
@@ -90,6 +94,7 @@
 
             generateReport: function() {
             
+                this.showReport = true;
                 this.drawTeamChart(this.team.id, this.reportGames);
             },
 
@@ -99,8 +104,16 @@
                 if (_.includes(this.reportGames, val)) {
                     let index = _.findIndex(this.reportGames, function(o) { return o == val; });
                     this.reportGames.splice(index, 1);
+                    window.socket.emit('leave-room', 'game.' + val);
                 } else {
                     this.reportGames.push(val);
+                    window.socket.emit('join-room', 'game.' + val);
+                }
+
+                if (this.reportGames.length > 0) {
+                    this.generateReport();
+                } else {
+                    this.showReport = false;
                 }
             },
 

@@ -26,7 +26,7 @@
                         <router-link :to="{path: '/games/' + game.id}">{{ game.team1_name }} vs {{ game.team2_name }}</router-link>
                     </div>
 
-                    <div class="column">
+                    <div class="column w-100">
                         <router-link :to="{path: '/games/stats/' + game.id}">Stats</router-link>
                     </div>
 
@@ -38,7 +38,7 @@
                         {{ displayDateTime(game.start_time) }}
                     </div>
 
-                    <div class="column">
+                    <div class="column icon">
                         <a @click.prevent="remove" class="delete fa fa-times icon" :href="'/api/games/delete/' + game.id"></a>
                     </div>
                 </div>

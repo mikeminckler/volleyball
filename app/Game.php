@@ -149,4 +149,9 @@ class Game extends Model
         }
     }
 
+    public function playerStats()
+    {
+        return $this->hasMany('App\PlayerStat');
+    }
+
 }

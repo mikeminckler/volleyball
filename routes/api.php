@@ -41,6 +41,8 @@ Route::group(['middleware' => 'auth:api', ], function() {
     Route::post('teams/set-stat/{id}', ['as' => 'teams.set-stat', 'uses' => 'TeamStatsController@setStat'])->where('id', '\d+');
     Route::post('teams/stats/{id}', ['as' => 'teams.stats', 'uses' => 'TeamStatsController@stats'])->where('id', '\d+');
     Route::post('teams/games/{id}', ['as' => 'teams.games', 'uses' => 'TeamsController@games'])->where('id', '\d+');
+    Route::post('teams/game-report/{id}', ['as' => 'teams.game-report', 'uses' => 'TeamStatsController@gameReport'])->where('id', '\d+');
+    Route::post('teams/players-stats-report/{id}', ['as' => 'teams.players-stats-report', 'uses' => 'TeamStatsController@playersReport'])->where('id', '\d+');
 
     Route::post('games', ['as' => 'games', 'uses' => 'GamesController@games']);
     Route::post('games/load/{id}', ['as' => 'games.show', 'uses' => 'GamesController@load'])->where('id', '\d+');

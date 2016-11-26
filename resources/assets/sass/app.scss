@@ -38,6 +38,9 @@
     --border-radius: 5px;
     --section-padding: 10px;
 
+    --active-tab-color: #fafafa;
+    --tab-color: #ededed;
+
     --icon-padding: 0px;
     --icon-text-color: #000;
     --icon-text-size: 18px;
@@ -462,5 +465,14 @@ div.room-item:not(:last-child) {
 
 div.room-item:nth-child(even) {
     background-color: var(--light-bg);
+}
+
+div.game-summary {
+    display: flex;
+}
+
+div.game-summary-team {
+    flex: 1;
+    padding: 5px;
 }
 

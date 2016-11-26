@@ -13,6 +13,10 @@ export default {
 
         userCanManageTeam(team_id) {
             return true;
+        },
+
+        userCanTakeStats(team_id) {
+            return true;
         }
     }
 

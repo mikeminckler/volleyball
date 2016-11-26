@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 use App\Player;
 use App\Game;
@@ -200,5 +201,103 @@ class Team extends Model
         }
     }
 
+    public function gameReport($games)
+    {
+
+        $report = new Collection;
+
+        foreach ($this->stats as $stat) {
+
+            $stats = $this->playerStats()
+                            ->whereIn('game_id', $games->pluck('id'))
+                            ->where('stat_id', $stat->id)->get();
+
+            $score = $this->statAverage($stats, $stat);
+
+            $team_stat = $this->stats()->where('stat_id', $stat->id)->first();
+            $score_high = $team_stat->pivot->score_high;
+            $score_low = $team_stat->pivot->score_low;
+
+            $highs = $stats->filter(function($stat) use($score_high) {
+                if ($stat->score == $score_high) {
+                    return true;
+                }
+                return false;
+            });
+
+            $lows = $stats->filter(function($stat) use($score_low) {
+                if ($stat->score == $score_low) {
+                    return true;
+                }
+                return false;
+            });
+
+            $info = [
+                'name' => $stat->stat_name,
+                'score' => $score,
+                'highs' => $highs->count(),
+                'lows' => $lows->count()
+            ];
+
+            $report->push($info);
+
+        }
+
+        return $report;
+    
+    }
+
+    public function playersReport($games)
+    {
+        $report = new Collection;
+
+        foreach ($this->players as $player) {
+
+            $player_info = $player->toArray();
+
+            foreach ($this->stats as $stat) {
+
+                $stats = $player->stats()
+                        ->whereIn('game_id', $games->pluck('id'))
+                        ->where('stat_id', $stat->id)
+                        ->where('team_id', $this->id)
+                        ->get();
+
+                $score = $this->statAverage($stats, $stat);
+
+                $player_info['stats'][] = [
+                    'name' => $stat->stat_name,
+                    'score' => $score,
+                ];
+
+            }
+
+            $report->push($player_info);
+
+        }
+
+        $player_info = ['full_name' => 'Total', 'id' => 0];
+
+        foreach ($this->stats as $stat) {
+
+            $stats = $this->playerStats()
+                    ->whereIn('game_id', $games->pluck('id'))
+                    ->where('stat_id', $stat->id)
+                    ->get();
+
+            $score = $this->statAverage($stats, $stat);
+
+            $player_info['stats'][] = [
+                'name' => $stat->stat_name,
+                'score' => $score,
+            ];
+
+        }
+
+        $report->push($player_info);
+
+        return $report;
+    
+    }
 
 }

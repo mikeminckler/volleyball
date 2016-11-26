@@ -16,22 +16,29 @@
 
         mixins: [ChartMixins],
 
-        props: ['team_id', 'game'],
+        props: ['team', 'game'],
 
         mounted () {
 
             var vue = this;
 
-            vue.drawTeamChart(this.team_id, [this.game.id]);
+            vue.drawTeamChart(this.team.id, [this.game.id]);
 
+            /*
             window.socket.on('App\\Events\\TeamGameChartUpdated', function (data) {
-                vue.drawTeamChart(vue.team_id, [vue.game.id]);
+                vue.drawTeamChart(vue.team.id, [vue.game.id]);
+            });
+            */
+
+            window.socket.on('App\\Events\\PlayerGameStatsUpdated', function (data) {
+                vue.drawTeamChart(vue.team.id, [vue.game.id]);
             });
 
         },
 
         beforeDestroy() {
-            window.socket.removeListener('App\\Events\\TeamGameChartUpdated');
+            //window.socket.removeListener('App\\Events\\TeamGameChartUpdated');
+            window.socket.removeListener('App\\Events\\PlayerGameStatsUpdated');
         }
 
     };

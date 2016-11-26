@@ -33,7 +33,7 @@
 
         </section>
 
-        <section>
+        <section v-if="team.id">
             <div class="h2">Stats Settings</h2>
         </section>
 
@@ -111,7 +111,7 @@
 
         </section>
 
-        <section>
+        <section v-if="team.id">
 
             <div class="form-block">
                 <div class="form-label">

@@ -2,7 +2,7 @@
 
     <div class="player-game-stat" :class="buttonCountClass"> 
         
-        <div class="stat-buttons" v-for="value in buttons">
+        <div class="stat-buttons" v-for="value in buttons" v-if="controls">
             <button class="stat" @click.prevent="takeStat(value)">{{ value }}</button>
         </div>
         <div class="stat-score-container" :class="statClass">
@@ -33,7 +33,7 @@
             }
         },
 
-        props: ['player', 'team', 'game', 'stat'],
+        props: ['player', 'team', 'game', 'stat', 'controls'],
 
         computed: {
             player_updated_at: function() {
@@ -46,7 +46,7 @@
                 return (this.changed ? ' changed' : '');
             },
             buttonCountClass: function() {
-                return 'buttons-' + this.buttons.length;
+                return 'buttons buttons-' + this.buttons.length;
             }
         },
 

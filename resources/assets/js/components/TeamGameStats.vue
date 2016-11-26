@@ -4,7 +4,7 @@
 
         <div class="row stats-player">
             <div class="column player-name"></div>
-            <div class="column" v-for="stat in stats">
+            <div class="column" v-for="stat in team.stats">
                 {{ stat.stat_name }}
             </div>
         </div>
@@ -26,9 +26,9 @@
 
                 <div class="column player-name">{{ player.full_name }}</div>
 
-                <div class="column" v-for="stat in stats">
+                <div class="column" v-for="stat in team.stats">
 
-                    <player-game-stat :stat="stat" :team="team" :player="player" :game="game"></player-game-stat>
+                    <player-game-stat :stat="stat" :team="team" :player="player" :game="game" :controls="controls"></player-game-stat>
 
                 </div>
 
@@ -50,7 +50,7 @@
 
         mixins: [ListTransition, StatMixins, TeamMixins],
 
-        props: ['team_id', 'game'],
+        props: ['team_id', 'game', 'controls'],
 
         methods: {
 
@@ -62,8 +62,8 @@
 
             updateStat: function(stat_id) {
                 let time = new Date().getTime();
-                let stat_index = _.findIndex(this.stats, function(o) {return o.id == stat_id});
-                this.stats[stat_index].updated_at = time;
+                let stat_index = _.findIndex(this.team.stats, function(o) {return o.id == stat_id});
+                this.team.stats[stat_index].updated_at = time;
             }
 
         },
@@ -73,8 +73,6 @@
             var vue = this;
 
             vue.loadTeam(this.team_id);
-
-            vue.loadTeamStats(this.team_id);
 
             window.socket.emit('join-room', 'team.' + this.team_id);
 

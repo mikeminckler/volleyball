@@ -28,7 +28,9 @@ Vue.component('scoreboard', require('./components/Scoreboard.vue'));
 Vue.component('room-list', require('./components/RoomList.vue'));
 Vue.component('team-game-stats', require('./components/TeamGameStats.vue'));
 Vue.component('team-game-chart', require('./components/TeamGameChart.vue'));
+Vue.component('team-game-report', require('./components/TeamGameReport.vue'));
 Vue.component('team-stat-setting', require('./components/TeamStatSetting.vue'));
+Vue.component('team-players-stats-report', require('./components/TeamPlayersStatsReport.vue'));
 Vue.component('player-game-stat', require('./components/PlayerGameStat.vue'));
 
 const router = new VueRouter({

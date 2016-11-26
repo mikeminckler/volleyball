@@ -43,7 +43,7 @@ class TeamsController extends Controller
 
     public function load($id)
     {
-        return $this->team->findOrFail($id)->load('players', 'homeGames', 'awayGames');
+        return $this->team->findOrFail($id)->load('players', 'homeGames', 'awayGames', 'stats');
     }
 
     public function store(Requests\TeamSave $request, $id)

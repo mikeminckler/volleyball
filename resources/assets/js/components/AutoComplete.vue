@@ -1,7 +1,17 @@
 <template>
 
     <div class="search">
-        <input id="terms" class="input" name="terms" v-model="terms" :class="[( value ? 'existing' : ''), ( id ? 'selected' : '')]" autocomplete="off" @blur="results = []">
+        <input id="terms" 
+                class="input" 
+                name="terms" 
+                v-model="terms" 
+                :class="[( value ? 'existing' : ''), ( id ? 'selected' : '')]" 
+                autocomplete="off" 
+                @blur="results = []" 
+                @keyup.enter.stop.prevent="selectCurrent" 
+                @keyup.up="selectPrev" 
+                @keyup.down="selectNext"
+        >
         <input :id="name" class="input" type="hidden" :name="name" :value="value" :required="required">
  
         <div class="results">
@@ -72,6 +82,18 @@
         },
 
         methods: {
+
+            selectNext: function(e) {
+
+            },
+
+            selectPrev: function(e) {
+            
+            },
+
+            selectCurrent: function(e) {
+
+            },
 
             search: _.debounce(
                 function () {

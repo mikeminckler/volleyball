@@ -23,25 +23,51 @@
 
         <div class="tab-content" v-show="tabs.tab1">
             <section>
-                Game Summary
+                <div class="game-summary">
+
+                    <div class="game-summary-team">
+
+                        <div class="h3">{{ game.team1.team_name }}</div>
+                        <section v-if="game.team1.id">
+                            <team-players-stats-report :team="game.team1" :game_ids="[game.id]"></team-players-stats-report>
+                        </section>
+
+                    </div>
+
+                    <div class="game-summary-team">
+
+                        <div class="h3">{{ game.team2.team_name }}</div>
+                        <section v-if="game.team2.id">
+                            <team-players-stats-report :team="game.team2" :game_ids="[game.id]"></team-players-stats-report>
+                        </section>
+
+                    </div>
+
+                </div>
             </section>
         </div>
 
         <div class="tab-content" v-show="tabs.tab2">
             <section>
-                <team-game-stats :team_id="game.team1.id" v-if="game.team1.id && tabs.tab2" :game="game"></team-game-stats>
+                <team-game-stats :team_id="game.team1.id" v-if="game.team1.id && tabs.tab2" :game="game" :controls="userCanTakeStats(game.team1.id)"></team-game-stats>
             <section>
             <section>
-                <team-game-chart :team_id="game.team1.id" v-if="game.team1.id && tabs.tab2" :game="game"></team-game-chart>
+                <team-game-chart :team="game.team1" v-if="game.team1.id && tabs.tab2" :game="game"></team-game-chart>
+            <section>
+            <section>
+                <team-game-report :team="game.team1" v-if="game.team1.id && tabs.tab2" :game_ids="[game.id]"></team-game-chart>
             <section>
         </div>
 
         <div class="tab-content" v-show="tabs.tab3">
             <section>
-                <team-game-stats :team_id="game.team2.id" v-if="game.team2.id && tabs.tab3" :game="game"></team-game-stats>
+                <team-game-stats :team_id="game.team2.id" v-if="game.team2.id && tabs.tab3" :game="game" :controls="userCanTakeStats(game.team2.id)"></team-game-stats>
             <section>
             <section>
-                <team-game-chart :team_id="game.team2.id" v-if="game.team2.id && tabs.tab3" :game="game"></team-game-chart>
+                <team-game-chart :team="game.team2" v-if="game.team2.id && tabs.tab3" :game="game"></team-game-chart>
+            <section>
+            <section>
+                <team-game-report :team="game.team2" v-if="game.team2.id && tabs.tab3" :game_ids="[game.id]"></team-game-chart>
             <section>
         </div>
 
@@ -51,10 +77,11 @@
 <script>
 
     import GameMixins from './GameMixins'
+    import UserMixins from './UserMixins'
 
     export default {
 
-        mixins: [GameMixins],
+        mixins: [GameMixins, UserMixins],
 
         data: function () {
             return {

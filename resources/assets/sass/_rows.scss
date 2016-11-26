@@ -18,3 +18,19 @@ div.player-name.column {
     min-width: 150px;
     flex: 0;
 }
+
+div.w-100 {
+    max-width: 100px;
+}
+
+div.icon {
+    max-width: 30px;
+}
+
+div.row:nth-child(odd) {
+    background-color: rgba(0,0,0,0.05);
+}
+
+div.row div.column:first-child {
+    padding-left: 5px;
+}

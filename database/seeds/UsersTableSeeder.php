@@ -62,5 +62,46 @@ class UsersTableSeeder extends Seeder
         $rp->save();
         $zep->addPlayer($rp);
 
+        $stones = Team::where('team_name', 'Rolling Stones')->first();
+
+        $mj = new User;
+        $mj->first_name = 'Mic';
+        $mj->last_name = 'Jagger';
+        $mj->email = 'mic@stones.com';
+        $mj->password = bcrypt('q');
+        $mj->save();
+        $stones->addPlayer($mj);
+
+        $kr = new User;
+        $kr->first_name = 'Keith';
+        $kr->last_name = 'Richards';
+        $kr->email = 'keith@stones.com';
+        $kr->password = bcrypt('q');
+        $kr->save();
+        $stones->addPlayer($kr);
+
+        $rw = new User;
+        $rw->first_name = 'Ronnie';
+        $rw->last_name = 'Wood';
+        $rw->email = 'ronnie@stones.com';
+        $rw->password = bcrypt('q');
+        $rw->save();
+        $stones->addPlayer($rw);
+
+        $bj = new User;
+        $bj->first_name = 'Brian';
+        $bj->last_name = 'Jones';
+        $bj->email = 'brian@stones.com';
+        $bj->password = bcrypt('q');
+        $bj->save();
+        $stones->addPlayer($bj);
+
+        $cw = new User;
+        $cw->first_name = 'Charlie';
+        $cw->last_name = 'Watts';
+        $cw->email = 'charlie@stones.com';
+        $cw->password = bcrypt('q');
+        $cw->save();
+        $stones->addPlayer($cw);
     }
 }
