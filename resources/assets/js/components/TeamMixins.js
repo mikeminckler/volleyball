@@ -7,6 +7,7 @@ export default {
             team: {
                 id: '',
                 team_name: '',
+                initials: '',
                 players: [],
                 games: []
             },

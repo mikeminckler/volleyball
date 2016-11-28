@@ -48,6 +48,7 @@ class Player extends Model
             $player_array['id'] = $player->id;
             $player_array['value'] = $player->user->full_name;
             $player_array['label'] = $player->user->full_name;
+            $player_array['selected'] = false;
             $players[] = $player_array;
         }
 

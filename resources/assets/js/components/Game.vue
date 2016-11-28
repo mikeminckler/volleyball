@@ -8,7 +8,7 @@
 
         <section>
 
-            <form role="form" method="POST" :action="'/api' + $route.path" @submit.prevent="submit">
+            <form role="form" method="POST" :action="'/api' + $route.path" @submit.prevent.stop="">
 
             <div class="form-block">
                 <div class="form-label">
@@ -42,7 +42,7 @@
                 <div class="form-label">
                 </div>
                 <div class="form-input">
-                    <button type="submit" class="">Save Game</button>
+                    <div class="submit button" @click="submit">Save Game</button>
                 </div>
             </div>
 
@@ -92,7 +92,7 @@
                     'start_time': this.game.start_time
                 };
 
-                vue.$http.post(e.target.action, post_data).then( function(response) {
+                vue.$http.post('/api' + vue.$route.path, post_data).then( function(response) {
 
                     vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Saved Game'});
                     vue.$router.push('/games');

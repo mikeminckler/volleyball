@@ -394,6 +394,10 @@ div.results-item {
     background-color: var(--button-color);
 }
 
+div.results-item.selected {
+    background-color: var(--search-results-highlight) !important;
+}
+
 div.results-item:hover {
     background-color: var(--search-results-highlight);
 }

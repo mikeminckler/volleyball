@@ -1,16 +1,17 @@
 <template>
 
     <div class="search">
+
         <input id="terms" 
                 class="input" 
                 name="terms" 
                 v-model="terms" 
                 :class="[( value ? 'existing' : ''), ( id ? 'selected' : '')]" 
                 autocomplete="off" 
-                @blur="results = []" 
-                @keyup.enter.stop.prevent="selectCurrent" 
+                @keyup.enter="selectCurrent" 
                 @keyup.up="selectPrev" 
                 @keyup.down="selectNext"
+                @blur="results = []"
         >
         <input :id="name" class="input" type="hidden" :name="name" :value="value" :required="required">
  
@@ -29,12 +30,14 @@
                     :id="result.id"
                     :data-label="result.label"
                     :data-index="index"
-                    @click="select" 
+                    @click="selectItem" 
+                    :class="{ selected: result.selected }"
                 >
-                    {{ result.label }}
+                {{ result.label }}
                 </div>
             </transition-group>
         </div>
+       
     </div>
 
 </template>
@@ -78,20 +81,71 @@
                 } else {
                     this.clicked = false;
                 }
-            }
+            },
+            id: 'select'
         },
 
         methods: {
 
             selectNext: function(e) {
 
+                let current = _.findIndex(this.results, function(result) {
+                    return result.selected;
+                });
+
+                _.forEach(this.results, function(result) {
+                    result.selected = false;
+                });
+
+                if (current != -1) {
+                    if (this.results[(current + 1)] != undefined) {
+                        this.results[(current + 1)].selected = true;
+                    } else {
+                        if (this.results.length > 1) {
+                            this.results[0].selected = true;
+                        }
+                    }
+                } else {
+                    this.results[0].selected = true;
+                }
+
             },
 
             selectPrev: function(e) {
+
+                let current = _.findIndex(this.results, function(result) {
+                    return result.selected;
+                });
+
+                _.forEach(this.results, function(result) {
+                    result.selected = false;
+                });
+
+                if (current != -1) {
+                    if (this.results[(current - 1)] != undefined) {
+                        this.results[(current - 1)].selected = true;
+                    } else {
+                        if (this.results.length > 1) {
+                            this.results[(this.results.length - 1)].selected = true;
+                        }
+                    }
+                } else {
+                    this.results[(this.results.length - 1)].selected = true;
+                }
             
             },
 
             selectCurrent: function(e) {
+
+                let current = _.findIndex(this.results, function(result) {
+                    return result.selected;
+                });
+
+                if (current != -1) {
+                    this.clicked = true;
+                    this.terms = this.results[current].label;
+                    this.id = this.results[current].id;
+                }
 
             },
 
@@ -114,15 +168,19 @@
                 }, 250 // length to wait before running the function
             ),
 
-            select: function(el) {
-
-                this.id = el.target.id;
+            selectItem: function(el) {
 
                 if (el.target.dataset.label != this.terms) {
                     this.clicked = true;
                 }
 
                 this.terms = el.target.dataset.label;
+                this.id = el.target.id;
+
+            },
+
+            select: function() {
+
                 this.results = [];
 
                 /**
@@ -156,19 +214,21 @@
 
             addPlayerToTeam: function(team_id) {
 
-                var vue = this;
-                let post_data = {
-                    'user_id': this.id,
-                    'team_id': team_id
-                }
+                if (this.id) {
+                    var vue = this;
+                    let post_data = {
+                        'user_id': this.id,
+                        'team_id': team_id
+                    }
 
-                vue.showLoading();
+                    vue.showLoading();
 
-                vue.$http.post('/api/teams/add-player/' + team_id, post_data).then( function(response) {
+                    vue.$http.post('/api/teams/add-player/' + team_id, post_data).then( function(response) {
+                        
+                    }, function (error) {
                     
-                }, function (error) {
-                
-                });
+                    });
+                }
 
             },
             

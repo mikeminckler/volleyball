@@ -23,6 +23,15 @@
 
             <div class="form-block">
                 <div class="form-label">
+                    <label for="initials" class="label">Initials</label>
+                </div>
+                <div class="form-input">
+                    <input id="initials" class="input" name="initials" v-model="team.initials" required autofocus>
+                </div>
+            </div>
+
+            <div class="form-block">
+                <div class="form-label">
                 </div>
                 <div class="form-input">
                     <button type="submit" class="">Save Team</button>
@@ -174,7 +183,8 @@
 
                 let post_data = {
                     'id': this.team.id,
-                    'team_name': this.team.team_name
+                    'team_name': this.team.team_name,
+                    'initials': this.team.initials
                 };
 
                 vue.$http.post(e.target.action, post_data).then( function(response) {

@@ -17,7 +17,7 @@ class CreateTeamsTable extends Migration
             $table->increments('id');
 
             $table->string('team_name');
-            $table->string('initials');
+            $table->string('initials')->nullable();
             $table->boolean('removed')->default(false);
 
             $table->timestamps();

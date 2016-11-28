@@ -27,6 +27,7 @@ class Team extends Model
         }
 
         $this->team_name = $input['team_name'];
+        $this->initials = $input['initials'];
         $this->save();
 
         if ($created) {
@@ -54,6 +55,7 @@ class Team extends Model
                 $team_array['id'] = $team->id;
                 $team_array['value'] = $team->team_name;
                 $team_array['label'] = $team->team_name;
+                $team_array['selected'] = false;
                 $teams[] = $team_array;
         }
 
@@ -82,7 +84,8 @@ class Team extends Model
             $user->addRole('player');
         }
 
-        if (!$this->players->contains($player)) {
+        $players = $this->players;
+        if (!$players->contains($player)) {
             $this->players()->attach($player);
         }
 
@@ -115,12 +118,21 @@ class Team extends Model
         return $this->hasMany('App\PlayerStat');
     }
 
-    public function gameStatScore(Stat $stat, Game $game)
+    public function gameStatScore(Stat $stat, $games)
     {
+
+        if (!$games instanceof Collection) {
+            if ($games instanceof Game) {
+                $games = collect($games);
+            } else {
+                $games = Game::findOrFail($games);
+                $games = collect($games);
+            }
+        }
 
         $team_stats = $this->playerStats()
             ->where('team_id', $this->id)
-            ->where('game_id', $game->id)
+            ->whereIn('game_id', $games->pluck('id'))
             ->where('stat_id', $stat->id)
             ->get();
 

@@ -38,7 +38,7 @@ class TeamsController extends Controller
     {
         $team = new Team;
         return $team
-            ->saveTeam($request->only('team_name'));
+            ->saveTeam($request->only('team_name', 'initials'));
     }
 
     public function load($id)
@@ -49,7 +49,7 @@ class TeamsController extends Controller
     public function store(Requests\TeamSave $request, $id)
     {
         return $this->team->findOrFail($id)
-            ->saveTeam($request->only('team_name'));
+            ->saveTeam($request->only('team_name', 'initials'));
     }
 
     public function destroy(Request $request, $id)

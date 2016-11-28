@@ -72,6 +72,11 @@ class User extends Model implements
         ];
     }
 
+    public function player()
+    {
+        return $this->hasOne('App\Player');
+    }
+
     public function getFullNameAttribute() 
     {
         return $this->first_name.' '.$this->last_name;
@@ -182,6 +187,7 @@ class User extends Model implements
                 $user_array['id'] = $user->id;
                 $user_array['value'] = $user->full_name;
                 $user_array['label'] = $user->full_name;
+                $user_array['selected'] = false;
                 $users[] = $user_array;
         }
 
