@@ -32,6 +32,7 @@ Vue.component('team-game-report', require('./components/TeamGameReport.vue'));
 Vue.component('team-stat-setting', require('./components/TeamStatSetting.vue'));
 Vue.component('team-players-stats-report', require('./components/TeamPlayersStatsReport.vue'));
 Vue.component('player-game-stat', require('./components/PlayerGameStat.vue'));
+Vue.component('player-game-report', require('./components/PlayerGameReport.vue'));
 
 const router = new VueRouter({
     routes: [
@@ -51,8 +52,9 @@ const router = new VueRouter({
         { path: '/games', component: require('./components/Games.vue') },
         { path: '/games/:id', component: require('./components/Game.vue') },
         { path: '/games/create', component: require('./components/Game.vue') },
-
         { path: '/games/stats/:id', component: require('./components/GameStats.vue') },
+
+        { path: '/players/stats/:id', component: require('./components/PlayerStatsReport.vue') },
 
         { path: '/stats', component: require('./components/Stats.vue') },
         { path: '/stats/:id', component: require('./components/Stat.vue') },

@@ -3,11 +3,10 @@
     <div class="content">
 
         <section class="header">
-            <div class="h1">{{ team.team_name }} Games</div>
-            <div v-if="userHasRole('admin')"><router-link class="button" to="/games/create">Create Game</router-link></div>
+            <div class="h1">{{ player.full_name }} Games</div>
         </section>
 
-        <section v-if="team.games">
+        <section v-if="player.games">
 
             <transition-group 
                 name="list" 
@@ -18,7 +17,7 @@
                 v-on:leave="leave"
             >
                 <div class="row" 
-                    v-for="(game, index) in team.games"
+                    v-for="(game, index) in player.games"
                     :key="game.id"
                     :data-index="index"
                 >
@@ -26,11 +25,7 @@
                         <input type="checkbox" :id="game.id" :name="'game-' + game.id" :value="game.id" @click="toggleGameSelect" :checked="gameCheck(game.id)">
                     </div>
                     <div class="column">
-                        <router-link :to="{path: '/games/' + game.id}">{{ game.team1_name }} vs {{ game.team2_name }}</router-link>
-                    </div>
-
-                    <div class="column w-50">
-                        <router-link :to="{path: '/games/stats/' + game.id}">Stats</router-link>
+                        {{ game.team1_name }} vs {{ game.team2_name }}
                     </div>
 
                     <div class="column">
@@ -41,59 +36,79 @@
                         {{ displayDateTime(game.start_time) }}
                     </div>
 
-                    <div class="column icon">
-                        <a @click.prevent="remove" class="delete fa fa-times icon" :href="'/api/games/delete/' + game.id"></a>
-                    </div>
                 </div>
+
             </transition-group>
 
         </section>
 
         <transition name="fade">
             <section v-if="showReport">
-                <div id="team_game_chart"></div>
+                <div id="player_game_chart"></div>
             </section>
         </transition>
 
         <transition name="fade">
             <section v-if="showReport">
-                <team-game-report :team="team" :game_ids="reportGames"></team-game-chart>
+                <player-game-report :player="player" :game_ids="reportGames"></player-game-report>
             <section>
         </transition>
 
-        <section v-if="showReport">
-            <team-players-stats-report :team="team" :game_ids="reportGames"></team-players-stats-report>
-        </section>
-            
     </div>
 
 </template>
 
 <script>
 
-    import Helpers from './Helpers'
-    import UserMixins from './UserMixins'
-    import TeamMixins from './TeamMixins'
+
     import ListTransition from './ListTransition'
+    import PlayerMixins from './PlayerMixins'
     import ChartMixins from './ChartMixins'
+    import Helpers from './Helpers'
 
     export default {
+
+        mixins: [ListTransition, PlayerMixins, ChartMixins, Helpers],
 
         data: function () {
             return {
                 reportGames: [],
-                showReport: false
+                showReport: false,
+                player: {}
             }
         },
 
-        mixins: [Helpers, UserMixins, TeamMixins, ListTransition, ChartMixins],
+        beforeMount() {
+            let player_id = this.$route.params.id;
+            this.loadPlayer(player_id);
+        },
+
+        mounted() {
+            
+            let player_id = this.$route.params.id;
+            var vue = this;
+            vue.loadPlayerGames(player_id);
+
+            window.socket.on('App\\Events\\GamesRefresh', function (data) {
+                vue.loadPlayerGames(player_id);
+            });
+
+            window.socket.on('App\\Events\\PlayerGameStatsUpdated', function (data) {
+                vue.generateReport();
+            });
+
+        },
+
+        beforeDestroy() {
+            window.socket.removeListener('App\\Events\\GamesRefresh');
+            window.socket.removeListener('App\\Events\\PlayerGameStatsUpdated');
+        },
 
         methods: {
 
             generateReport: function() {
-            
                 this.showReport = true;
-                this.drawTeamChart(this.team.id, this.reportGames);
+                this.drawPlayerChart(this.player.id, this.reportGames);
             },
 
             toggleGameSelect: function(e) {
@@ -118,32 +133,7 @@
             gameCheck: function(game_id) {
                 return _.includes(this.reportGames, game_id);
             }
-        },
-
-        beforeMount() {
-            let team_id = this.$route.params.id;
-            this.loadTeam(team_id);
-        },
-
-        mounted() {
-            
-            var vue = this;
-
-            window.socket.on('App\\Events\\GamesRefresh', function (data) {
-                vue.loadTeamGames();
-            });
-
-            window.socket.on('App\\Events\\PlayerGameStatsUpdated', function (data) {
-                vue.generateReport();
-            });
-
-        },
-
-        beforeDestroy() {
-            window.socket.removeListener('App\\Events\\GamesRefresh');
-            window.socket.removeListener('App\\Events\\PlayerGameStatsUpdated');
         }
 
-    }
-
+    };
 </script>

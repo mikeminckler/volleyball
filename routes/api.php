@@ -60,9 +60,15 @@ Route::group(['middleware' => 'auth:api', ], function() {
     Route::post('stats/create', ['as' => 'stats.create', 'uses' => 'StatsController@create']);
     Route::post('stats/delete/{id}', ['as' => 'stats.delete', 'uses' => 'StatsController@destroy'])->where('id', '\d+');
 
+
+    Route::post('players/load/{id}', ['as' => 'players.load', 'uses' => 'PlayersController@load'])->where('id', '\d+');
+    Route::post('players/games/{id}', ['as' => 'players.games', 'uses' => 'PlayersController@games'])->where('id', '\d+');
+    Route::post('players/game-report/{id}', ['as' => 'players.game-report', 'uses' => 'PlayersController@gameReport'])->where('id', '\d+');
+
     Route::post('players/get-game-stat-score/{id}', ['as' => 'players.get-game-stat-score', 'uses' => 'PlayerGameController@getStatScore'])->where('id', '\d+');
     Route::post('players/add-game-stat-score/{id}', ['as' => 'players.add-game-stat-score', 'uses' => 'PlayerGameController@addStatScore'])->where('id', '\d+');
 
     Route::post('charts/team-games', ['as' => 'charts.team-games', 'uses' => 'ChartsController@teamGames']);
+    Route::post('charts/player-games', ['as' => 'charts.player-games', 'uses' => 'ChartsController@playerGames']);
 
 });

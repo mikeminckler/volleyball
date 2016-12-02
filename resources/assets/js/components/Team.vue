@@ -107,6 +107,9 @@
 
                     <div class="column">{{ player.full_name }}</div>
                     <div class="column">
+                        <router-link :to="{path: '/players/stats/' + player.id}">Stats</router-link>
+                    </div>
+                    <div class="column">
                         <a @click.prevent="removePlayer" 
                             :data-player-id="player.id" 
                             class="delete fa fa-times icon" 

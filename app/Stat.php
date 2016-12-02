@@ -41,4 +41,22 @@ class Stat extends Model
         return $this;
     }
 
+    public static function statsReport($all_stats, $team)
+    {
+        
+        $stats = $all_stats->groupBy('stat_id');
+        $stats_array = array();
+
+        foreach ($stats as $stat_id => $player_stats) {
+
+            $stat = $team->stats()->where('stat_id', $stat_id)->first();
+            $score = $team->statAverage($player_stats, $stat);
+
+            $stats_array[$stat->id] = $score;
+
+        }
+
+        return $stats_array;
+
+    }
 }

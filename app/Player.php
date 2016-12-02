@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 use App\Game;
 use App\Stat;
@@ -15,7 +16,7 @@ class Player extends Model
 {
     use UserAttributes;
 
-    protected $appends = ['full_name'];
+    protected $appends = ['full_name', 'games'];
 
     public function user()
     {
@@ -25,6 +26,16 @@ class Player extends Model
     public function teams()
     {
         return $this->belongsToMany('App\Team')->withPivot('number');
+    }
+
+    public function games()
+    {
+        $games = new Collection;
+        $teams = $this->teams;
+        foreach ($teams as $team) {
+            $games = $games->merge($team->games());
+        }
+        return $games->unique();
     }
 
     public function search($term)
@@ -102,6 +113,64 @@ class Player extends Model
         event(new TeamGameChartUpdated($player_stat));
 
         return $this;
+
+    }
+
+    public function getGamesAttribute()
+    {
+        return $this->games();
+    }
+
+    public function playedForTeamInGame($game)
+    {
+        $teams = $this->teams;
+
+        if ($teams->contains($game->team1->id)) {
+            return $game->team1;
+        }    
+
+        if ($teams->contains($game->team2->id)) {
+            return $game->team2;
+        }    
+
+    }
+
+    public function gamesReport($games)
+    {
+
+        $report = new Collection;
+
+        $team_check = $this->stats()
+                        ->whereIn('game_id', $games->pluck('id'))
+                        ->get()->groupBy('team_id');
+
+        foreach ($team_check as $team_id => $team_stats) {
+
+            $team = Team::findOrFail($team_id); 
+
+            foreach ($games as $game) {
+
+                $all_stats = $this->stats()
+                    ->where('game_id', $game->id)
+                    ->where('team_id', $team->id)
+                    ->orderBy('player_stats.created_at')
+                    ->get();
+
+                $report_info = array();
+                $report_info['stats'] = array_values(Stat::statsReport($all_stats, $team));
+                $report_info['versus_team'] = 'vs '.$game->opposingTeam($team)->team_name;
+                $report->push($report_info);
+
+            }
+
+            $team_info = array();
+            $team_info['stats'] = array_values(Stat::statsReport($team_stats, $team));
+            $team_info['versus_team'] = 'Total for '.$team->team_name;
+            $report->push($team_info);
+
+        }
+
+        return $report;
 
     }
 

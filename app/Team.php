@@ -259,11 +259,15 @@ class Team extends Model
     
     }
 
-    public function playersReport($games)
+    public function playersReport($games, $players = null)
     {
         $report = new Collection;
 
-        foreach ($this->players as $player) {
+        if (!$players) {
+            $players = $this->players;
+        }
+
+        foreach ($players as $player) {
 
             $player_info = $player->toArray();
 

@@ -1,8 +1,8 @@
 <template>
 
-    <div class="team-game-chart">
+    <div class="player-game-chart">
 
-        <div id="team_game_chart"></div>
+        <div id="player_game_chart"></div>
 
     </div>
 
@@ -16,16 +16,16 @@
 
         mixins: [ChartMixins],
 
-        props: ['team', 'game'],
+        props: ['player', 'game'],
 
         mounted () {
 
             var vue = this;
 
-            vue.drawTeamChart(this.team.id, [this.game.id]);
+            vue.drawPlayerChart(this.player.id, [this.game.id]);
 
             window.socket.on('App\\Events\\PlayerGameStatsUpdated', function (data) {
-                vue.drawTeamChart(vue.team.id, [vue.game.id]);
+                vue.drawPlayerChart(vue.player.id, [vue.game.id]);
             });
 
         },
@@ -35,5 +35,4 @@
         }
 
     };
-
 </script>
