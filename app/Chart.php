@@ -92,8 +92,10 @@ class Chart extends Model
 
         $chart_headers = collect(['Touch', 'Total '.$total]);
 
-        foreach ($team_stats as $team_stat) {
-            $chart_headers->push($team_stat->stat_name.' '.$team->gameStatScore($team_stat, $games));
+        if (isset($team_stats)) {
+            foreach ($team_stats as $team_stat) {
+                $chart_headers->push($team_stat->stat_name.' '.$team->gameStatScore($team_stat, $games));
+            }
         }
 
         $chart = collect([$chart_headers])->merge($chart_data);

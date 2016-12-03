@@ -31,6 +31,10 @@
                     </div>
 
                     <div class="column">
+                        <router-link :to="{path: '/teams/players/' + team.id}">Players</router-link>
+                    </div>
+
+                    <div class="column">
                         <a @click.prevent="remove" class="delete fa fa-times icon" :href="'/api/teams/delete/' + team.id"></a>
                     </div>
                 </div>

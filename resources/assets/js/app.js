@@ -31,6 +31,7 @@ Vue.component('team-game-chart', require('./components/TeamGameChart.vue'));
 Vue.component('team-game-report', require('./components/TeamGameReport.vue'));
 Vue.component('team-stat-setting', require('./components/TeamStatSetting.vue'));
 Vue.component('team-players-stats-report', require('./components/TeamPlayersStatsReport.vue'));
+Vue.component('team-players-list', require('./components/TeamPlayersList.vue'));
 Vue.component('player-game-stat', require('./components/PlayerGameStat.vue'));
 Vue.component('player-game-report', require('./components/PlayerGameReport.vue'));
 
@@ -48,6 +49,7 @@ const router = new VueRouter({
         { path: '/teams/:id', component: require('./components/Team.vue') },
         { path: '/teams/create', component: require('./components/Team.vue') },
         { path: '/teams/games/:id', component: require('./components/TeamGames.vue') },
+        { path: '/teams/players/:id', component: require('./components/TeamPlayers.vue') },
 
         { path: '/games', component: require('./components/Games.vue') },
         { path: '/games/:id', component: require('./components/Game.vue') },
@@ -96,7 +98,8 @@ const store = new Vuex.Store({
             last_name: '',
             email: '',
             id: '',
-            roles: []
+            roles: [],
+            teams: []
         },
 
         feedback: [],

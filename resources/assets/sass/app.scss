@@ -25,6 +25,7 @@
     --existing-bg: #f2fff5;
     --input-error-color: #ffdda2;
     --border-highlight-color: #76a7c5;
+    --checkbox-color: #9ac4ff;
 
     --font-size: 15px;
     --small-font: 13px;
@@ -291,21 +292,37 @@ input:-webkit-autofill {
     -webkit-text-fill-color: var(--link-color) !important;
 }
 
-/*
 input[type="checkbox"] {
-    position: absolute;
-    left: -999em;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    margin: 0px 2px;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    background-color: var(--button-color);
+    transition: all .2s;
+}
+
+input[type="checkbox"]:checked {
+    background-color: var(--checkbox-color);
+    border: 1px solid var(--border-highlight-color);
 }
 
 input[type="checkbox"]:after {
-    width: 20px;
-    height: 20px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    background-color: #fff;
-    content: " ";
+    font-family: FontAwesome;
+    width: 18px;
+    display: inline-block;
+    text-align: center;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    content: "";
 }
-*/
+
+input[type="checkbox"]:checked:after {
+    content: "\f00c";
+}
 
 /* LOGIN */
 

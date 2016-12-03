@@ -13,6 +13,9 @@ use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 use App\Role;
+use App\Player;
+
+use Illuminate\Support\Collection;
 
 use App\Events\UserUpdated;
 use App\Events\UserCreated;
@@ -27,6 +30,8 @@ class User extends Model implements
     JWTSubject
 {
     use Authenticatable, Authorizable, CanResetPassword, Notifiable;
+
+    protected $appends = ['teams'];
 
     /**
      * The attributes that are mass assignable.
@@ -192,6 +197,20 @@ class User extends Model implements
         }
 
         return $users;
+    }
+
+    public function getTeamsAttribute()
+    {
+
+        $teams = new Collection;
+        return null;
+        $player = $this->player;
+
+        if ($this->player instanceof Player) {
+            //$player_teams = $this->player->teams;
+        }
+        
+        return $teams;
     }
 
 }

@@ -103,5 +103,47 @@ class UsersTableSeeder extends Seeder
         $cw->password = bcrypt('q');
         $cw->save();
         $stones->addPlayer($cw);
+
+        $floyd = Team::where('team_name', 'Pink Floyd')->first();
+
+        $dg = new User;
+        $dg->first_name = 'David';
+        $dg->last_name = 'Gilmore';
+        $dg->email = 'david@floyd.com';
+        $dg->password = bcrypt('q');
+        $dg->save();
+        $floyd->addPlayer($dg);
+
+        $rw = new User;
+        $rw->first_name = 'Roger';
+        $rw->last_name = 'Waters';
+        $rw->email = 'roger@floyd.com';
+        $rw->password = bcrypt('q');
+        $rw->save();
+        $floyd->addPlayer($rw);
+
+        $nm = new User;
+        $nm->first_name = 'Nick';
+        $nm->last_name = 'Mason';
+        $nm->email = 'nick@floyd.com';
+        $nm->password = bcrypt('q');
+        $nm->save();
+        $floyd->addPlayer($nm);
+
+        $sb = new User;
+        $sb->first_name = 'Sid';
+        $sb->last_name = 'Barrett';
+        $sb->email = 'sid@floyd.com';
+        $sb->password = bcrypt('q');
+        $sb->save();
+        $floyd->addPlayer($sb);
+
+        $rw = new User;
+        $rw->first_name = 'Richard';
+        $rw->last_name = 'Wright';
+        $rw->email = 'richard@floyd.com';
+        $rw->password = bcrypt('q');
+        $rw->save();
+        $floyd->addPlayer($rw);
     }
 }

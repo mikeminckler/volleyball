@@ -90,37 +90,7 @@
         </section>
 
         <section v-show="team.id" v-if="userCanManageTeam(team.id)">
-
-            <transition-group 
-                name="list" 
-                tag="div"
-                v-bind:css="false"
-                v-on:before-enter="beforeEnter"
-                v-on:enter="enter"
-                v-on:leave="leave"
-            >
-                <div class="row" 
-                    v-for="(player, index) in team.players"
-                    :key="player.id"
-                    :data-index="index"
-                >
-
-                    <div class="column">{{ player.full_name }}</div>
-                    <div class="column">
-                        <router-link :to="{path: '/players/stats/' + player.id}">Stats</router-link>
-                    </div>
-                    <div class="column">
-                        <a @click.prevent="removePlayer" 
-                            :data-player-id="player.id" 
-                            class="delete fa fa-times icon" 
-                            :href="'/api/teams/delete-player/' + team.id"
-                        >
-                        </a>
-                    </div>
-
-                </div>
-            </transition-group>
-
+            <team-players-list :team="team"></team-players-list>
         </section>
 
         <section v-if="team.id">
@@ -159,24 +129,6 @@
         mixins: [UserMixins, ListTransition, Helpers, TeamMixins, StatMixins],
 
         methods: {
-
-            removePlayer: function(e) {
-
-                var vue = this;
-                vue.showLoading();
-            
-                let player_id = e.target.dataset.playerId;
-                let post_data = {
-                    'player_id': player_id
-                }
-                
-                vue.$http.post(e.target.href, post_data).then( function(response) {
-
-                }, function (error) {
-                
-                });
-             
-            },
 
             submit: function(e) {
 
