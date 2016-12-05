@@ -1,0 +1,81 @@
+<template>
+
+    <div class="select-team-container">
+
+        <div class="select-team">
+
+            <div class="h3">Select A Team</div>
+
+            <div class="row select-team-item"
+                v-for="(team, index) in teams"
+                @click="clickTeam"
+                :id="team.id"
+            >
+                {{ team.name }}
+            </div>
+
+        </div>
+
+    </div>
+
+</template>
+
+<script>
+
+    import TeamMixins from './TeamMixins'
+
+    export default {
+
+        mixins: [TeamMixins],
+
+        data: function () {
+            return {
+                teams: []
+            }
+        },
+
+        watch: {
+            'team.id': 'setTeam'
+        },
+
+        mounted () {
+            this.showTeams();
+        },
+
+        methods: {
+
+            showTeams: function() {
+
+                this.teams = _.uniqBy(
+                    _.map(this.$store.state.user.roles, function(role) {
+                        return {'id': role.team.id, 'name': role.team.team_name};
+                    })
+                 , 'id');
+
+                if (this.teams.length > 1) {
+
+                    // wait for click on team
+
+                } else if (this.teams.length == 1) {
+                    this.loadTeam(_.head(this.teams).id);
+                } else {
+                    // logout we have no teams
+                    this.$store.dispatch('addFeedback', {'type': 'error', 'message': 'You are not assigned to a Team'});
+                    this.$router.push('/logout');
+                }
+
+            },
+
+            clickTeam: function(el) {
+                this.loadTeam(el.target.id);
+            },
+
+            setTeam: function() {
+                this.$store.dispatch('setActiveTeam', this.team);
+                this.$router.push('/home');
+            }
+
+        }
+    };
+
+</script>

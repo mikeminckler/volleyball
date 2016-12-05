@@ -7,22 +7,26 @@ use Illuminate\Support\Collection;
 use App\User;
 use App\Player;
 use App\Team;
+use App\Role;
 
 class Search {
 
     protected $user;
     protected $player;
     protected $team;
+    protected $role;
 
     public function __construct(
             User $user,
             Player $player,
-            Team $team
+            Team $team,
+            Role $role
         )
     {
         $this->user = $user;
         $this->player = $player;
         $this->team = $team;
+        $this->role = $role;
     }
 
     public function search($object, $input)

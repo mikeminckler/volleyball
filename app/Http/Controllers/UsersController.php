@@ -6,21 +6,27 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\User;
+use App\Team;
+use App\Role;
 use App\Events\UserRemoved;
 
 class UsersController extends Controller
 {
 
     protected $user;
+    protected $team;
+    protected $role;
 
-    public function __construct(User $user) 
+    public function __construct(User $user, Team $team, Role $role) 
     {
         $this->user = $user;
+        $this->team = $team;
+        $this->role = $role;
     }
 
     public function myInfo()
     {
-        return auth()->user();
+        return auth()->user()->load('roles');
     }
 
     public function myRoles()
@@ -45,7 +51,7 @@ class UsersController extends Controller
 
     public function load($id)
     {
-        return $this->user->findOrFail($id);
+        return $this->user->findOrFail($id)->load('roles');
     }
 
     public function store(Requests\UserSave $request, $id)
@@ -76,12 +82,17 @@ class UsersController extends Controller
 
     public function saveRole(Request $request, $id) 
     {
-        return $this->user->findOrFail($id)->addRole($request->input('role_id'));
+        $team = $this->team->findOrFail($request->input('team_id'));
+        return $this->user->findOrFail($id)
+            ->addRole($request->input('role_id'), $team);
     }
 
     public function removeRole(Request $request, $id) 
     {
-        return $this->user->findOrFail($id)->removeRole($request->input('role_id'));
+        $team = $this->team->findOrFail($request->input('team_id'));
+        $role = $this->role->findOrFail($request->input('role_id'));
+        return $this->user->findOrFail($id)
+            ->removeRole($role, $team);
     }
 
 }

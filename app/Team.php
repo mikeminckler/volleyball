@@ -15,7 +15,7 @@ use App\Events\TeamUpdated;
 class Team extends Model
 {
 
-    protected $appends = ['games'];
+    protected $appends = ['games', 'stats'];
 
     public function saveTeam($input)
     {
@@ -81,7 +81,7 @@ class Team extends Model
             $player->user_id = $user->id;
             $player->save();
 
-            $user->addRole('player');
+            $user->addRole('player', $this);
         }
 
         $players = $this->players;
@@ -155,6 +155,11 @@ class Team extends Model
         $home_games = $this->homeGames;
         $away_games = $this->awayGames;
         return $home_games->merge($away_games);
+    }
+
+    public function getStatsAttribute()
+    {
+        return $this->stats()->get();
     }
 
     public function getGamesAttribute()

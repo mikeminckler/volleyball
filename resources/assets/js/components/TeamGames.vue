@@ -49,21 +49,30 @@
 
         </section>
 
+
+        <transition name="fade">
+            <div class="game-summary">
+
+                <div class="game-summary-team">
+                    <section v-if="showReport">
+                        <team-game-report :team="team" :game_ids="reportGames"></team-game-chart>
+                    <section>
+                </div>
+
+                <div class="game-summary-team">
+                    <section v-if="showReport">
+                        <team-players-stats-report :team="team" :game_ids="reportGames"></team-players-stats-report>
+                    </section>
+                </div>
+
+            </div>
+        </transition>
+
         <transition name="fade">
             <section v-if="showReport">
                 <div id="team_game_chart"></div>
             </section>
         </transition>
-
-        <transition name="fade">
-            <section v-if="showReport">
-                <team-game-report :team="team" :game_ids="reportGames"></team-game-chart>
-            <section>
-        </transition>
-
-        <section v-if="showReport">
-            <team-players-stats-report :team="team" :game_ids="reportGames"></team-players-stats-report>
-        </section>
             
     </div>
 

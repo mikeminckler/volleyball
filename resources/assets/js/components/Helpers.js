@@ -14,6 +14,10 @@ export default {
 
         displayDateTime(value) {
             return moment(value).format('h:mma ddd MMM Do, YYYY');
+        },
+
+        upperCase(value) {
+            return _.capitalize(value);
         }
 
     }

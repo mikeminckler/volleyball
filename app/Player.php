@@ -16,7 +16,7 @@ class Player extends Model
 {
     use UserAttributes;
 
-    protected $appends = ['full_name', 'games'];
+    protected $appends = ['games', 'full_name'];
 
     public function user()
     {

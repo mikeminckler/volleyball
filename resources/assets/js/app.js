@@ -36,9 +36,11 @@ Vue.component('player-game-stat', require('./components/PlayerGameStat.vue'));
 Vue.component('player-game-report', require('./components/PlayerGameReport.vue'));
 
 const router = new VueRouter({
+    mode: 'history',
     routes: [
         { path: '/login', component: require('./components/Login.vue') },
         { path: '/home', component: require('./components/Home.vue') },
+        { path: '/select-team', component: require('./components/SelectTeam.vue') },
 
         { path: '/my-account', component: require('./components/User.vue') },
         { path: '/users', component: require('./components/Users.vue') },
@@ -70,8 +72,17 @@ const router = new VueRouter({
 router.beforeEach( function(to, from, next) {
     if (to.path != '/login') {
         if (store.state.user.authenticated) {
+
             store.dispatch('clearErrorsFeedback');
-            next();
+
+            if (to.path == '/select-team') {
+                next();
+            } else if (!store.state.activeTeam.id) {
+                next('/select-team');
+            } else { 
+                next();
+            }
+
         } else {
             if (to.path != '/') {
                 store.dispatch('addFeedback', {'type': 'error', 'message': 'Please login to acces that page'});
@@ -98,13 +109,13 @@ const store = new Vuex.Store({
             last_name: '',
             email: '',
             id: '',
-            roles: [],
-            teams: []
+            roles: []
         },
 
         feedback: [],
         intended: '',
-        menu: []
+        menu: [],
+        activeTeam: {}
     },
 
     getters: {
@@ -114,6 +125,15 @@ const store = new Vuex.Store({
     },
 
     mutations: {
+
+        setActiveTeam (state, team) {
+            state.activeTeam = team;
+        },
+
+        removeActiveTeam (state) {
+            state.activeTeam = {};
+        },
+
         setToken (state, token) {
             state.user.authenticated = true;
             state.user.token = token;
@@ -151,11 +171,14 @@ const store = new Vuex.Store({
             state.user.last_name = info.last_name;
             state.user.email = info.email;
             state.user.id = info.id;
+            state.user.roles = info.roles;
         },
 
+        /*
         userRoles (state, info) {
             state.user.roles = info;
         },
+        */
 
         menu (state, menu) {
             state.menu = menu;
@@ -164,6 +187,15 @@ const store = new Vuex.Store({
     },
 
     actions: {
+        
+        setActiveTeam({ commit, state }, team) {
+            commit('setActiveTeam', team);
+        },
+
+        removeActiveTeam({ commit, state }) {
+            commit('removeActiveTeam');
+        },
+
         setToken({ commit, state }, token) {
 
             commit('setToken', token);
@@ -252,6 +284,7 @@ const app = new Vue({
                 vue.$router.push('/login');
 
                 vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged Out'});
+                vue.$store.dispatch('removeActiveTeam');
 
             }, function(error) {
                 // we have timed out or our token is invalid so lets go to the login page
@@ -300,6 +333,7 @@ const app = new Vue({
 
         });
 
+        /*
         window.socket.on('App\\Events\\UserRolesUpdated', function (data) {
 
             vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
@@ -311,6 +345,7 @@ const app = new Vue({
             });
 
         });
+        */
 
         window.socket.on('App\\Events\\AuthAnnouncement', function (data) {
             vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});

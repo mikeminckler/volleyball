@@ -26,9 +26,9 @@ class UsersTableSeeder extends Seeder
         $mike->password = bcrypt('q');
         $mike->save();
 
-        $mike->addRole($admin);
-
         $zep = Team::where('team_name', 'Led Zeppelin')->first();
+
+        $mike->addRole($admin, $zep);
 
         $jb = new User;
         $jb->first_name = 'John';

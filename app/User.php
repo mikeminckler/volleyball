@@ -31,8 +31,6 @@ class User extends Model implements
 {
     use Authenticatable, Authorizable, CanResetPassword, Notifiable;
 
-    protected $appends = ['teams'];
-
     /**
      * The attributes that are mass assignable.
      *
@@ -134,10 +132,10 @@ class User extends Model implements
 
     public function roles()
     {
-        return $this->belongsToMany('App\Role');
+        return $this->belongsToMany('App\Role')->withPivot('team_id');
     }
 
-    public function addRole($role)
+    public function addRole($role, $team)
     {
 
         if (!$role instanceof Role) {
@@ -152,24 +150,34 @@ class User extends Model implements
             return false;
         }
 
-        if (!$this->roles->contains($role)) {
-            $this->roles()->attach($role);
-            event(new UserRolesUpdated('You are now in the '.$role->role_name.' group', $this));
+        if (!$this->roles->contains(function($user_role) use($role, $team) {
+            if ($user_role->pivot->team_id == $team->id && $user_role->id == $role->id) {
+                return true;
+            }
+            return false;
+        })) {
+            $this->roles()->attach($role, ['team_id' => $team->id]);
+            event(new UserRolesUpdated('You are now in the '.$role->role_name.' group for '.$team->team_name, $this));
         }
 
         return $this;
     }
 
-    public function removeRole($role)
+    public function removeRole($role, $team)
     {
 
         if (!$role instanceof Role) {
             $role = Role::findOrFail($role);
         }
 
-        if ($this->roles->contains($role)) {
-            $this->roles()->detach($role);
-            event(new UserRolesUpdated('You have been removed from the '.$role->role_name.' group', $this));
+        if ($this->roles->contains(function($user_role) use($role, $team) {
+            if ($user_role->pivot->team_id == $team->id && $user_role->id == $role->id) {
+                return true;
+            }
+            return false;
+        })) {
+            $this->roles()->newPivotStatementForId($role->id)->where('team_id', $team->id)->delete();
+            event(new UserRolesUpdated('You have been removed from the '.$role->role_name.' group for '.$team->id, $this));
         }
 
         return $this;
@@ -197,20 +205,6 @@ class User extends Model implements
         }
 
         return $users;
-    }
-
-    public function getTeamsAttribute()
-    {
-
-        $teams = new Collection;
-        return null;
-        $player = $this->player;
-
-        if ($this->player instanceof Player) {
-            //$player_teams = $this->player->teams;
-        }
-        
-        return $teams;
     }
 
 }

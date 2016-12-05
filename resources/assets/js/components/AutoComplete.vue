@@ -82,55 +82,60 @@
                     this.clicked = false;
                 }
             },
-            id: 'select'
+            id: 'select',
+            clear: 'clearFields',
         },
 
         methods: {
 
             selectNext: function(e) {
 
-                let current = _.findIndex(this.results, function(result) {
-                    return result.selected;
-                });
+                if (this.results.length > 0) {
+                    let current = _.findIndex(this.results, function(result) {
+                        return result.selected;
+                    });
 
-                _.forEach(this.results, function(result) {
-                    result.selected = false;
-                });
+                    _.forEach(this.results, function(result) {
+                        result.selected = false;
+                    });
 
-                if (current != -1) {
-                    if (this.results[(current + 1)] != undefined) {
-                        this.results[(current + 1)].selected = true;
-                    } else {
-                        if (this.results.length > 1) {
-                            this.results[0].selected = true;
+                    if (current != -1) {
+                        if (this.results[(current + 1)] != undefined) {
+                            this.results[(current + 1)].selected = true;
+                        } else {
+                            if (this.results.length > 1) {
+                                this.results[0].selected = true;
+                            }
                         }
+                    } else {
+                        this.results[0].selected = true;
                     }
-                } else {
-                    this.results[0].selected = true;
                 }
 
             },
 
             selectPrev: function(e) {
 
-                let current = _.findIndex(this.results, function(result) {
-                    return result.selected;
-                });
+                if (this.results.length > 0) {
+                    let current = _.findIndex(this.results, function(result) {
+                        return result.selected;
+                    });
 
-                _.forEach(this.results, function(result) {
-                    result.selected = false;
-                });
+                    _.forEach(this.results, function(result) {
+                        result.selected = false;
+                    });
 
-                if (current != -1) {
-                    if (this.results[(current - 1)] != undefined) {
-                        this.results[(current - 1)].selected = true;
-                    } else {
-                        if (this.results.length > 1) {
-                            this.results[(this.results.length - 1)].selected = true;
+                    if (current != -1) {
+                        if (this.results[(current - 1)] != undefined) {
+                            this.results[(current - 1)].selected = true;
+                        } else {
+                            if (this.results.length > 1) {
+                                this.results[(this.results.length - 1)].selected = true;
+                            }
                         }
+                    } else {
+                        this.results[(this.results.length - 1)].selected = true;
                     }
-                } else {
-                    this.results[(this.results.length - 1)].selected = true;
                 }
             
             },
@@ -200,11 +205,15 @@
                     this[postFunction](postOptions);
                 }
 
+                this.clearFields();
+
+            },
+
+            clearFields: function() {
                 if (this.clear) {
                     this.terms = '';
                     this.id = '';
                 }
-
             },
 
             /**

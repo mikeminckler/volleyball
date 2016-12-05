@@ -9,7 +9,6 @@ Route::group(['middleware' => 'auth:api', ], function() {
 
     Route::post('users', ['as' => 'users', 'uses' => 'UsersController@users']);
     Route::post('users/my-info', ['as' => 'users.my-info', 'uses' => 'UsersController@myInfo']);
-    Route::post('users/my-roles', ['as' => 'users.my-info', 'uses' => 'UsersController@myRoles']);
     Route::post('users/load/{id}', ['as' => 'users.show', 'uses' => 'UsersController@load'])->where('id', '\d+');
     Route::post('users/roles/{id}', ['as' => 'users.roles', 'uses' => 'UsersController@roles'])->where('id', '\d+');
     Route::post('users/{id}', ['as' => 'users.store', 'uses' => 'UsersController@store'])->where('id', '\d+');
@@ -27,6 +26,7 @@ Route::group(['middleware' => 'auth:api', ], function() {
     Route::post('search/users', ['as' => 'search.users', 'uses' => 'SearchController@users']);
     Route::post('search/players', ['as' => 'search.players', 'uses' => 'SearchController@players']);
     Route::post('search/teams', ['as' => 'search.teams', 'uses' => 'SearchController@teams']);
+    Route::post('search/roles', ['as' => 'search.roles', 'uses' => 'SearchController@roles']);
 
 
     Route::post('teams', ['as' => 'teams', 'uses' => 'TeamsController@teams']);

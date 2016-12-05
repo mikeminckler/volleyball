@@ -2,8 +2,12 @@ export default {
     
     methods: {
         userHasRole(role) {
-            
-            if (_.includes(this.$store.state.user.roles, role)) {
+
+            let check = _.some(this.$store.state.user.roles, function (r) {
+                return r.role_name == role;
+            });
+
+            if (check) {
                 return true;
             } else {
                 return false;

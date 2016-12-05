@@ -31,4 +31,8 @@ class SearchController extends Controller
         return $this->search->search('team', $request->only('terms'));
     }
 
+    public function roles(Request $request)
+    {
+        return $this->search->search('role', $request->only('terms'));
+    }
 }

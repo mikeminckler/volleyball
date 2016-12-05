@@ -2,11 +2,11 @@
 
     <div class="team-players-stats-report">
 
-        <div class="h3">Players</div>
+        <div class="h3">Players Report</div>
 
         <div class="row">
             <div class="column"></div>
-            <div class="column" v-for="stat in team.stats">{{ stat.stat_name }}</div>
+            <div class="column player-game-stat" v-for="stat in team.stats">{{ stat.stat_name }}</div>
         </div>
 
         <transition-group 

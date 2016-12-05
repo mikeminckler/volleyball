@@ -145,6 +145,8 @@ div.menu-item {
     flex: 1;
     text-align: center;
     padding: 0px 10px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
 }
 
 div.home-link, div.right-menu {
@@ -324,6 +326,38 @@ input[type="checkbox"]:checked:after {
     content: "\f00c";
 }
 
+/* SELECT TEAM */
+
+div.select-team-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+} 
+
+div.select-team {
+    min-width: 360px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+}
+
+div.select-team-item {
+    cursor: pointer;
+    padding: 0px 5px;
+    border-top: 1px solid var(--border-color);
+}
+
+div.select-team-item:last-child {
+    border-bottom: 1px solid var(--border-color);
+}
+
+div.select-team-item:hover {
+    background-color: var(--search-results-highlight) !important;
+}
+
 /* LOGIN */
 
 div.login {
@@ -388,6 +422,7 @@ a.forgot-password {
     padding: var(--icon-padding);
     color: var(--icon-text-color);    
     font-size: var(--icon-text-size);    
+    cursor: pointer;
 }
 
 /* SEARCH */

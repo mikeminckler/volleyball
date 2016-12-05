@@ -91,23 +91,69 @@
         <div v-show="user.id" v-if="userHasRole('admin')">
 
             <section>
-                <div class="h2">Groups</h2>
+                <div class="h2">Teams</h2>
             </section>
 
             <section>
-                <div class="form-block" v-for="role in roles">
+
+                <transition-group 
+                    name="list" 
+                    tag="div"
+                    v-bind:css="false"
+                    v-on:before-enter="beforeEnter"
+                    v-on:enter="enter"
+                    v-on:leave="leave"
+                >
+                    <div class="row" v-for="(role, index) in user.roles"
+                        :key="role.id"
+                        :data-index="index"
+                    >
+                    
+                        <div class="column">{{ role.team.team_name }}</div>
+                        <div class="column">{{ upperCase(role.role_name) }}</div>
+                        <div class="column icon">
+                            <div class="fa fa-times icon" @click="removeRole(role)"></div> 
+                        </div>
+
+                    </div>
+
+                </transition-group>
+
+            </section>
+
+            <section>
+
+                <div class="h3">Add Role</div>
+
+                <div class="form-block">
                     <div class="form-label">
-                        <label :for="role.id">{{ role.role_name }}</label>
+                        <label for="add_team_id" class="label">Team</label>
                     </div>
                     <div class="form-input">
-                        <input type="checkbox" 
-                            :id="role.id" 
-                            :value="role.id" 
-                            @click="toggleRole" 
-                            :checked="roleCheck(role.id)"
-                        >
+                        <autocomplete object="teams" name="add_team_id" afterSearching="" :clear="clear"></autocomplete>
                     </div>
                 </div>
+
+                <div class="form-block">
+                    <div class="form-label">
+                        <label for="add_role_id" class="label">Role</label>
+                    </div>
+                    <div class="form-input">
+                        <autocomplete object="roles" name="add_role_id" afterSearching="" :clear="clear"></autocomplete>
+                    </div>
+                </div>
+
+                <div class="row">
+                </div>
+
+                <div class="form-block">
+                    <div class="form-label">
+                    </div>
+                    <div class="form-input">
+                        <div class="submit button" @click="addRoleToUser()">Add Role</div>
+                    </div>
+                </div>
+
             </section>
 
         </div>
@@ -119,6 +165,8 @@
 <script>
 
     import UserMixins from './UserMixins'
+    import Helpers from './Helpers'
+    import ListTransition from './ListTransition'
 
     export default {
 
@@ -128,23 +176,72 @@
                     id: '',
                     first_name: '',
                     last_name: '',
-                    email: ''
+                    email: '',
+                    teams: []
                 },
                 password: '',
                 password_confirmation: '',
                 show_password: false,
-                roles: [],
-                groups: []
+                clear: false,
+                //roles: [],
+                //groups: [],
             }
         },
 
-        mixins: [UserMixins],
+        mixins: [UserMixins, Helpers, ListTransition],
 
         watch: {
             '$route': 'loadInfo'
         },
 
         methods: {
+
+
+            removeRole: function(role) {
+
+                var vue = this;
+                let user_id = vue.$route.params.id;
+                let post_data = {
+                    'role_id': role.id,
+                    'team_id': role.team.id
+                }
+
+                vue.$http.post('/api/users/remove-role/' + user_id, post_data).then( function(response) {
+
+                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Removed group'});
+                    vue.loadInfo();
+
+                }, function(error) {
+                
+                });
+
+            },
+
+            addRoleToUser: function() {
+
+                var vue = this;
+                let user_id = vue.$route.params.id;
+                let post_data = {
+                    'team_id': document.getElementById("add_team_id").value,
+                    'role_id': document.getElementById("add_role_id").value
+                };
+
+                vue.clear = true;   
+
+                vue.$http.post('/api/users/save-role/' + user_id, post_data).then( function(response) {
+
+                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Group saved'});
+                    vue.loadInfo();
+                    vue.clear = false;   
+
+                }, function(error) {
+                
+                });
+
+
+            },
+
+            /*
 
             toggleRole: function(e) {
 
@@ -190,6 +287,8 @@
                 }
             },
 
+            */
+
             loadInfo: function() {
 
                 var vue = this;
@@ -209,6 +308,7 @@
                 }
             },
 
+            /*
             loadRoles: function() {
 
                 var vue = this;
@@ -233,6 +333,7 @@
                 });
 
             },
+            */
 
             submit: function(e) {
 
@@ -285,14 +386,16 @@
                 this.show_password = !this.show_password;
             },
 
+            /*
             roleCheck: function(role_id) {
                 return _.includes(this.groups, role_id);
             }
+            */
 
         },
 
         beforeMount() {
-            this.loadRoles();
+            //this.loadRoles();
             this.loadInfo();
         },
 

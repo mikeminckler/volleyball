@@ -111,6 +111,7 @@
                         vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your info'});
                     });
 
+                    /*
                     vue.$http.post('/api/users/my-roles').then( function(response) {
 
                         vue.$store.dispatch('userRoles', response.data); 
@@ -118,6 +119,7 @@
                     }, function(error) {
                         vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your groups'});
                     });
+                    */
 
                     vue.loadMenu();
 
