@@ -30,6 +30,15 @@ export default {
             }
         },
 
+        loadActiveTeam: function() {
+
+            var vue = this;
+
+            vue.$http.post('/api/teams/load/' + vue.$store.state.activeTeam.id).then( function(response) {
+                vue.$store.dispatch('setActiveTeam', response.data);
+            });
+        },
+
         loadPlayers: function(team_id) {
 
             var vue = this;

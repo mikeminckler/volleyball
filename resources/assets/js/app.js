@@ -29,6 +29,7 @@ Vue.component('room-list', require('./components/RoomList.vue'));
 Vue.component('team-game-stats', require('./components/TeamGameStats.vue'));
 Vue.component('team-game-chart', require('./components/TeamGameChart.vue'));
 Vue.component('team-game-report', require('./components/TeamGameReport.vue'));
+Vue.component('team-games-list', require('./components/TeamGamesList.vue'));
 Vue.component('team-stat-setting', require('./components/TeamStatSetting.vue'));
 Vue.component('team-players-stats-report', require('./components/TeamPlayersStatsReport.vue'));
 Vue.component('team-players-list', require('./components/TeamPlayersList.vue'));
@@ -189,6 +190,13 @@ const store = new Vuex.Store({
     actions: {
         
         setActiveTeam({ commit, state }, team) {
+
+            if (state.activeTeam.id != team.id) {
+                if (state.activeTeam.id) {
+                    window.socket.emit('leave-room', 'team.' + state.activeTeam.id);
+                }
+                window.socket.emit('join-room', 'team.' + team.id);
+            }
             commit('setActiveTeam', team);
         },
 
