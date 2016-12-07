@@ -2,7 +2,10 @@
 
 Auth::routes();
 
+
 Route::group(['middleware' => 'auth:api', ], function() {
+
+    Route::post('login-check', ['as' => 'login-check', 'uses' => 'UsersController@loginCheck']);
 
     Route::post('home', ['as' => 'home', 'uses' => 'UsersController@home']);
     Route::post('menu', ['as' => 'menu', 'uses' => 'UsersMenuController@index']);

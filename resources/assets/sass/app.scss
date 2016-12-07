@@ -13,12 +13,14 @@
     --screen-width: 320px;
     --font: 'Lato', sans-serif; 
 
-    --link-color: #252c41;
+    --link-color: #21659e;
     --bg-color: #f4f5f9;
     --text-color: #252c41;
     --border-color: #c9d6de;
     --button-color: #fff;
     --button-text-color: #252c41;
+    --link-active-bg: #fff;
+    --link-active-border: #252c41;
     --footer-font-color: #999;
     --light-bg: #f2f8ff;
     --search-results-highlight: #e5f0ff;
@@ -44,7 +46,7 @@
 
     --icon-padding: 0px;
     --icon-text-color: #000;
-    --icon-text-size: 18px;
+    --icon-text-size: 17px;
 
     --success-bg: #daffe3;
     --success-border: #a5ecb7;
@@ -129,10 +131,10 @@ div.header {
 }
 
 .router-link-active {
-    font-weight: var(--font-weight-bold);
+    background-color: var(--link-active-bg);
+    border: 0 !important;
     color: #000;
 }
-
 
 div.menu {
     flex: 1;
@@ -149,12 +151,22 @@ div.menu-item {
     white-space: nowrap;
 }
 
+div.menu div.menu-item a {
+    padding: 4px 10px;
+    border-radius: var(--border-radius);
+}
+
 div.home-link, div.right-menu {
     padding: 0px 10px;
+    flex: 0;
 }
 
 div.right-menu {
     display: flex;
+}
+
+div.right-menu div.menu-item {
+    padding: 0px 5px;
 }
 
 div.footer {
@@ -227,8 +239,13 @@ input:focus, textarea:focus, button:focus, a:focus {
 }
 
 a:focus {
-    border: 0;
+    border: 0 !important;
     font-weight: var(--font-weight-bold);
+}
+
+div.menu-item a:focus {
+    border: 0 !important;
+    font-weight: var(--font-weight) !important;
 }
 
 button:focus {
@@ -423,6 +440,10 @@ a.forgot-password {
     color: var(--icon-text-color);    
     font-size: var(--icon-text-size);    
     cursor: pointer;
+}
+
+a.icon {
+    border-radius: 50%;
 }
 
 /* SEARCH */

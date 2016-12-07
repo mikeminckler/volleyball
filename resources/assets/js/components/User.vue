@@ -88,7 +88,7 @@
 
         </section>
 
-        <div v-show="user.id" v-if="userHasRole('admin')">
+        <div v-show="user.id" v-if="userHasRole(['admin'])">
 
             <section>
                 <div class="h2">Teams</h2>

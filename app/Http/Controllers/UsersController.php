@@ -95,4 +95,15 @@ class UsersController extends Controller
             ->removeRole($role, $team);
     }
 
+    public function loginCheck(Request $request)
+    {
+
+        if (auth()->check()) {
+            return response()->json(['status' => 'ok']);
+        } else {
+            return response()->json(['status' => 'timeout']);
+        }
+
+    }
+
 }

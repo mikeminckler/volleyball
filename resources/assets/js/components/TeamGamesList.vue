@@ -4,7 +4,7 @@
 
         <section class="header">
             <div class="h1">{{ team.team_name }} Games</div>
-            <div v-if="userHasRole('admin')"><router-link class="button" to="/games/create">Create Game</router-link></div>
+            <div v-if="userHasRole(['admin'])"><router-link class="button" to="/games/create">Create Game</router-link></div>
         </section>
 
         <section v-if="team.games">
@@ -29,7 +29,7 @@
                         <router-link :to="{path: '/games/' + game.id}">{{ game.team1_name }} vs {{ game.team2_name }}</router-link>
                     </div>
 
-                    <div class="column w-50">
+                    <div class="column w-50" v-if="userCanTakeStats(team.id)">
                         <router-link :to="{path: '/games/stats/' + game.id}">Stats</router-link>
                     </div>
 

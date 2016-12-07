@@ -1,10 +1,20 @@
 export default {
     
     methods: {
-        userHasRole(role) {
 
-            let check = _.some(this.$store.state.user.roles, function (r) {
-                return r.role_name == role;
+        userHasRole(role_array, team_id = undefined) {
+
+            var vue = this;
+            if (team_id == undefined) {
+                team_id = vue.$store.state.activeTeam.id;
+            }
+
+            let roles = _.filter(vue.$store.state.user.roles, function (r) {
+                return r.team.id == team_id;
+            });
+
+            let check = _.some(roles, function (r) {
+                return _.includes(role_array, r.role_name);
             });
 
             if (check) {
@@ -16,11 +26,11 @@ export default {
         },
 
         userCanManageTeam(team_id) {
-            return true;
+            return this.userHasRole(['admin', 'team_manager'], team_id);
         },
 
         userCanTakeStats(team_id) {
-            return true;
+            return this.userHasRole(['admin', 'coach'], team_id);
         }
     }
 

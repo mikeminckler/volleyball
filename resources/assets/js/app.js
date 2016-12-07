@@ -143,6 +143,7 @@ const store = new Vuex.Store({
         removeToken (state) {
             state.user.authenticated = false;
             state.user.token = '';
+            clearInterval(window.loginCheck);
         },
 
         addFeedback (state, item) {
@@ -213,6 +214,8 @@ const store = new Vuex.Store({
 
             // authenticate our token
             window.socket.emit('authenticate', {token: token});
+
+            window.loginCheck = setInterval(function() { app.loginCheck() }, 10000);
         },
 
         userRoles({ commit, state }, info) {
@@ -229,6 +232,7 @@ const store = new Vuex.Store({
 
         removeToken({ commit, state }) {
             commit('removeToken');
+            clearInterval(window.loginCheck);
         },
 
         addFeedback({ commit, state }, feedback) {
@@ -278,6 +282,7 @@ const app = new Vue({
     methods: {
 
         logout: function(e){
+
             var vue = this;
             vue.$http.post(e.target.action).then( function(response) {
 
@@ -285,19 +290,49 @@ const app = new Vue({
 
                 // call the action for the store update
                 vue.$store.dispatch('removeToken').then( function() {
-                    //window.socket.removeListener('auth.info');
                     window.socket.close();
                 });
 
-                vue.$router.push('/login');
-
                 vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged Out'});
                 vue.$store.dispatch('removeActiveTeam');
+                vue.$router.push('/login');
 
             }, function(error) {
                 // we have timed out or our token is invalid so lets go to the login page
                 vue.$router.push('/login');
             });
+
+        }, 
+
+        loginCheck: function() {
+        
+            var vue = this;
+
+            vue.$http.post('/api/login-check').then( function(response) {
+
+                if (response.data.status == 'timeout') {
+                    vue.timeout();
+                }
+
+            }, function(error) {
+
+                vue.timeout();
+
+            });
+
+        },
+
+        timeout: function() {
+
+            var vue = this;
+        
+            vue.$store.dispatch('removeToken').then( function() {
+                window.socket.close();
+            });
+
+            vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'Your session has timed out'});
+            vue.$store.dispatch('removeActiveTeam');
+            vue.$router.push('/login');
 
         }
 

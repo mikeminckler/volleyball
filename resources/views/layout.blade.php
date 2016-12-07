@@ -29,19 +29,22 @@
         <transition name="slide-down">
             <div class="header" v-if="$store.state.user.authenticated">
 
-                <div class="home-link" v-if="$store.state.activeTeam.id">
-                    <router-link to="/home" class="button">Home</router-link>
-                </div>
-                
                 <app-menu></app-menu>
         
                 <div class="right-menu">
-                    <div class="menu-item"  v-if="$store.state.activeTeam.id"><router-link to="/my-account">@{{ $store.getters.user_name }}</div>
-                    <div class="menu-item"  v-if="$store.state.activeTeam.id"><router-link to="/select-team">@{{ $store.state.activeTeam.team_name }}</div>
-                    <form id="logout-form" action="/api/logout" method="POST" @submit.prevent="logout">
-                        <button class="logout">Logout</button>
-                    </form>
+                    <div class="menu-item"  v-if="$store.state.activeTeam.id">
+                        <router-link to="/my-account" class="fa-user-circle fa icon"></router-link>
+                    </div>
+                    <div class="menu-item"  v-if="$store.state.activeTeam.id && $store.state.user.roles.length > 1">
+                        <router-link to="/select-team" class="fa-users fa icon"></router-link>
+                    </div>
+                    <div class="menu-item">
+                        <form id="logout-form" action="/api/logout" method="POST" @submit.prevent="logout">
+                            <button class="logout">Logout</button>
+                        </form>
+                    </div>
                 </div>
+
             </div>
         </transition>
         

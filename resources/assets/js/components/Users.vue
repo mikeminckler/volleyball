@@ -4,7 +4,7 @@
 
         <section class="header">
             <div class="h1">Users</div>
-            <div v-if="userHasRole('admin')"><router-link class="button" to="/users/create">Create User</router-link></div>
+            <div v-if="userHasRole(['admin'])"><router-link class="button" to="/users/create">Create User</router-link></div>
         </section>
 
         <section>
