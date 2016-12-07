@@ -26,7 +26,8 @@
                         <input type="checkbox" :id="game.id" :name="'game-' + game.id" :value="game.id" @click="toggleGameSelect" :checked="gameCheck(game.id)">
                     </div>
                     <div class="column">
-                        <router-link :to="{path: '/games/' + game.id}">{{ game.team1_name }} vs {{ game.team2_name }}</router-link>
+                        <router-link v-if="userCanManageTeam(team.id)" :to="{path: '/games/' + game.id}">{{ game.team1_name }} vs {{ game.team2_name }}</router-link>
+                        <div v-else>{{ game.team1_name }} vs {{ game.team2_name }}</div>
                     </div>
 
                     <div class="column w-50" v-if="userCanTakeStats(team.id)">
