@@ -3,7 +3,7 @@
     <div class="login-container">
         <div class="login">
 
-            <form class="login" role="form" method="POST" action="/api/login" @submit.prevent="login">
+            <form class="login" role="form" method="POST" action="/api/login" @submit.prevent="attempt">
 
                 <div class="login-logo fa fa-book"></div>
 
@@ -86,7 +86,7 @@
 
             },
 
-            login: function(e) {
+            attempt: function(e) {
                 let post_data = {
                     'email':    this.login.email,
                     'password': this.login.password,
