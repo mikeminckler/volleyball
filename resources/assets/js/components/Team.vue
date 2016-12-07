@@ -85,15 +85,15 @@
         </section>
 
 
-        <section v-show="team.id" v-if="userCanManageTeam(team.id)">
+        <section v-if="team.id">
             <div class="h2">Players</h2>
         </section>
 
-        <section v-show="team.id" v-if="userCanManageTeam(team.id)">
+        <section v-show="team.id">
             <team-players-list :team="team"></team-players-list>
         </section>
 
-        <section v-if="team.id">
+        <section v-show="team.id" v-if="userCanManageTeam(team.id)">
 
             <div class="form-block">
                 <div class="form-label">

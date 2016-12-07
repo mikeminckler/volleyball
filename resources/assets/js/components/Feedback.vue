@@ -8,7 +8,7 @@
                     v-for="(feedback, index) in $store.state.feedback" 
                     @click="$store.state.feedback.splice(index, 1)"
                 >
-                    <router-link v-if="feedback.link" :to="{ path: feedback.link }">{{ feedback.message }}</router-link>
+                    <router-link v-if="feedback.link" :to="{ path: feedback.link }" class="feedback">{{ feedback.message }}</router-link>
                     <div v-else>{{ feedback.message }}</div>
                 </div>
             </transition-group>

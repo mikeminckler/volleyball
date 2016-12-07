@@ -24,6 +24,7 @@ class GamesController extends Controller
     {
         return $this->game->where('removed', false)->with('team1', 'team2')->get()
             ->sortBy('team1_id')
+            ->sortByDesc('start_time')
             ->values()
             ->all();
     }

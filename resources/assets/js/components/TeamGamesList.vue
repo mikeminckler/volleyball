@@ -4,7 +4,7 @@
 
         <section class="header">
             <div class="h1">{{ team.team_name }} Games</div>
-            <div v-if="userHasRole(['admin'])"><router-link class="button" to="/games/create">Create Game</router-link></div>
+            <div v-if="userHasRole(['admin', 'coach', 'team_manager'])"><router-link class="button" to="/games/create">Create Game</router-link></div>
         </section>
 
         <section v-if="team.games">

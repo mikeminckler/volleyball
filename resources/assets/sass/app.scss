@@ -130,7 +130,7 @@ div.header {
     outline: 0;
 }
 
-.router-link-active {
+.router-link-active:not(.feedback) {
     background-color: var(--link-active-bg);
     border: 0 !important;
     color: #000;

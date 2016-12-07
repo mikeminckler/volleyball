@@ -154,7 +154,7 @@ class Team extends Model
     {
         $home_games = $this->homeGames;
         $away_games = $this->awayGames;
-        return $home_games->merge($away_games);
+        return $home_games->merge($away_games)->sortByDesc('start_time')->values();
     }
 
     public function getStatsAttribute()

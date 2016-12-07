@@ -53,7 +53,7 @@
 
         data: function () {
             return {
-                terms: '',
+                terms: this.text,
                 id: '',
                 clicked: false,
                 results: [],

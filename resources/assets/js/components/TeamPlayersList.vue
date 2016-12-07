@@ -20,7 +20,7 @@
                     <div class="column">
                         <router-link :to="{path: '/players/stats/' + player.id}">Stats</router-link>
                     </div>
-                    <div class="column">
+                    <div class="column" v-if="userCanManageTeam(team.id)">
                         <a @click.prevent="removePlayer" 
                             :data-player-id="player.id" 
                             class="delete fa fa-times icon" 
@@ -39,11 +39,12 @@
 
     import ListTransition from './ListTransition'
     import Helpers from './Helpers'
+    import UserMixins from './UserMixins'
 
     export default {
         components: {},
 
-        mixins: [ListTransition, Helpers],
+        mixins: [ListTransition, Helpers, UserMixins],
 
         data: function () {
             return {

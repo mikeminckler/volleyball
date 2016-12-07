@@ -15,7 +15,10 @@
                     <label for="team1_id" class="label">Team 1 (H)</label>
                 </div>
                 <div class="form-input">
-                    <autocomplete object="teams" name="team1_id" afterSearching="" :oldid="game.team1.id" :text="game.team1.team_name"></autocomplete>
+                    <autocomplete object="teams" name="team1_id" afterSearching="" 
+                        :oldid="game.team1.id ? game.team1.id : $store.state.activeTeam.id" 
+                        :text="game.team1.id ? game.team1.team_name : $store.state.activeTeam.team_name">
+                    </autocomplete>
                 </div>
             </div>
 
