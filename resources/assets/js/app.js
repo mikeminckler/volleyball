@@ -17,7 +17,8 @@ const axios = require('axios');
 const moment = require('moment');
 
 const io = require('socket.io-client');
-window.socket = io('//' + window.location.hostname + ':3000');
+//window.socket = io('//' + window.location.hostname + '/socket');
+window.socket = io('//' + window.location.hostname + '/socket', {path: '/socket/socket.io'});
 
 Vue.prototype.$http = axios;
 

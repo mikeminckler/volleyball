@@ -13,15 +13,17 @@ var server = require('http').createServer();
 var io = require('socket.io')(server);
 var socketioJwt = require('socketio-jwt');
 
+var namespace = io.of('/socket');
+
 var Redis = require('ioredis');
 var redis = new Redis();
 
-io.on('connection', socketioJwt.authorize({
+namespace.on('connection', socketioJwt.authorize({
     secret: process.env.JWT_SECRET,
     timeout: 15000
 }));
 
-io.on('authenticated', function (socket) {
+namespace.on('authenticated', function (socket) {
 
     /** we can access the token props via socket.decoded_token
      *  these are set in App\User::getJWTCustomClaims()
@@ -80,7 +82,7 @@ io.on('authenticated', function (socket) {
     });
 });
 
-io.on('connection', function( socket ) {
+namespace.on('connection', function( socket ) {
 
     socket.join('public.info');
 
