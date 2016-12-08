@@ -17,8 +17,12 @@ const axios = require('axios');
 const moment = require('moment');
 
 const io = require('socket.io-client');
-window.socket = io('//' + window.location.hostname);
-//window.socket = io('//' + window.location.hostname, {path: '/socket.io'});
+
+if (window.location.hostname.indexOf('gamestats.brentwood.bc.ca') != -1) {
+    window.socket = io('//' + window.location.hostname);
+} else {
+    window.socket = io('//' + window.location.hostname + ':3000');
+}
 
 Vue.prototype.$http = axios;
 
