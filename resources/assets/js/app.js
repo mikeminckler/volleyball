@@ -220,7 +220,7 @@ const store = new Vuex.Store({
             // authenticate our token
             window.socket.emit('authenticate', {token: token});
 
-            window.loginCheck = setInterval(function() { app.loginCheck() }, 10000);
+            window.loginCheck = setInterval(function() { app.loginCheck() }, 60000);
         },
 
         userRoles({ commit, state }, info) {
