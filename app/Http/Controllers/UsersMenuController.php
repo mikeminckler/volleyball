@@ -9,10 +9,16 @@ class UsersMenuController extends Controller
     public function index()
     {
         $menu = [];
+
+        // admin
         $menu[] = ['url' => 'users', 'name' => 'Users', 'roles' => ['admin']];
-        $menu[] = ['url' => 'games', 'name' => 'Games', 'roles' => ['admin']];
+        $menu[] = ['url' => 'games', 'name' => 'All Games', 'roles' => ['admin']];
         $menu[] = ['url' => 'teams', 'name' => 'Teams', 'roles' => ['admin']];
         $menu[] = ['url' => 'stats', 'name' => 'Stats', 'roles' => ['admin']];
+
+        $menu[] = ['url' => 'teams/manage-team', 'name' => 'Manage Team', 'roles' => ['admin', 'team_manager']];
+        $menu[] = ['url' => 'teams/games/all', 'name' => 'Games', 'roles' => ['admin', 'team_manager', 'coach']];
+
         return $menu;
     }
 }

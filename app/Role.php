@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    protected $appends = ['team'];
+    protected $appends = ['team', 'name'];
 
     public function users()
     {
@@ -24,6 +24,11 @@ class Role extends Model
         return $this->where('role_name', 'like', '%'.$term.'%')->get();
     }
 
+    public function getNameAttribute()
+    {
+        return ucwords(str_replace('_', ' ', $this->role_name));
+    }
+
     public function searchResultsArray($objects)
     {
         $roles = array();
@@ -31,7 +36,7 @@ class Role extends Model
                 $role_array = array();
                 $role_array['id'] = $role->id;
                 $role_array['value'] = $role->role_name;
-                $role_array['label'] = $role->role_name;
+                $role_array['label'] = $role->name;
                 $role_array['selected'] = false;
                 $roles[] = $role_array;
         }

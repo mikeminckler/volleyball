@@ -71,8 +71,17 @@
             },
 
             setTeam: function() {
-                this.$store.dispatch('setActiveTeam', this.team);
-                this.$router.push('/home');
+
+                var vue = this;
+                vue.$store.dispatch('setActiveTeam', this.team);
+
+                // load the home page now that we are logged in
+                if (vue.$store.state.intended != '/login' && vue.$store.state.intended.length > 0) {
+                    vue.$router.push(vue.$store.state.intended);
+                    vue.$store.state.intended = '';
+                } else {
+                    vue.$router.push('/home');
+                }
             }
 
         }

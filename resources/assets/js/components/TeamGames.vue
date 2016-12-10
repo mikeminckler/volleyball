@@ -22,6 +22,9 @@
 
         beforeMount() {
             let team_id = this.$route.params.id;
+            if (team_id == 'all') {
+                team_id = this.$store.state.activeTeam.id;
+            }
             this.loadTeam(team_id);
         },
 

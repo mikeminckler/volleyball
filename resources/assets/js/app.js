@@ -56,6 +56,7 @@ const router = new VueRouter({
         { path: '/teams', component: require('./components/Teams.vue') },
         { path: '/teams/:id', component: require('./components/Team.vue') },
         { path: '/teams/create', component: require('./components/Team.vue') },
+        { path: '/teams/manage-team', component: require('./components/Team.vue') },
         { path: '/teams/games/:id', component: require('./components/TeamGames.vue') },
         { path: '/teams/players/:id', component: require('./components/TeamPlayers.vue') },
 
@@ -204,6 +205,7 @@ const store = new Vuex.Store({
                 window.socket.emit('join-room', 'team.' + team.id);
             }
             commit('setActiveTeam', team);
+            app.setTeamSessionId(team.id);
         },
 
         removeActiveTeam({ commit, state }) {
@@ -285,6 +287,17 @@ const app = new Vue({
     mixins: [UserMixins, Helpers],
 
     methods: {
+
+        setTeamSessionId: function(team_id) {
+        
+            var vue = this;
+            vue.$http.post('/api/set-team/' + team_id).then( function(response) {
+
+            }, function(error) {
+
+            });
+
+        },
 
         logout: function(e){
 

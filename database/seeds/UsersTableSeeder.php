@@ -26,10 +26,11 @@ class UsersTableSeeder extends Seeder
         $mike->password = bcrypt('q');
         $mike->save();
 
-        $zep = Team::where('team_name', 'Led Zeppelin')->first();
+        $bcs = Team::where('team_name', 'Brentwood')->first();
 
-        $mike->addRole($admin, $zep);
+        $mike->addRole($admin, $bcs);
 
+        /*
         $jb = new User;
         $jb->first_name = 'John';
         $jb->last_name = 'Bonham';
@@ -145,5 +146,6 @@ class UsersTableSeeder extends Seeder
         $rw->password = bcrypt('q');
         $rw->save();
         $floyd->addPlayer($rw);
+        */
     }
 }

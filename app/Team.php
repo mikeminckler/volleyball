@@ -27,7 +27,17 @@ class Team extends Model
         }
 
         $this->team_name = $input['team_name'];
-        $this->initials = $input['initials'];
+        if ($input['initials']) {
+            $this->initials = $input['initials'];
+        } else {
+            $words = preg_split("/[\s,_-]+/", $input['team_name']);
+            $acronym = "";
+
+            foreach ($words as $w) {
+                  $acronym .= $w[0];
+            }
+            $this->initials = $acronym;
+        }
         $this->save();
 
         if ($created) {

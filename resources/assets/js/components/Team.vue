@@ -42,11 +42,8 @@
 
         </section>
 
-        <section v-if="team.id">
-            <div class="h2">Stats Settings</h2>
-        </section>
-
-        <section v-if="team.id">
+        <section v-if="team.id && userHasRole(['admin'], team.id)">
+            <div class="h2">Stats Settings</div>
 
             <div class="form-block">
                 <div class="form-label"></div>
@@ -86,10 +83,7 @@
 
 
         <section v-if="team.id">
-            <div class="h2">Players</h2>
-        </section>
-
-        <section v-show="team.id">
+            <div class="h2">Players</div>
             <team-players-list :team="team"></team-players-list>
         </section>
 
@@ -174,9 +168,16 @@
         },
 
         beforeMount() {
+
             var vue = this;
             let team_id = vue.$route.params.id;
+
+            if (team_id == 'manage-team') {
+                team_id = vue.$store.state.activeTeam.id;
+            }
+
             this.loadTeam(team_id);
+
             this.loadStats();
         },
 
@@ -185,6 +186,9 @@
             var vue = this;
 
             let team_id = vue.$route.params.id;
+            if (team_id == 'manage-team') {
+                team_id = vue.$store.state.activeTeam.id;
+            }
             if (_.toNumber(team_id)) {
                 window.socket.emit('join-room', 'team.' + team_id);
             }
@@ -196,7 +200,6 @@
                 vue.loadTeam(team_id);
             });
 
-            //console.log(window.socket);
         },
 
         beforeDestroy() {

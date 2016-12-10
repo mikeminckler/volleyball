@@ -63,7 +63,11 @@
         },
 
         mounted () {
-            //
+
+        },
+
+        beforeDestroy() {
+
         },
 
         methods: {

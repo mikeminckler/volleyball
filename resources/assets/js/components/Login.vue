@@ -123,13 +123,7 @@
 
                     vue.loadMenu();
 
-                    // load the home page now that we are logged in
-                    if (vue.$store.state.intended != '/login' && vue.$store.state.intended.length > 0) {
-                        vue.$router.push(vue.$store.state.intended);
-                        vue.$store.state.intended = '';
-                    } else {
-                        vue.$router.push('/home');
-                    }
+                    vue.$router.push('/select-team');
 
                 }, function(error) {
 

@@ -5,8 +5,8 @@
                 <div class="home-link menu-item" v-if="$store.state.activeTeam.id">
                     <router-link to="/home" class="">Home</router-link>
                 </div>
-                <div class="menu-item" v-for="item in $store.state.menu">
-                    <router-link :to="{path: '/' + item.url}" v-if="roleCheck(item.roles)">{{ item.name }}</router-link>
+                <div class="menu-item" v-for="item in $store.state.menu" v-if="roleCheck(item.roles)">
+                    <router-link :to="{path: '/' + item.url}">{{ item.name }}</router-link>
                 </div>
             </div>
 

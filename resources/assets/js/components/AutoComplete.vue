@@ -14,7 +14,7 @@
                 @blur="results = []"
         >
         <input :id="name" class="input" type="hidden" :name="name" :value="value" :required="required">
- 
+
         <div class="results">
             <transition-group 
                 name="list" 
@@ -28,8 +28,9 @@
                     v-for="(result, index) in results" 
                     :key="result.id" 
                     :id="result.id"
-                    :data-label="result.label"
+                    :data-value="result.value"
                     :data-index="index"
+                    :data-add="result.add"
                     @click="selectItem" 
                     :class="{ selected: result.selected }"
                 >
@@ -49,7 +50,7 @@
 
     export default {
 
-        props: ['object', 'afterSearching', 'clear', 'name', 'required', 'oldid', 'text'],
+        props: ['object', 'afterSearching', 'clear', 'name', 'required', 'oldid', 'text', 'canAdd'],
 
         data: function () {
             return {
@@ -57,6 +58,7 @@
                 id: '',
                 clicked: false,
                 results: [],
+                add: ''
             }
         },
 
@@ -148,7 +150,7 @@
 
                 if (current != -1) {
                     this.clicked = true;
-                    this.terms = this.results[current].label;
+                    this.terms = this.results[current].value;
                     this.id = this.results[current].id;
                 }
 
@@ -164,6 +166,16 @@
                     }
 
                     vue.$http.post('/api/search/' + this.object, post_data).then( function(response) {
+                        let res = response.data;
+                        if (vue.canAdd) {
+                            res.push({
+                                id: 0,
+                                value: vue.terms,
+                                label: 'Add ' + vue.terms,
+                                selected: false,
+                                add: vue.canAdd
+                            });
+                        } 
                         vue.results = response.data;
                     }, function (error) {
                     
@@ -175,12 +187,13 @@
 
             selectItem: function(el) {
 
-                if (el.target.dataset.label != this.terms) {
+                if (el.target.dataset.value != this.terms) {
                     this.clicked = true;
                 }
 
-                this.terms = el.target.dataset.label;
+                this.terms = el.target.dataset.value;
                 this.id = el.target.id;
+                this.add = el.target.dataset.add;
 
             },
 
@@ -193,6 +206,16 @@
                  * call a function if one is defined in the 
                  * props from the tag
                  */
+
+                if (this.add != undefined) {
+                    let addFunction = this.add;
+
+                    if ( _.isFunction(this[addFunction])) {
+                        this[addFunction]();
+                        this.add = '';
+                    }
+
+                }
 
                 let postFunction = this.afterSearching;
                 let postOptions = '';
@@ -213,6 +236,7 @@
                 if (this.clear) {
                     this.terms = '';
                     this.id = '';
+                    this.add = '';
                 }
             },
 
@@ -240,6 +264,25 @@
                 }
 
             },
+
+            addTeam: function() {
+
+                var vue = this;
+                let post_data = {
+                    'team_name': this.terms
+                }
+
+                vue.$http.post('/api/teams/create', post_data).then( function(response) {
+
+                    vue.clicked = true;
+                    vue.terms = response.data.team_name;
+                    vue.id = response.data.id;
+
+                }, function (error) {
+                
+                });
+
+            }
             
 
         },

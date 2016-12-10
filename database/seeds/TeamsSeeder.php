@@ -17,21 +17,6 @@ class TeamsSeeder extends Seeder
         $bcs->team_name = 'Brentwood';
         $bcs->initials = 'BCS';
         $bcs->save();
-            
-        $team = new Team;
-        $team->team_name = 'Led Zeppelin';
-        $team->initials = 'LZ';
-        $team->save();
-
-        $team = new Team;
-        $team->team_name = 'Pink Floyd';
-        $team->initials = 'PF';
-        $team->save();
-
-        $team = new Team;
-        $team->team_name = 'Rolling Stones';
-        $team->initials = 'RS';
-        $team->save();
 
     }
 }

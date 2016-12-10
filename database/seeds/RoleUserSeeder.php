@@ -28,11 +28,11 @@ class RoleUserSeeder extends Seeder
         $role->save();
 
         $role = new Role;
-        $role->role_name = 'team_manager';
+        $role->role_name = 'manager';
         $role->save();
 
         $role = new Role;
-        $role->role_name = 'club_manager';
+        $role->role_name = 'stats';
         $role->save();
 
     }

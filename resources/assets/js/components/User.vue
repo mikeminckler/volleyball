@@ -110,7 +110,7 @@
                     >
                     
                         <div class="column">{{ role.team.team_name }}</div>
-                        <div class="column">{{ upperCase(role.role_name) }}</div>
+                        <div class="column">{{ role.name }}</div>
                         <div class="column icon">
                             <div class="fa fa-times icon" @click="removeRole(role)"></div> 
                         </div>
@@ -353,7 +353,7 @@
                 vue.$http.post(e.target.action, post_data).then( function(response) {
 
                     vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Saved User'});
-                    vue.$router.push('/users');
+                    vue.$router.push('/users/' + response.data.id);
 
                 }, function(error) {
 
