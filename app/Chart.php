@@ -21,9 +21,11 @@ class Chart extends Model
         $ticks = new Collection;
         $scores = array();
 
-        if (!$players && $team instanceof Team) {
-            $players = $team->players;
-            $teams = Team::where('id', $team->id)->get();
+        if ($team instanceof Team) {
+            if (!$players || !$players->count()) {
+                $players = $team->players;
+                $teams = Team::where('id', $team->id)->get();
+            }
         }
 
         if (!$team && $players->count()) {
@@ -33,6 +35,10 @@ class Chart extends Model
 
             $team_ids = $team_check->keys()->all();
             $teams = Team::whereIn('id', $team_ids)->get();
+        }
+
+        if ($team instanceof Team && !isset($teams)) {
+            $teams = Team::where('id', $team->id)->get();
         }
 
         foreach ($teams as $team) {

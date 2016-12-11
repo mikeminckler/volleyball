@@ -10,23 +10,39 @@
             <div class="column">Max's</div>
             <div class="column">Min's</div>
         </div>
-        <div class="row game-report-stat" v-for="stat in stats">
-            <div class="column">{{ stat.name }}</div>
-            <div class="column">{{ stat.score.attempts > 0 ? stat.score.score : '-' }}</div>
-            <div class="column">{{ stat.score.attempts > 0 ? stat.score.attempts : stat.score.score }}</div>
-            <div class="column">{{ stat.highs }}</div>
-            <div class="column">{{ stat.lows }}</div>
-        </div>
+
+        <transition-group 
+            name="list" 
+            tag="div"
+            v-bind:css="false"
+            v-on:before-enter="beforeEnter"
+            v-on:enter="enter"
+            v-on:leave="leave"
+        >
+            <div class="row game-report-stat" 
+                v-for="(stat, index) in stats"
+                :key="stat.name"
+                :data-index="index"
+            >
+                <div class="column">{{ stat.name }}</div>
+                <div class="column">{{ stat.score.attempts > 0 ? stat.score.score : '-' }}</div>
+                <div class="column">{{ stat.score.attempts > 0 ? stat.score.attempts : stat.score.score }}</div>
+                <div class="column">{{ stat.highs }}</div>
+                <div class="column">{{ stat.lows }}</div>
+            </div>
+        </transition-group>
 
     </div>
 
 </template>
 
 <script>
-    export default {
-        components: {},
 
-        mixins: [],
+    import ListTransition from './ListTransition'
+
+    export default {
+
+        mixins: [ListTransition],
 
         data: function () {
             return {
@@ -34,10 +50,11 @@
             }
         },
 
-        props: ['team', 'game_ids'],
+        props: ['team', 'game_ids', 'playerFilter'],
 
         watch: {
-            'game_ids': 'loadTeamGameReport'
+            'game_ids': 'loadTeamGameReport',
+            'playerFilter': 'loadTeamGameReport'
         },
 
         computed: {
@@ -68,7 +85,8 @@
                 var vue = this;
 
                 let post_data = {
-                    'game_ids': this.game_ids
+                    'game_ids': this.game_ids,
+                    'players': this.playerFilter
                 }
                 
                 vue.$http.post('/api/teams/game-report/' + this.team.id, post_data).then( function(response) {

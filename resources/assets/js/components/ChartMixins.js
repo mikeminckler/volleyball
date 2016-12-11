@@ -2,12 +2,13 @@ export default {
 
     methods: {
 
-        drawTeamChart: function(team_id, games) {
+        drawTeamChart: function(team_id, games, players = undefined) {
 
             var vue = this;
             let post_data = {
                 'team_id': team_id,
-                'games': games
+                'games': games,
+                'players': players
             }
 
             vue.$http.post('/api/charts/team-games', post_data).then( function(response) {

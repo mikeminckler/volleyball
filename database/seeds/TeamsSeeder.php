@@ -13,9 +13,15 @@ class TeamsSeeder extends Seeder
      */
     public function run()
     {
+
         $bcs = new Team;
         $bcs->team_name = 'Brentwood';
         $bcs->initials = 'BCS';
+        $bcs->save();
+
+        $bcs = new Team;
+        $bcs->team_name = 'Led Zeppelin';
+        $bcs->initials = 'LZ';
         $bcs->save();
 
     }

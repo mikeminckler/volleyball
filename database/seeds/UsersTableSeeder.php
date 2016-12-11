@@ -30,7 +30,10 @@ class UsersTableSeeder extends Seeder
 
         $mike->addRole($admin, $bcs);
 
-        /*
+        $zep = Team::where('team_name', 'Led Zeppelin')->first();
+
+        $mike->addRole($admin, $zep);
+
         $jb = new User;
         $jb->first_name = 'John';
         $jb->last_name = 'Bonham';
@@ -63,6 +66,7 @@ class UsersTableSeeder extends Seeder
         $rp->save();
         $zep->addPlayer($rp);
 
+        /*
         $stones = Team::where('team_name', 'Rolling Stones')->first();
 
         $mj = new User;

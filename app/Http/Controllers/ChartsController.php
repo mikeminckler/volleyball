@@ -40,8 +40,13 @@ class ChartsController extends Controller
     {
         $team = $this->team->findOrFail($request->input('team_id'));
         $games = $this->game->whereIn('id', $request->input('games'))->get();
+        if ($request->input('players')) {
+            $players = $this->player->whereIn('id', $request->input('players'))->get();
+        } else {
+            $players = null;
+        }
 
-        return Chart::createData($games, $team);
+        return Chart::createData($games, $team, $players);
 
 
     }

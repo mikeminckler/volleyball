@@ -228,16 +228,24 @@ class Team extends Model
         }
     }
 
-    public function gameReport($games)
+    public function gameReport($games, $players = null)
     {
 
         $report = new Collection;
 
         foreach ($this->stats as $stat) {
 
-            $stats = $this->playerStats()
-                            ->whereIn('game_id', $games->pluck('id'))
-                            ->where('stat_id', $stat->id)->get();
+            $stats = $this->playerStats()->where(function($query) use($games, $players, $stat) {
+
+                    $query->whereIn('game_id', $games->pluck('id'))
+                        ->where('stat_id', $stat->id);
+                    if ($players) {
+                        if ($players->count()) {
+                            $query->whereIn('player_id', $players->pluck('id'));
+                        }
+                    }
+
+                })->get();
 
             $score = $this->statAverage($stats, $stat);
 
@@ -278,6 +286,12 @@ class Team extends Model
     {
         $report = new Collection;
 
+        if ($players instanceof Collection) {
+            if (!$players->count()) {
+                $players = $this->players;
+            }
+        }
+
         if (!$players) {
             $players = $this->players;
         }
@@ -314,6 +328,7 @@ class Team extends Model
             $stats = $this->playerStats()
                     ->whereIn('game_id', $games->pluck('id'))
                     ->where('stat_id', $stat->id)
+                    ->whereIn('player_id', $players->pluck('id'))
                     ->get();
 
             $score = $this->statAverage($stats, $stat);

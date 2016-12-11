@@ -50,19 +50,55 @@
 
         </section>
 
+        <section>
+            <div class="button" @click="togglePlayers">{{ showPlayers ? 'Hide' : 'Filter' }} Players</div>
+
+            <div class="player-filter">
+
+                <transition-group
+                    name="list" 
+                    tag="div"
+                    v-bind:css="false"
+                    v-on:before-enter="beforeEnter"
+                    v-on:enter="enter"
+                    v-on:leave="leave"
+                >
+
+                    <div class="players-list row"
+                        v-for="(player, index) in team.players"
+                        :key="player.id"
+                        :data-index="index"
+                        v-if="showPlayers"
+                    >
+
+                        <div class="column shrink">
+                            <input type="checkbox" :id="player.id" :name="'player-' + player.id" :value="player.id" @click="togglePlayerFilter" :checked="playerCheck(player.id)">
+                        </div>
+                        <div class="column">{{ player.full_name }}</div>
+                        <div class="column">
+                            <router-link :to="{path: '/players/stats/' + player.id}">Stats</router-link>
+                        </div>
+
+                    </div>
+
+                </transition-group>
+
+            </div>
+        </section>
+
 
         <transition name="fade">
             <div class="game-summary">
 
                 <div class="game-summary-team">
                     <section v-if="showReport">
-                        <team-game-report :team="team" :game_ids="reportGames"></team-game-chart>
+                        <team-game-report :team="team" :game_ids="reportGames" :playerFilter="playerFilter"></team-game-chart>
                     <section>
                 </div>
 
                 <div class="game-summary-team">
                     <section v-if="showReport">
-                        <team-players-stats-report :team="team" :game_ids="reportGames"></team-players-stats-report>
+                        <team-players-stats-report :team="team" :game_ids="reportGames" :playerFilter="playerFilter"></team-players-stats-report>
                     </section>
                 </div>
 
@@ -92,7 +128,9 @@
         data: function () {
             return {
                 reportGames: [],
-                showReport: false
+                playerFilter: [],
+                showReport: false,
+                showPlayers: false
             }
         },
 
@@ -102,10 +140,22 @@
 
         methods: {
 
+            togglePlayers: function() {
+                this.showPlayers = !this.showPlayers;
+                if (!this.showPlayer) {
+                    this.playerFilter = [];
+                    if (this.reportGames.length > 0) {
+                        this.generateReport();
+                    } else {
+                        this.showReport = false;
+                    }
+                }
+            },
+
             generateReport: function() {
             
                 this.showReport = true;
-                this.drawTeamChart(this.team.id, this.reportGames);
+                this.drawTeamChart(this.team.id, this.reportGames, this.playerFilter);
             },
 
             toggleGameSelect: function(e) {
@@ -129,7 +179,30 @@
 
             gameCheck: function(game_id) {
                 return _.includes(this.reportGames, game_id);
-            }
+            },
+
+            playerCheck: function(player_id) {
+                return _.includes(this.playerFilter, player_id);
+            },
+
+            togglePlayerFilter: function(e) {
+
+                let val = parseInt(e.target.value);
+                
+                if (_.includes(this.playerFilter, val)) {
+                    let index = _.findIndex(this.playerFilter, function(o) { return o == val; });
+                    this.playerFilter.splice(index, 1);
+                } else {
+                    this.playerFilter.push(val);
+                }
+
+                if (this.reportGames.length > 0) {
+                    this.generateReport();
+                } else {
+                    this.showReport = false;
+                }
+
+            },
         },
 
         mounted() {
