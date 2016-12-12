@@ -125,6 +125,11 @@ div.header {
     margin-bottom: 2px;
 }
 
+div.button.player-filter {
+    text-align: center;
+    width: 100px;
+}
+
 .button a {
     color: var(--button-text-color);
     outline: 0;
@@ -227,7 +232,7 @@ section.header {
 }
 
 section.header div.h1 {
-    flex: 1;
+    padding-right: 20px;
 }
 
 /* FORMS */
@@ -446,6 +451,34 @@ a.icon {
     border-radius: 50%;
 }
 
+.button-icon:before {
+    font-family: FontAwesome;
+    width: 16px;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+.create:before {
+    content: "\f067";
+    color: #1f7635;
+}
+
+.create:hover {
+    background-color: var(--success-bg);
+}
+
+.game-center:before {
+    content: "\f192";
+    color: var(--link-color);
+}
+
+.game-center:hover {
+    background-color: var(--search-results-highlight);
+}
+
+
 /* SEARCH */
 
 div.results {
@@ -510,16 +543,49 @@ div.results-item:last-child {
 
 /* ROOM LIST */
 
-div.room-list {
+div.room-list-container.hidden {
+    transform: translateX(100%);
+}
+
+div.room-list-container {
     position: fixed;
     z-index: 10;
     bottom: 25px;
-    right: 0px;
+    right: 0;
     border-left: 1px solid var(--border-color);
     border-top: 1px solid var(--border-color);
     border-top-left-radius: var(--border-radius);
     background-color: var(--button-color);
     font-size: var(--small-font);
+    transition: transform .2s;
+}
+
+div.room-list-button-container {
+    height: 0px;
+    overflow: visible;
+}
+
+div.room-list-button {
+    position: relative;
+    background-color: var(--button-color);
+    border-left: 1px solid var(--border-color);
+    border-top: 1px solid var(--border-color);
+    border-top-left-radius: var(--border-radius);
+    bottom: 30px;
+    right: 41px;
+    width: 40px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+div.room-list-button:before {
+    font-family: FontAwesome;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    padding-right: 2px;
+    content: "\f086";
+    font-size: 18px;
 }
 
 div.room-item, div.room-title {

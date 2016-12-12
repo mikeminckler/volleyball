@@ -4,7 +4,7 @@
 
         <section class="header">
             <div class="h1">Games</div>
-            <div v-if="userHasRole(['admin'])"><router-link class="button" to="/games/create">Create Game</router-link></div>
+            <div v-if="userHasRole(['admin'])"><router-link class="button button-icon create" to="/games/create">Create Game</router-link></div>
         </section>
 
         <section>

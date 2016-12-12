@@ -26,11 +26,11 @@ export default {
         },
 
         userCanManageTeam(team_id) {
-            return this.userHasRole(['admin', 'team_manager'], team_id);
+            return this.userHasRole(['admin', 'coach', 'manager'], team_id);
         },
 
         userCanTakeStats(team_id) {
-            return this.userHasRole(['admin', 'coach'], team_id);
+            return this.userHasRole(['admin', 'coach', 'manager'], team_id);
         }
     }
 

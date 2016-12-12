@@ -1,22 +1,30 @@
 <template>
 
-    <div class="room-list">
-        <transition-group 
-            name="list" 
-            tag="div"
-            v-bind:css="false"
-            v-on:before-enter="beforeEnter"
-            v-on:enter="enter"
-            v-on:leave="leave"
-        >
-            <div class="room-item"
-                v-for="(user, index) in roomUsers"
-                :key="user.id"
-                :data-index="index"
+    <div class="room-list-container" :class="{ hidden: hidden }">
+
+        <div class="room-list">
+            <transition-group 
+                name="list" 
+                tag="div"
+                v-bind:css="false"
+                v-on:before-enter="beforeEnter"
+                v-on:enter="enter"
+                v-on:leave="leave"
             >
-                {{ user.name }}
-            </div>
-        </transition-group>
+                <div class="room-item"
+                    v-for="(user, index) in roomUsers"
+                    :key="user.id"
+                    :data-index="index"
+                >
+                    {{ user.name }}
+                </div>
+            </transition-group>
+        </div>
+
+        <div class="room-list-button-container">
+            <div class="room-list-button" @click="hidden = !hidden">{{ roomUsers.length }}</div>
+        </div>
+
     </div>
 
 </template>
@@ -29,7 +37,8 @@
         data: function () {
             return {
                 roomUsers: [],
-                connected: false
+                connected: false,
+                hidden: true
             }
         },
 

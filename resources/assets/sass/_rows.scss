@@ -10,6 +10,10 @@ div.column {
     white-space: nowrap;
 }
 
+div.column .button {
+    padding: 1px 5px;
+}
+
 div.column.shrink {
     flex: 0;
 }

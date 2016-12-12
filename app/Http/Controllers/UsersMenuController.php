@@ -16,8 +16,8 @@ class UsersMenuController extends Controller
         $menu[] = ['url' => 'teams', 'name' => 'Teams', 'roles' => ['admin']];
         $menu[] = ['url' => 'stats', 'name' => 'Stats', 'roles' => ['admin']];
 
-        $menu[] = ['url' => 'teams/manage-team', 'name' => 'Manage Team', 'roles' => ['admin', 'team_manager']];
-        $menu[] = ['url' => 'teams/games/all', 'name' => 'Games', 'roles' => ['admin', 'team_manager', 'coach']];
+        $menu[] = ['url' => 'teams/manage-team', 'name' => 'Manage Team', 'roles' => ['admin', 'manager']];
+        $menu[] = ['url' => 'teams/games/all', 'name' => 'Games', 'roles' => ['admin', 'manager', 'coach']];
 
         return $menu;
     }
