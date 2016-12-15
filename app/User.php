@@ -37,7 +37,7 @@ class User extends Model implements
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'password',
+        'first_name', 'common_name', 'last_name', 'email', 'password',
     ];
 
     /**
@@ -96,6 +96,7 @@ class User extends Model implements
         }
 
         $this->first_name = $input['first_name'];
+        $this->common_name = $input['common_name'];
         $this->last_name = $input['last_name'];
         $this->email = $input['email'];
 
@@ -188,7 +189,8 @@ class User extends Model implements
         return $this->where('removed', false)
             ->where(function($query) use($term) {
                 $query->where('first_name', 'like', '%'.$term.'%')
-                    ->orWhere('last_name', 'like', '%'.$term.'%');
+                    ->orWhere('last_name', 'like', '%'.$term.'%')
+                    ->orWhere('common_name', 'like', '%'.$term.'%');
             })->get();
     }
 

@@ -8,7 +8,6 @@
     "axios": "^0.15.2 ",
     "dotenv": "^2.0.0",
     "font-awesome": "^4.7.0",
-    "fullcalendar": "^3.0.1",
     "gulp": "^3.9.1",
     "ioredis": "^2.4.0",
     "jquery": "^3.1.1",

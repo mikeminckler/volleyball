@@ -394,20 +394,6 @@ const app = new Vue({
 
         });
 
-        /*
-        window.socket.on('App\\Events\\UserRolesUpdated', function (data) {
-
-            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
-
-            vue.$http.post('/api/users/my-roles').then( function(response) {
-                vue.$store.dispatch('userRoles', response.data); 
-            }, function(error) {
-                vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your groups'});
-            });
-
-        });
-        */
-
         window.socket.on('App\\Events\\AuthAnnouncement', function (data) {
             vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         });
@@ -443,9 +429,11 @@ const app = new Vue({
         });
 
         // Room Events
+        /*
         window.socket.on('room-info', function (data) {
             vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data});
         });
+        */
     }
 
 });

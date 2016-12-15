@@ -15,7 +15,16 @@
                     <label for="first_name" class="label">First Name</label>
                 </div>
                 <div class="form-input">
-                    <input id="first_name" class="input" name="first_name" v-model="user.first_name" required autofocus>
+                    <input id="first_name" class="input" name="first_name" v-model="user.first_name" required autofocus >
+                </div>
+            </div>
+
+            <div class="form-block">
+                <div class="form-label">
+                    <label for="common_name" class="label">Nickname</label>
+                </div>
+                <div class="form-input">
+                    <input id="common_name" class="input" name="common_name" v-model="user.common_name" >
                 </div>
             </div>
 
@@ -24,7 +33,7 @@
                     <label for="last_name" class="label">Last Name</label>
                 </div>
                 <div class="form-input">
-                    <input id="last_name" class="input" name="last_name" v-model="user.last_name" required autofocus>
+                    <input id="last_name" class="input" name="last_name" v-model="user.last_name" required >
                 </div>
             </div>
 
@@ -33,7 +42,7 @@
                     <label for="email" class="label">Email</label>
                 </div>
                 <div class="form-input">
-                    <input id="email" class="input" name="email" v-model="user.email" required autofocus>
+                    <input id="email" class="input" name="email" v-model="user.email" required >
                 </div>
             </div>
 
@@ -175,6 +184,7 @@
                 user: {
                     id: '',
                     first_name: '',
+                    common_name: '',
                     last_name: '',
                     email: '',
                     teams: []
@@ -241,53 +251,6 @@
 
             },
 
-            /*
-
-            toggleRole: function(e) {
-
-                var vue = this;
-                let val = parseInt(e.target.value);
-                let user_id = vue.$route.params.id;
-                if (!user_id) {
-                    user_id = vue.$store.state.user.id;
-                }
-
-                let post_data = {
-                    'role_id':  val
-                }
-
-                if (_.includes(this.groups, val)) {
-
-                    // remove the role
-                    let index = _.findIndex(this.groups, function(o) { return o == val; });
-                    this.groups.splice(index, 1);
-
-
-                    vue.$http.post('/api/users/remove-role/' + user_id, post_data).then( function(response) {
-
-                        vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Group saved'});
-
-                    }, function(error) {
-                    
-                    });
-
-
-                } else {
-
-                    this.groups.push(val);
-
-                    vue.$http.post('/api/users/save-role/' + user_id, post_data).then( function(response) {
-
-                        vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Group saved'});
-
-                    }, function(error) {
-                    
-                    });
-
-                }
-            },
-
-            */
 
             loadInfo: function() {
 
@@ -308,32 +271,6 @@
                 }
             },
 
-            /*
-            loadRoles: function() {
-
-                var vue = this;
-
-                vue.$http.post('/api/roles').then( function(response) {
-                    vue.roles = response.data;
-
-                    let user_id = vue.$route.params.id;
-
-                    if (!user_id) {
-                        user_id = vue.$store.state.user.id;
-                    }
-
-                    if (user_id != 'create') {
-
-                        vue.$http.post('/api/users/roles/' + user_id).then( function(response) {
-                            vue.groups = response.data;
-                        });
-
-                    }
-
-                });
-
-            },
-            */
 
             submit: function(e) {
 
@@ -344,6 +281,7 @@
                 let post_data = {
                     'id': this.user.id,
                     'first_name': this.user.first_name,
+                    'common_name': this.user.common_name,
                     'last_name': this.user.last_name,
                     'email': this.user.email,
                     'password': this.password,

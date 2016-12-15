@@ -46,7 +46,7 @@ class UsersController extends Controller
     {
         $user = new User;
         return $this->user
-            ->saveUser($request->only('first_name', 'last_name', 'email', 'password'));
+            ->saveUser($request->only('first_name', 'common_name', 'last_name', 'email', 'password'));
     }
 
     public function load($id)
@@ -57,13 +57,13 @@ class UsersController extends Controller
     public function store(Requests\UserSave $request, $id)
     {
         return $this->user->findOrFail($id)
-            ->saveUser($request->only('first_name', 'last_name', 'email', 'password'));
+            ->saveUser($request->only('first_name', 'common_name', 'last_name', 'email', 'password'));
     }
 
     public function saveMyInfo(Requests\UserSave $request)
     {
         return auth()->user()
-            ->saveUser($request->only('first_name', 'last_name', 'email', 'password'));
+            ->saveUser($request->only('first_name', 'common_name', 'last_name', 'email', 'password'));
     }
 
     public function destroy(Request $request, $id)

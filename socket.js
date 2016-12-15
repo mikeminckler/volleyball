@@ -47,19 +47,19 @@ io.on('authenticated', function (socket) {
     socket.on('join-room', function (room) {
         
         socket.join(room);
-        io.sockets.in('user.' + socket.decoded_token.userid).emit('auth.info', 'You have joined room ' + room);
+        //io.sockets.in('user.' + socket.decoded_token.userid).emit('auth.info', 'You have joined room ' + room);
         io.sockets.in(room).emit('update-room', room);
 
-        socket.broadcast.to(room).emit('room-info', socket.decoded_token.name + ' has joined ' + room);
+        socket.broadcast.to(room).emit('room-info', socket.decoded_token.name + ' has joined');
     });
 
     socket.on('leave-room', function (room) {
 
         socket.leave(room);
-        io.sockets.in('user.' + socket.decoded_token.userid).emit('auth.info', 'You have left room ' + room);
+        //io.sockets.in('user.' + socket.decoded_token.userid).emit('auth.info', 'You have left room ' + room);
         io.sockets.in(room).emit('update-room', room);
 
-        socket.broadcast.to(room).emit('room-info', socket.decoded_token.name + ' has left ' + room);
+        socket.broadcast.to(room).emit('room-info', socket.decoded_token.name + ' has left');
     });
      
     socket.on('room-list', function(room) {
