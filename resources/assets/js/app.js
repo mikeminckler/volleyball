@@ -1,22 +1,22 @@
 
-const _ = require('lodash');
+var _ = require('lodash');
 
 window.$ = window.jQuery = require('jquery');
 require('./libs/jquery-ui');
 require('./libs/timepicker');
 
-const Vue = require('vue');
-const VueRouter = require('vue-router');
-const Vuex = require('vuex');
+var Vue = require('vue');
+var VueRouter = require('vue-router');
+var Vuex = require('vuex');
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
-const axios = require('axios');
-//const fullCalendar = require('fullcalendar');
-const moment = require('moment');
+var axios = require('axios');
+//var fullCalendar = require('fullcalendar');
+var moment = require('moment');
 
-const io = require('socket.io-client');
+var io = require('socket.io-client');
 
 if (window.location.hostname.indexOf('gamestats.brentwood.bc.ca') != -1) {
     window.socket = io('//' + window.location.hostname);
@@ -41,7 +41,7 @@ Vue.component('team-players-list', require('./components/TeamPlayersList.vue'));
 Vue.component('player-game-stat', require('./components/PlayerGameStat.vue'));
 Vue.component('player-game-report', require('./components/PlayerGameReport.vue'));
 
-const router = new VueRouter({
+var router = new VueRouter({
     mode: 'history',
     routes: [
         { path: '/login', component: require('./components/Login.vue') },
@@ -106,7 +106,7 @@ router.beforeEach( function(to, from, next) {
     }
 });
 
-const store = new Vuex.Store({
+var store = new Vuex.Store({
     state: {
 
         user: {
@@ -188,7 +188,7 @@ const store = new Vuex.Store({
         },
         */
 
-        menu (state, menu) {
+        setMenu (state, menu) {
             state.menu = menu;
         }
 
@@ -268,8 +268,8 @@ const store = new Vuex.Store({
             commit('clearErrorsFeedback');
         },
 
-        menu({ commit, state }, menu) {
-            commit('menu', menu);
+        setMenu({ commit, state }, menu) {
+            commit('setMenu', menu);
             app.$store.dispatch('addFeedback', {'type': 'info', 'message': 'Your menu is ready'});
         }
 
@@ -279,7 +279,7 @@ const store = new Vuex.Store({
 import UserMixins from './components/UserMixins'
 import Helpers from './components/Helpers'
 
-const app = new Vue({
+var app = new Vue({
     el: '#app',
     router,
     store,
@@ -501,7 +501,7 @@ $(function(){
      * may be able to ditch all this if we dont need 
      * window size
      */
-
+/*
     setWidth();
 
 	$(window).resize(function() {
@@ -512,8 +512,11 @@ $(function(){
 		}
 	});
 
+*/
+
 });
 
+/*
 function orientation_change() {
 	setWidth();
 }
@@ -521,3 +524,4 @@ function orientation_change() {
 function setWidth() {
     document.documentElement.style.setProperty('--screen-width', $(window).width() + 'px');
 }
+*/

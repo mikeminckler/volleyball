@@ -10,6 +10,8 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+use App\User;
+
 class LoginController extends Controller
 {
     /*
@@ -73,7 +75,12 @@ class LoginController extends Controller
             return response()->json(['error' => 'Could Not Create Token'], 500);
         }
 
-        // all good so return the token
+        // no errors so we can loggin the user
+        // and send back the token to vue
+
+        //$user = User::where('email', $request->input('email'))->first();
+        //auth()->login($user);
+
         $this->clearLoginAttempts($request);
         //Redis::publish('public-message', auth()->user()->full_name.' has logged in');
         return response()->json(compact('token'));
@@ -83,6 +90,7 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         $this->guard()->logout();
+        auth()->logout();
         return response()->json([
             'success' => 'logout'
         ]);

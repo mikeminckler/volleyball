@@ -79,7 +79,7 @@
 
                 var vue = this;
                 vue.$http.post('/api/menu').then( function(response) {
-                    vue.$store.dispatch('menu', response.data); 
+                    vue.$store.dispatch('setMenu', response.data); 
                 }, function(error) {
                     vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading the menu'});
                 });
