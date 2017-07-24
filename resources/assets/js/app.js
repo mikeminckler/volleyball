@@ -6,8 +6,8 @@ require('./libs/jquery-ui');
 require('./libs/timepicker');
 
 var Vue = require('vue');
-var VueRouter = require('vue-router');
-var Vuex = require('vuex');
+import VueRouter from 'vue-router';
+import Vuex from 'vuex';
 
 Vue.use(VueRouter);
 Vue.use(Vuex);

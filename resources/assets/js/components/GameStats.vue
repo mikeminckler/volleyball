@@ -13,6 +13,7 @@
                 <div class="stats-header-item stats-header-right">
                     <button class="add-set" @click.prevent="addSet">New Set</button>
                 </div>
+            </div>
         </section>
 
         <div class="tab-header">
@@ -50,25 +51,25 @@
         <div class="tab-content" v-show="tabs.tab2">
             <section>
                 <team-game-stats :team_id="game.team1.id" v-if="game.team1.id && tabs.tab2" :game="game" :controls="userCanTakeStats(game.team1.id)"></team-game-stats>
-            <section>
+            </section>
             <section>
                 <team-game-chart :team="game.team1" v-if="game.team1.id && tabs.tab2" :game="game"></team-game-chart>
+            </section>
             <section>
-            <section>
-                <team-game-report :team="game.team1" v-if="game.team1.id && tabs.tab2" :game_ids="[game.id]"></team-game-chart>
-            <section>
+                <team-game-report :team="game.team1" v-if="game.team1.id && tabs.tab2" :game_ids="[game.id]"></team-game-report>
+            </section>
         </div>
 
         <div class="tab-content" v-show="tabs.tab3">
             <section>
                 <team-game-stats :team_id="game.team2.id" v-if="game.team2.id && tabs.tab3" :game="game" :controls="userCanTakeStats(game.team2.id)"></team-game-stats>
-            <section>
+            </section>
             <section>
                 <team-game-chart :team="game.team2" v-if="game.team2.id && tabs.tab3" :game="game"></team-game-chart>
+            </section>
             <section>
-            <section>
-                <team-game-report :team="game.team2" v-if="game.team2.id && tabs.tab3" :game_ids="[game.id]"></team-game-chart>
-            <section>
+                <team-game-report :team="game.team2" v-if="game.team2.id && tabs.tab3" :game_ids="[game.id]"></team-game-report>
+            </section>
         </div>
 
     </div>

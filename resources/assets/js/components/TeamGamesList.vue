@@ -92,8 +92,8 @@
 
                 <div class="game-summary-team">
                     <section v-if="showReport">
-                        <team-game-report :team="team" :game_ids="reportGames" :playerFilter="playerFilter"></team-game-chart>
-                    <section>
+                        <team-game-report :team="team" :game_ids="reportGames" :playerFilter="playerFilter"></team-game-report>
+                    </section>
                 </div>
 
                 <div class="game-summary-team">

@@ -100,7 +100,7 @@
         <div v-show="user.id" v-if="userHasRole(['admin'])">
 
             <section>
-                <div class="h2">Teams</h2>
+                <div class="h2">Teams</div>
             </section>
 
             <section>

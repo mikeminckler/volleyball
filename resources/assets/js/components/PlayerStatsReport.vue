@@ -51,7 +51,7 @@
         <transition name="fade">
             <section v-if="showReport">
                 <player-game-report :player="player" :game_ids="reportGames"></player-game-report>
-            <section>
+            </section>
         </transition>
 
     </div>

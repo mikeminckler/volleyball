@@ -51,9 +51,11 @@
                 <div class="form-label">
                 </div>
                 <div class="form-input">
-                    <div class="submit button" @click="submit">Save Game</button>
+                    <div class="submit button" @click="submit">Save Game</div>
                 </div>
             </div>
+
+            </form>
 
         </section>
 
