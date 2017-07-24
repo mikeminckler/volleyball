@@ -35,11 +35,18 @@
         },
 
         watch: {
-            'team.id': 'setTeam'
+            'team.id': 'setTeam',
+            roles() {
+                this.showTeams();
+            }
         },
 
-        mounted () {
-            this.showTeams();
+        computed: {
+            
+            roles() {
+                return this.$store.state.user.roles;
+            }
+        
         },
 
         methods: {
