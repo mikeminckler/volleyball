@@ -75,17 +75,6 @@
 
         methods: {
             
-            loadMenu: function() {
-
-                var vue = this;
-                vue.$http.post('/api/menu').then( function(response) {
-                    vue.$store.dispatch('setMenu', response.data); 
-                }, function(error) {
-                    vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading the menu'});
-                });
-
-            },
-
             attempt: function(e) {
                 let post_data = {
                     'email':    this.login.email,
@@ -105,8 +94,10 @@
                     vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
 
                     vue.$http.post('/api/users/my-info').then( function(response) {
+
                         vue.$store.dispatch('userInfo', response.data);
                         socket.emit('auth.info', vue.$store.getters.user_name + ' has connected');
+
                     }, function(error) {
                         vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your info'});
                     });
@@ -121,9 +112,6 @@
                     });
                     */
 
-                    vue.loadMenu();
-
-                    vue.$router.push('/select-team');
 
                 }, function(error) {
 

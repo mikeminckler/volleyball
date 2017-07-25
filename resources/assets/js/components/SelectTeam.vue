@@ -8,7 +8,7 @@
 
             <div class="row select-team-item"
                 v-for="(team, index) in teams"
-                @click="clickTeam"
+                @click="clickTeam(team.id)"
                 :id="team.id"
             >
                 {{ team.name }}
@@ -35,7 +35,9 @@
         },
 
         watch: {
-            'team.id': 'setTeam',
+            team() {
+                this.setTeam()
+            },
             roles() {
                 this.showTeams();
             }
@@ -47,6 +49,14 @@
                 return this.$store.state.user.roles;
             }
         
+        },
+
+        created() {
+
+            if (this.roles.length > 0) {
+                this.showTeams();
+            }
+
         },
 
         methods: {
@@ -73,8 +83,8 @@
 
             },
 
-            clickTeam: function(el) {
-                this.loadTeam(el.target.id);
+            clickTeam: function(id) {
+                this.loadTeam(id);
             },
 
             setTeam: function() {

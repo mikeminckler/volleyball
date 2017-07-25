@@ -25,6 +25,13 @@ if (window.location.hostname.indexOf('gamestats.brentwood.bc.ca') != -1) {
 }
 
 Vue.prototype.$http = axios;
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+if (window.app.csrfToken) {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = window.app.csrfToken;
+} else {
+    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+}
 
 Vue.component('feedback', require('./components/Feedback.vue'));
 Vue.component('app-menu', require('./components/Menu.vue'));
@@ -286,6 +293,21 @@ var app = new Vue({
 
     mixins: [UserMixins, Helpers],
 
+	watch: {
+	
+		userId() {
+			app.loadMenu();
+			app.$router.push('/select-team');
+		}
+	
+	},
+
+	computed: {
+		userId() {
+			return this.$store.state.user.id;
+		}
+	},
+
     methods: {
 
         setTeamSessionId: function(team_id) {
@@ -352,19 +374,38 @@ var app = new Vue({
             vue.$store.dispatch('removeActiveTeam');
             vue.$router.push('/login');
 
-        }
+        },
 
+
+		loadMenu: function() {
+
+			var vue = this;
+			vue.$http.post('/api/menu').then( function(response) {
+				vue.$store.dispatch('setMenu', response.data); 
+			}, function(error) {
+				vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading the menu'});
+			});
+
+		},
+
+    },
+
+    mounted() {
+    
+        var vue = this;
+        vue.$router.push('/login');
+    
     },
 
     created: function () {
 
         var vue = this;
 
-        if (!vue.$store.state.user.authenticated) {
-            vue.$router.push('/login');
-        } else {
-            vue.$router.push('/home');
-        }
+        //if (!vue.$store.state.user.authenticated) {
+        //     vue.$router.push('/login');
+        //} else {
+        //    vue.$router.push('/home');
+        //}
 
         window.socket.on('public.info', function (data) {
             vue.$store.dispatch('addFeedback', {'type': 'info', 'message': data});

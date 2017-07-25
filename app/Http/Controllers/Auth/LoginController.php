@@ -10,6 +10,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+use Cookie;
 use App\User;
 
 class LoginController extends Controller

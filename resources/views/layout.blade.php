@@ -16,8 +16,9 @@
 
     <!-- Scripts -->
     <script>
-        window.Laravel = <?php echo json_encode([
+        window.app = <?php echo json_encode([
             'csrfToken' => csrf_token(),
+            //'token' => $token
         ]); ?>
     </script>
 </head>
