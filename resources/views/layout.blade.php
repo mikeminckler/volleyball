@@ -18,7 +18,6 @@
     <script>
         window.app = <?php echo json_encode([
             'csrfToken' => csrf_token(),
-            //'token' => $token
         ]); ?>
     </script>
 </head>

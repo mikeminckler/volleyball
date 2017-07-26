@@ -10,7 +10,6 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-use Cookie;
 use App\User;
 
 class LoginController extends Controller
@@ -44,7 +43,7 @@ class LoginController extends Controller
     public function __construct(JWTAuth $auth)
     {
         $this->auth = $auth;
-        $this->middleware('guest', ['except' => 'logout']);
+        //$this->middleware('guest', ['except' => 'logout']);
     }
 
     /**
@@ -55,25 +54,43 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $this->validateLogin($request);
-        
-        if ($this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
-            return $this->sendLockoutResponse($request);
+
+        // check for token and relogin
+        if ($request->header('Authorization') && !$request->input('email')) {
+            try {
+                $user = $this->auth->parseToken()->authenticate();
+            } catch (JWTException $e) {
+                return response()->json(['error' => 'Your token has expired'], 401);
+            }
+        } else {
+            $user = null;
         }
 
-        $credentials = $this->credentials($request);
+        if ($user instanceof User) {
+            $token = $this->auth->refresh();
+        } else {
 
-        try {
-            // attempt to verify the credentials and create a token for the user
-            $token = $this->auth->attempt($credentials);
-            if (!$token) {
-                $this->incrementLoginAttempts($request);
-                return response()->json(['error' => 'Invalid Credentials'], 401);
+            $this->validateLogin($request);
+            
+            if ($this->hasTooManyLoginAttempts($request)) {
+                $this->fireLockoutEvent($request);
+                return $this->sendLockoutResponse($request);
             }
-        } catch (JWTException $e) {
-            // something went wrong whilst attempting to encode the token
-            return response()->json(['error' => 'Could Not Create Token'], 500);
+
+            $credentials = $this->credentials($request);
+
+            try {
+                // attempt to verify the credentials and create a token for the user
+                $token = $this->auth->attempt($credentials);
+                if (!$token) {
+                    $this->incrementLoginAttempts($request);
+                    return response()->json(['error' => 'Invalid Credentials'], 401);
+                }
+            } catch (JWTException $e) {
+                // something went wrong whilst attempting to encode the token
+                return response()->json(['error' => 'Could Not Create Token'], 500);
+            }
+
         }
 
         // no errors so we can loggin the user
@@ -81,7 +98,7 @@ class LoginController extends Controller
 
         //$user = User::where('email', $request->input('email'))->first();
         //auth()->login($user);
-
+        
         $this->clearLoginAttempts($request);
         //Redis::publish('public-message', auth()->user()->full_name.' has logged in');
         return response()->json(compact('token'));

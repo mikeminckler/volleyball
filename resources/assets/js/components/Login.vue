@@ -69,8 +69,19 @@
                     email: '',
                     password: '',
                     remember: ''
-                }
+                },
+                token: window.localStorage.jwt
             }
+        },
+
+        created() {
+        
+            if (this.token) {
+                //console.log('localStorage TOKEN: ' + this.token);
+                this.$store.dispatch('setToken', this.token);
+                this.attempt();
+            }
+        
         },
 
         methods: {
@@ -79,28 +90,30 @@
                 let post_data = {
                     'email':    this.login.email,
                     'password': this.login.password,
-                    'remember': this.login.remember
+                    'remember': this.login.remember,
                 };
 
                 var vue = this;
 
-                vue.$http.post(e.target.action, post_data).then( function(response) {
+                vue.$http.post('/api/login', post_data).then( function(response) {
 
                     // Set authenticated and the JWT Token 
-                    vue.$store.dispatch('setToken', response.data.token);
+                    //console.log('LOGIN TOKEN: ' + response.data.token);
+                    if (response.data.token) {
 
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
+                        vue.$store.dispatch('setToken', response.data.token);
 
-                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
+                        vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
 
-                    vue.$http.post('/api/users/my-info').then( function(response) {
+                        vue.$http.post('/api/users/my-info').then( function(response) {
 
-                        vue.$store.dispatch('userInfo', response.data);
-                        socket.emit('auth.info', vue.$store.getters.user_name + ' has connected');
+                            vue.$store.dispatch('userInfo', response.data);
+                            socket.emit('auth.info', vue.$store.getters.user_name + ' has connected');
 
-                    }, function(error) {
-                        vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your info'});
-                    });
+                        }, function(error) {
+                            vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your info'});
+                        });
+                    }
 
                     /*
                     vue.$http.post('/api/users/my-roles').then( function(response) {
@@ -125,10 +138,6 @@
 
             }
         },
-
-        mounted() {
-            //console.log('Login ready.')
-        }
 
     }
 </script>

@@ -229,6 +229,10 @@ var store = new Vuex.Store({
             // authenticate our token
             window.socket.emit('authenticate', {token: token});
 
+            window.localStorage.jwt = token;
+
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
             window.loginCheck = setInterval(function() { app.loginCheck() }, 60000);
         },
 

@@ -10,6 +10,10 @@ use App\Team;
 use App\Role;
 use App\Events\UserRemoved;
 
+use App\Services\Storage;
+use Tymon\JWTAuth\JWTAuth;
+use Cookie;
+
 class UsersController extends Controller
 {
 
@@ -26,6 +30,10 @@ class UsersController extends Controller
 
     public function myInfo()
     {
+        //$token = app(JWTAuth::class)->getToken();
+        //$storage = app(Storage::class);
+        //$storage->put('jwt', $token);
+        //$cookie = Cookie::make('jwt', $token, 5000);
         return auth()->user()->load('roles');
     }
 
