@@ -36,7 +36,7 @@
                         <router-link to="/my-account" class="fa-user-circle fa icon"></router-link>
                     </div>
                     <div class="menu-item"  v-if="$store.state.activeTeam.id && $store.state.user.roles.length > 1">
-                        <router-link to="/select-team" class="fa-users fa icon"></router-link>
+                        <div @click="selectNewTeam" class="fa-users fa icon"></div>
                     </div>
                     <div class="menu-item">
                         <form id="logout-form" action="/api/logout" method="POST" @submit.prevent="logout">

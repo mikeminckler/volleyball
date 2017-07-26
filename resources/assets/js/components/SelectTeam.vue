@@ -53,6 +53,10 @@
 
         created() {
 
+            if (window.localStorage.teamId == this.team.id) {
+                vue.$router.push('/home');
+            }
+
             if (this.roles.length > 0) {
                 this.showTeams();
             }
@@ -70,6 +74,10 @@
                  , 'id');
 
                 if (this.teams.length > 1) {
+
+                    if (window.localStorage.teamId) {
+                        this.loadTeam(window.localStorage.teamId);
+                    }
 
                     // wait for click on team
 

@@ -75,7 +75,7 @@
         },
 
         created() {
-        
+
             if (this.token) {
                 //console.log('localStorage TOKEN: ' + this.token);
                 this.$store.dispatch('setToken', this.token);
@@ -109,6 +109,8 @@
 
                             vue.$store.dispatch('userInfo', response.data);
                             socket.emit('auth.info', vue.$store.getters.user_name + ' has connected');
+
+                            vue.$router.push('/select-team');
 
                         }, function(error) {
                             vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your info'});

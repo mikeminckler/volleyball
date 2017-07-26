@@ -189,6 +189,10 @@ var store = new Vuex.Store({
             state.user.roles = info.roles;
         },
 
+        removeUser (state) {
+            state.user = {};
+        },
+
         /*
         userRoles (state, info) {
             state.user.roles = info;
@@ -213,10 +217,12 @@ var store = new Vuex.Store({
             }
             commit('setActiveTeam', team);
             app.setTeamSessionId(team.id);
+            window.localStorage.teamId = team.id;
         },
 
         removeActiveTeam({ commit, state }) {
             commit('removeActiveTeam');
+            window.localStorage.removeItem('teamId');
         },
 
         setToken({ commit, state }, token) {
@@ -248,8 +254,13 @@ var store = new Vuex.Store({
             commit('userInfo', info);
         },
 
+        removeUser({commit, state}) {
+            commit('removeUser');
+        },
+
         removeToken({ commit, state }) {
             commit('removeToken');
+            window.localStorage.removeItem('jwt');
             clearInterval(window.loginCheck);
         },
 
@@ -300,8 +311,9 @@ var app = new Vue({
 	watch: {
 	
 		userId() {
-			app.loadMenu();
-			app.$router.push('/select-team');
+            if (this.userId > 0) {
+                app.loadMenu();
+            }
 		}
 	
 	},
@@ -313,6 +325,13 @@ var app = new Vue({
 	},
 
     methods: {
+
+        selectNewTeam: function() {
+        
+            this.$store.dispatch('removeActiveTeam');
+            this.$router.push('/select-team');
+        
+        },
 
         setTeamSessionId: function(team_id) {
         
@@ -332,6 +351,7 @@ var app = new Vue({
 
                 window.socket.emit('auth.info', store.getters.user_name + ' has disconnected');
 
+                vue.$store.dispatch('removeUser');
                 // call the action for the store update
                 vue.$store.dispatch('removeToken').then( function() {
                     window.socket.close();
