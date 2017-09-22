@@ -87,7 +87,14 @@ class Player extends Model
 
 
         $player_stats = $this->stats()->where('stat_id', $stat->id)
-                                ->where('game_id', $game->id)
+                                
+                        ->whereHas('point', function($query) use($game) {
+                            $query->whereHas('gameSet', function($query) use($game) {
+                                $query->whereHas('game', function($query) use($game) {
+                                    $query->where('id', $game->id);
+                                });
+                            });
+                        })
                                 ->where('team_id', $team->id)->get();
 
         return $team->statAverage($player_stats, $stat);
@@ -141,7 +148,16 @@ class Player extends Model
         $report = new Collection;
 
         $team_check = $this->stats()
-                        ->whereIn('game_id', $games->pluck('id'))
+
+                        ->whereHas('point', function($query) use($games) {
+                            $query->whereHas('gameSet', function($query) use($games) {
+                                $query->whereHas('game', function($query) use($games) {
+                                    $query->whereIn('id', $games->pluck('id'));
+                                });
+                            });
+                        })
+
+
                         ->get()->groupBy('team_id');
 
         foreach ($team_check as $team_id => $team_stats) {
@@ -151,7 +167,16 @@ class Player extends Model
             foreach ($games as $game) {
 
                 $all_stats = $this->stats()
-                    ->where('game_id', $game->id)
+
+                    ->whereHas('point', function($query) use($game) {
+                        $query->whereHas('gameSet', function($query) use($game) {
+                            $query->whereHas('game', function($query) use($game) {
+                                $query->where('id', $game->id);
+                            });
+                        });
+                    })
+
+
                     ->where('team_id', $team->id)
                     ->orderBy('player_stats.created_at')
                     ->get();

@@ -142,7 +142,15 @@ class Team extends Model
 
         $team_stats = $this->playerStats()
             ->where('team_id', $this->id)
-            ->whereIn('game_id', $games->pluck('id'))
+
+            ->whereHas('point', function($query) use($games) {
+                $query->whereHas('gameSet', function($query) use($games) {
+                    $query->whereHas('game', function($query) use($games) {
+                        $query->whereIn('id', $games->pluck('id'));
+                    });
+                });
+            })
+
             ->where('stat_id', $stat->id)
             ->get();
 
@@ -237,8 +245,17 @@ class Team extends Model
 
             $stats = $this->playerStats()->where(function($query) use($games, $players, $stat) {
 
-                    $query->whereIn('game_id', $games->pluck('id'))
-                        ->where('stat_id', $stat->id);
+
+                    $query->whereHas('point', function($query) use($games) {
+                        $query->whereHas('gameSet', function($query) use($games) {
+                            $query->whereHas('game', function($query) use($games) {
+                                $query->whereIn('id', $games->pluck('id'));
+                            });
+                        });
+                    })
+
+                    ->where('stat_id', $stat->id);
+
                     if ($players) {
                         if ($players->count()) {
                             $query->whereIn('player_id', $players->pluck('id'));
@@ -303,7 +320,14 @@ class Team extends Model
             foreach ($this->stats as $stat) {
 
                 $stats = $player->stats()
-                        ->whereIn('game_id', $games->pluck('id'))
+
+                        ->whereHas('point', function($query) use($games) {
+                            $query->whereHas('gameSet', function($query) use($games) {
+                                $query->whereHas('game', function($query) use($games) {
+                                    $query->whereIn('id', $games->pluck('id'));
+                                });
+                            });
+                        })
                         ->where('stat_id', $stat->id)
                         ->where('team_id', $this->id)
                         ->get();
@@ -326,7 +350,13 @@ class Team extends Model
         foreach ($this->stats as $stat) {
 
             $stats = $this->playerStats()
-                    ->whereIn('game_id', $games->pluck('id'))
+                    ->whereHas('point', function($query) use($games) {
+                        $query->whereHas('gameSet', function($query) use($games) {
+                            $query->whereHas('game', function($query) use($games) {
+                                $query->whereIn('id', $games->pluck('id'));
+                            });
+                        });
+                    })
                     ->where('stat_id', $stat->id)
                     ->whereIn('player_id', $players->pluck('id'))
                     ->get();

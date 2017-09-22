@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Player;
+use App\PlayerStat;
 use App\Game;
 use App\Stat;
 use App\Team;
+
+use App\Events\PlayerGameStatsUpdated;
 
 class PlayerGameController extends Controller
 {
@@ -44,6 +47,21 @@ class PlayerGameController extends Controller
         $player->addGameStatScore($game, $stat, $team, $score);
 
         return $player->getGameStatScore($game, $stat, $team);
+    }
+
+    public function removeLastStat(Request $request, $id)
+    {
+        $player = $this->player->findOrFail($id);
+        $stat = $player->stats->sortByDesc('created_at')->first();
+        if ($stat instanceof PlayerStat) {
+            $game = $stat->game;
+            $statType = $stat->stat;
+            $stat->delete();
+            if ($game instanceof Game) {
+                event( new PlayerGameStatsUpdated($player, $game, $statType) );
+            }
+        }
+
     }
 
 }

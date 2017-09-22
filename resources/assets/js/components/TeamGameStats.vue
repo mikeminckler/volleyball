@@ -7,6 +7,9 @@
             <div class="column" v-for="stat in team.stats">
                 {{ stat.stat_name }}
             </div>
+            <div class="column icon" v-if="team.stats">
+                <div class="fa fa-undo icon" @click="undo = !undo"></div>
+            </div>
         </div>
 
         <transition-group 
@@ -32,6 +35,10 @@
 
                 </div>
 
+                <div class="column icon" v-if="undo">
+                    <div class="fa fa-undo icon" @click="removeLastPlayerStat(player.id)"></div>
+                </div>
+
             </div>
 
         </transition-group>
@@ -52,6 +59,12 @@
 
         props: ['team_id', 'game', 'controls'],
 
+        data: function() {
+            return {
+                undo: false
+            }
+        },
+
         methods: {
 
             updatePlayerStats: function(player_id) {
@@ -64,6 +77,18 @@
                 let time = new Date().getTime();
                 let stat_index = _.findIndex(this.team.stats, function(o) {return o.id == stat_id});
                 this.team.stats[stat_index].updated_at = time;
+            },
+
+            removeLastPlayerStat: function(playerId)
+            {
+            
+                var vue = this;
+
+                vue.$http.post('/api/players/remove-last-stat/' + playerId).then( function(response) {
+
+                }, function (error) {
+                
+                });
             }
 
         },

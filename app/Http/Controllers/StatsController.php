@@ -49,4 +49,5 @@ class StatsController extends Controller
     {
         return $this->stat->findOrFail($id)->remove();
     }
+
 }

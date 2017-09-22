@@ -30,7 +30,15 @@ class Chart extends Model
 
         if (!$team && $players->count()) {
             $team_check = PlayerStat::whereIn('player_id', $players->pluck('id'))
-                        ->whereIn('game_id', $games->pluck('id'))
+
+                        ->whereHas('point', function($query) use($games) {
+                            $query->whereHas('gameSet', function($query) use($games) {
+                                $query->whereHas('game', function($query) use($games) {
+                                    $query->whereIn('id', $games->pluck('id'));
+                                });
+                            });
+                        })
+
                         ->get()->groupBy('team_id');
 
             $team_ids = $team_check->keys()->all();
@@ -62,10 +70,18 @@ class Chart extends Model
 
                 $team = $player->playedForTeamInGame($game);
 
-                $player_stats = $player_stats->merge($player->stats()
-                    ->where('game_id', $game->id)
-                    ->where('team_id', $team->id)->get()
-                );
+                $p_stats = $player->stats()
+                    ->whereHas('point', function($query) use($game) {
+                        $query->whereHas('gameSet', function($query) use($game) {
+                            $query->whereHas('game', function($query) use($game) {
+                                $query->where('id', $game->id);
+                            });
+                        });
+                    })
+                    ->where('team_id', $team->id)
+                    ->get();
+
+                $player_stats = $player_stats->merge($p_stats);
             }
 
             $player_stats = $player_stats->sortBy(function($player_stat) {

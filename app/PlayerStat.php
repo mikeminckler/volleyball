@@ -8,6 +8,8 @@ use App\Player;
 use App\Game;
 use App\Stat;
 use App\Team;
+use App\GameSet;
+use App\Point;
 
 use App\Events\PlayerGameStatsUpdated;
 
@@ -65,8 +67,8 @@ class PlayerStat extends Model
         $player_stat->player_id = $player->id;
         $player_stat->stat_id = $stat->id;
         $player_stat->team_id = $team->id;
-        $player_stat->game_id = $game->id;
-        $player_stat->game_set_id = $game->currentSet()->id;
+        //$player_stat->game_id = $game->id;
+        //$player_stat->game_set_id = $game->currentSet()->id;
         $player_stat->point_id = $game->currentPoint()->id;
         $player_stat->score = $score;
 
@@ -93,6 +95,7 @@ class PlayerStat extends Model
         return $this->belongsTo('App\Team');
     }
     
+    /*
     public function game()
     {
         return $this->belongsTo('App\Game');
@@ -102,6 +105,7 @@ class PlayerStat extends Model
     {
         return $this->belongsTo('App\GameSet');
     }
+     */
 
     public function point()
     {

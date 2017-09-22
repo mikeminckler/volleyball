@@ -71,6 +71,7 @@ Route::group(['middleware' => ['auth:api']], function() {
 
     Route::post('players/get-game-stat-score/{id}', ['as' => 'players.get-game-stat-score', 'uses' => 'PlayerGameController@getStatScore'])->where('id', '\d+');
     Route::post('players/add-game-stat-score/{id}', ['as' => 'players.add-game-stat-score', 'uses' => 'PlayerGameController@addStatScore'])->where('id', '\d+');
+    Route::post('players/remove-last-stat/{id}', ['as' => 'players.remove-last-stat', 'uses' => 'PlayerGameController@removeLastStat'])->where('id', '\d+');
 
     Route::post('charts/team-games', ['as' => 'charts.team-games', 'uses' => 'ChartsController@teamGames']);
     Route::post('charts/player-games', ['as' => 'charts.player-games', 'uses' => 'ChartsController@playerGames']);

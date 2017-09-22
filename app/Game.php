@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\GameSet;
 use App\Point;
+use App\PlayerStat;
+use App\Team;
 
 use App\Events\GameCreated;
 use App\Events\GamesRefresh;
@@ -18,17 +20,17 @@ class Game extends Model
 
     public function team1() 
     {
-        return $this->hasOne('App\Team', 'id', 'team1_id');
+        return $this->hasOne(Team::class, 'id', 'team1_id');
     }
 
     public function team2() 
     {
-        return $this->hasOne('App\Team', 'id', 'team2_id');
+        return $this->hasOne(Team::class, 'id', 'team2_id');
     }
 
     public function gameSets() 
     {
-        return $this->hasMany('App\GameSet');
+        return $this->hasMany(GameSet::class);
     }
 
 
@@ -138,7 +140,12 @@ class Game extends Model
 
     public function currentPoint()
     {
-        return $this->currentSet()->points->sortByDesc('created_at')->values()->first();
+        return $this->points->sortByDesc('created_at')->values()->first();
+    }
+
+    public function points() 
+    {
+        return $this->hasManyThrough(Point::class, GameSet::class)->orderBy('created_at', 'desc');
     }
 
     public function opposingTeam($team) {
@@ -151,7 +158,7 @@ class Game extends Model
 
     public function playerStats()
     {
-        return $this->hasMany('App\PlayerStat');
+        return $this->hasMany(PlayerStat::class);
     }
 
 }
