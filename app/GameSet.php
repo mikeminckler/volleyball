@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Cache;
+
 use App\Point;
 
 class GameSet extends Model
@@ -26,17 +28,26 @@ class GameSet extends Model
         $point->team_id = $team_id;
         $point->game_set_id = $this->id;
         $point->save();
+
+        Cache::tags(['game_'.$this->game->id])->flush();
+
         return $this;
     }
 
     public function getTeam1PointsAttribute()
     {
-        return $this->points->where('team_id', $this->game->team1->id)->count();
+        $points = Cache::tags(['game_'.$this->game->id])->rememberForever('game_'.$this->game->id.'_team1_points', function() {
+            return $this->points->where('team_id', $this->game->team1->id)->count();
+        });
+        return $points;
     }
 
     public function getTeam2PointsAttribute()
     {
-        return $this->points->where('team_id', $this->game->team2->id)->count();
+        $points = Cache::tags(['game_'.$this->game->id])->rememberForever('game_'.$this->game->id.'_team2_points', function() {
+            return $this->points->where('team_id', $this->game->team2->id)->count();
+        });
+        return $points;
     }
 
     public function getScoreAttribute()
@@ -58,7 +69,10 @@ class GameSet extends Model
 
     public function getFullScoreAttribute()
     {
-        return $this->team1_points.'-'.$this->team2_points;
+        $score = Cache::tags(['game_'.$this->game->id])->rememberForever('game_'.$this->game->id.'_full_score', function() {
+            return $this->team1_points.'-'.$this->team2_points;
+        });
+        return $score;
     }
 
 

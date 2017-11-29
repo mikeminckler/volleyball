@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Cache;
+
 use App\GameSet;
 use App\Point;
 use App\PlayerStat;
@@ -62,6 +64,8 @@ class Game extends Model
 
         event(new GamesRefresh());
 
+        Cache::tags(['game_'.$this->id])->flush();
+
         return $this;
     }
 
@@ -74,22 +78,33 @@ class Game extends Model
         event(new GamesRefresh());
         event(new GameUpdated($this, 'Set '.$game_set->number.' has been created'));
 
+        Cache::tags(['game_'.$this->id])->flush();
+
         return $game_set;
     }
 
     public function getScoreAttribute()
     {
-        return $this->gameSets()->get()->implode('full_score', ', ');
+        $score = Cache::tags(['game_'.$this->id])->rememberForever('game_'.$this->id.'_score', function() {
+            return $this->gameSets()->get()->implode('full_score', ', ');
+        });
+        return $score;
     }
 
     public function getTeam1NameAttribute()
     {
-        return $this->team1()->get()->first()->team_name;
+        $name = Cache::tags(['game_'.$this->id])->rememberForever('game_'.$this->id.'_team1', function() {
+            return $this->team1()->get()->first()->team_name;
+        });
+        return $name;
     }
 
     public function getTeam2NameAttribute()
     {
-        return $this->team2()->get()->first()->team_name;
+        $name = Cache::tags(['game_'.$this->id])->rememberForever('game_'.$this->id.'_team2', function() {
+            return $this->team2()->get()->first()->team_name;
+        });
+        return $name;
     }
 
     public function addPoint($team = null)
@@ -112,6 +127,8 @@ class Game extends Model
             event(new GameUpdated($this, $team->team_name.' has scored a point'));
         }
 
+        Cache::tags(['game_'.$this->id])->flush();
+
         return $this;
 
     }
@@ -129,6 +146,8 @@ class Game extends Model
 
         event(new GamesRefresh());
         event(new GameUpdated($this, $team->team_name.' score corrected'));
+
+        Cache::tags(['game_'.$this->id])->flush();
 
         return $this;
     }

@@ -180,7 +180,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-        VueGenerators\ServiceProvider::class
 
     ],
 
