@@ -46,6 +46,8 @@ Vue.component('team-players-list', require('./components/TeamPlayersList.vue'));
 Vue.component('player-game-stat', require('./components/PlayerGameStat.vue'));
 Vue.component('player-game-report', require('./components/PlayerGameReport.vue'));
 
+Vue.component('datetimepicker', require('./components/DateTimePicker.vue'));
+
 var router = new VueRouter({
     mode: 'history',
     routes: [

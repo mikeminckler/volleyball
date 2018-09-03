@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 use Cache;
+use Carbon\Carbon;
 
 use App\GameSet;
 use App\Point;
@@ -178,6 +179,11 @@ class Game extends Model
     public function playerStats()
     {
         return $this->hasMany(PlayerStat::class);
+    }
+
+    public function getStartTimeAttribute($value) 
+    {
+        return Carbon::parse($value)->format('Y-m-d H:i');
     }
 
 }

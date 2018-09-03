@@ -42,7 +42,7 @@
                     <label for="start_time" class="label">Start Date & Time</label>
                 </div>
                 <div class="form-input">
-                    <input type="text" class="datetimepicker" placeholder="" name="start_time" id="start_time" v-model="game.start_time" />
+                    <datetimepicker name="start_time" v-model="game.start_time"></datetimepicker>
                 </div>
             </div>
 
