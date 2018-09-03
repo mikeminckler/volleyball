@@ -5,7 +5,9 @@
 
             <form class="login" role="form" method="POST" action="/api/login" @submit.prevent="attempt">
 
-                <div class="login-logo fa fa-book"></div>
+                <div class="login-logo">
+                    <i class="fas fa-chart-line"></i>
+                </div>
 
             <div class="form-block">
                 <div class="form-label">
@@ -93,46 +95,32 @@
                     'remember': this.login.remember,
                 };
 
-                var vue = this;
-
-                vue.$http.post('/api/login', post_data).then( function(response) {
+                this.$http.post('/api/login', post_data).then( response => {
 
                     // Set authenticated and the JWT Token 
                     //console.log('LOGIN TOKEN: ' + response.data.token);
                     if (response.data.token) {
 
-                        vue.$store.dispatch('setToken', response.data.token);
+                        this.$store.dispatch('setToken', response.data.token);
+                        this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
 
-                        vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged In'});
+                        this.$http.post('/api/users/my-info').then( response => {
 
-                        vue.$http.post('/api/users/my-info').then( function(response) {
+                            this.$store.dispatch('userInfo', response.data);
+                            socket.emit('auth.info', this.$store.getters.user_name + ' has connected');
 
-                            vue.$store.dispatch('userInfo', response.data);
-                            socket.emit('auth.info', vue.$store.getters.user_name + ' has connected');
+                            this.$router.push('/select-team');
 
-                            vue.$router.push('/select-team');
-
-                        }, function(error) {
-                            vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your info'});
+                        }, error => {
+                            this.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your info'});
                         });
                     }
 
-                    /*
-                    vue.$http.post('/api/users/my-roles').then( function(response) {
 
-                        vue.$store.dispatch('userRoles', response.data); 
-
-                    }, function(error) {
-                        vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading your groups'});
-                    });
-                    */
-
-
-                }, function(error) {
+                }, error => {
 
                     // login failed provide the feedback
-                    vue.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data.error});
-
+                    this.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data.error});
                     $('input.input-password').val('').focus();
 
                 });

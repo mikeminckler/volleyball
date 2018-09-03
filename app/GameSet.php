@@ -36,7 +36,7 @@ class GameSet extends Model
 
     public function getTeam1PointsAttribute()
     {
-        $points = Cache::tags(['game_'.$this->game->id])->rememberForever('game_'.$this->game->id.'_team1_points', function() {
+        $points = Cache::tags(['game_'.$this->game->id])->rememberForever('game_'.$this->game->id.'_game_set_'.$this->id.'_team1_points', function() {
             return $this->points->where('team_id', $this->game->team1->id)->count();
         });
         return $points;
@@ -44,7 +44,7 @@ class GameSet extends Model
 
     public function getTeam2PointsAttribute()
     {
-        $points = Cache::tags(['game_'.$this->game->id])->rememberForever('game_'.$this->game->id.'_team2_points', function() {
+        $points = Cache::tags(['game_'.$this->game->id])->rememberForever('game_'.$this->game->id.'_game_set_'.$this->id.'_team2_points', function() {
             return $this->points->where('team_id', $this->game->team2->id)->count();
         });
         return $points;
@@ -69,7 +69,7 @@ class GameSet extends Model
 
     public function getFullScoreAttribute()
     {
-        $score = Cache::tags(['game_'.$this->game->id])->rememberForever('game_'.$this->game->id.'_full_score', function() {
+        $score = Cache::tags(['game_'.$this->game->id])->rememberForever('game_'.$this->game->id.'_game_set_'.$this->id.'_full_score', function() {
             return $this->team1_points.'-'.$this->team2_points;
         });
         return $score;

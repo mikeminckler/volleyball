@@ -19,15 +19,11 @@
         props: ['team', 'game'],
 
         mounted () {
+            this.drawTeamChart(this.team.id, [this.game.id]);
 
-            var vue = this;
-
-            vue.drawTeamChart(this.team.id, [this.game.id]);
-
-            window.socket.on('App\\Events\\PlayerGameStatsUpdated', function (data) {
-                vue.drawTeamChart(vue.team.id, [vue.game.id]);
+            window.socket.on('App\\Events\\PlayerGameStatsUpdated', data => {
+                this.drawTeamChart(this.team.id, [this.game.id]);
             });
-
         },
 
         beforeDestroy() {

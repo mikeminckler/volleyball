@@ -93,8 +93,6 @@
 
             submit: function(e) {
 
-                var vue = this;
-
                 $('input.input-error').removeClass('input-error');
 
                 let post_data = {
@@ -103,31 +101,26 @@
                     'start_time': this.game.start_time
                 };
 
-                vue.$http.post('/api' + vue.$route.path, post_data).then( function(response) {
+                this.$http.post('/api' + this.$route.path, post_data).then( response => {
 
-                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Saved Game'});
-                    vue.$router.push('/games');
+                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Saved Game'});
+                    this.$router.push('/games');
 
-                }, function(error) {
+                }, error => {
 
-                    // this needs to go into a function 
                     if (error.response.status == 422) {
-                        for(let input in error.response.data) {
 
-                            // we need to show feedback on the form itself
-                            //$("input[name='" + input + "']").addClass('input-error');
+                        this.$lodash.each(error.response.data.errors, (errors, field) => {
+                            $('input[name="' + field + '"]').addClass('input-error');
+                            this.$lodash.each(errors, error => {
+                                this.$store.dispatch('addFeedback', {'type': 'error', 'message': error, 'input': field});
+                            });
+                        });
 
-                            //document.getElementById(input).classList.add('input-error');
-                            $('input[name="' + input + '"]').addClass('input-error');
-
-                            for (let info in error.response.data[input]) {
-                                vue.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data[input][info], 'input': input});
-                            }
-                        }
                     }
 
                     if (error.response.status == 500) {
-                        vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was a server error'});
+                        this.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was a server error'});
                     }
 
                 });

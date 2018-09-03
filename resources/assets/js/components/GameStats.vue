@@ -116,15 +116,13 @@
 
             showTab: function(e) {
 
-
-                var vue = this;
                 let active_tab = e.target.dataset.tab;
 
-                _.each(vue.tabs, function(tab, key) { 
+                this.$lodash.each(this.tabs, (tab, key) => { 
                     if (key == active_tab) {
-                        vue.tabs[key] = true;
+                        this.tabs[key] = true;
                     } else {
-                        vue.tabs[key] = false;
+                        this.tabs[key] = false;
                     }
                 });
 
@@ -132,10 +130,8 @@
 
             addSet: function() {
 
-                var vue = this;
-
-                vue.$http.post('/api/games/add-set/' + this.game.id).then( function(response) {
-                    
+                this.$http.post('/api/games/add-set/' + this.game.id).then( response => {
+                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Added New Set'});
                 });
                 
             }

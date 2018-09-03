@@ -27,7 +27,9 @@
                     </div>
                     <div class="column">{{ user.email }}</div>
                     <div class="column">
-                        <a @click.prevent="remove" class="delete fa fa-times icon" :href="'/api/users/delete/' + user.id"></a>
+                        <div @click.prevent="remove(user.id)" class="delete icon">
+                            <i class="fas fa-times"></i>
+                        </div>
                     </div>
                 </div>
             </transition-group>
@@ -57,23 +59,17 @@
 
             loadUsers: function() {
 
-                var vue = this;
-                vue.$http.post('/api/users').then( function(response) {
-                    vue.users = response.data;
+                this.$http.post('/api/users').then( response => {
+                    this.users = response.data;
                 });
             
             },
 
-            remove: function(e) {
+            remove: function(userId) {
 
-                var vue = this;
-                
-                vue.$http.post(e.target.href).then( function(response) {
-
-                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'User Deleted'});
-
-                    vue.loadUsers();
-
+                this.$http.post('/api/users/delete/' + userId).then( response => {
+                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'User Deleted'});
+                    this.loadUsers();
                 }, function (error) {
                 
                 });
@@ -86,10 +82,8 @@
 
         mounted() {
             
-            var vue = this;
-
-            window.socket.on('App\\Events\\UsersRefresh', function (data) {
-                vue.loadUsers();
+            window.socket.on('App\\Events\\UsersRefresh', data => {
+                this.loadUsers();
             });
 
         },

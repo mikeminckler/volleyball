@@ -66,14 +66,12 @@
 
             updateScore: function() {
 
-                var vue = this;
-
                 if (this.player_updated_at == this.stat.updated_at) {
                     this.changed = true;
                     this.getScore();                
 
-                    setTimeout(function() {
-                       vue.changed = false;
+                    setTimeout( () => {
+                       this.changed = false;
                     }, 250);
                 }
 
@@ -81,12 +79,10 @@
 
             getButtons: function() {
 
-                var vue = this;
+                let score_low = this.$lodash.toFinite(this.stat.pivot.score_low);
+                let score_high = this.$lodash.toFinite(this.stat.pivot.score_high);
 
-                let score_low = _.toFinite(this.stat.pivot.score_low);
-                let score_high = _.toFinite(this.stat.pivot.score_high);
-
-                if ( _.isNumber(score_low) && _.isNumber(score_high)) {
+                if ( this.$lodash.isNumber(score_low) && this.$lodash.isNumber(score_high)) {
 
                     if (score_low == score_high) {
 
@@ -112,15 +108,14 @@
 
             getScore: function() {
 
-                var vue = this;
                 let post_data = {
                     'game_id': this.game.id,
                     'team_id': this.team.id,
                     'stat_id': this.stat.id
                 }
                 
-                vue.$http.post('/api/players/get-game-stat-score/' + this.player.id, post_data).then( function(response) {
-                    vue.score = response.data;
+                this.$http.post('/api/players/get-game-stat-score/' + this.player.id, post_data).then( response => {
+                    this.score = response.data;
                 }, function (error) {
                 
                 });
@@ -129,7 +124,6 @@
 
             takeStat: function(value) {
 
-                var vue = this;
                 let post_data = {
                     'game_id': this.game.id,
                     'stat_id': this.stat.id,
@@ -137,10 +131,8 @@
                     'score': value
                 }
 
-                vue.$http.post('/api/players/add-game-stat-score/' + this.player.id, post_data).then( function(response) {
-
-                    vue.score = response.data;
-
+                this.$http.post('/api/players/add-game-stat-score/' + this.player.id, post_data).then( response => {
+                    this.score = response.data;
                 }, function (error) {
                 
                 });

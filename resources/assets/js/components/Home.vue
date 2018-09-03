@@ -24,12 +24,9 @@
 
         mounted() {
 
-            var vue = this;
-
             this.team = this.$store.state.activeTeam;
-
-            window.socket.on('App\\Events\\GamesRefresh', function (data) {
-                vue.loadActiveTeam();
+            window.socket.on('App\\Events\\GamesRefresh', data => {
+                this.loadActiveTeam();
             });
 
         },

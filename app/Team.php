@@ -27,7 +27,7 @@ class Team extends Model
         }
 
         $this->team_name = $input['team_name'];
-        if ($input['initials']) {
+        if (array_get($input, 'initials')) {
             $this->initials = $input['initials'];
         } else {
             $words = preg_split("/[\s,_-]+/", $input['team_name']);
@@ -120,7 +120,7 @@ class Team extends Model
 
     public function stats()
     {
-        return $this->belongsToMany('App\Stat')->withPivot('score_high', 'score_low', 'target_high', 'target_mid', 'target_low');
+        return $this->belongsToMany('App\Stat')->withPivot('score_high', 'score_low', 'target_high', 'target_mid', 'target_low')->orderBy('id');
     }
 
     public function playerStats()

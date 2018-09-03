@@ -20,12 +20,10 @@
 
         mounted () {
 
-            var vue = this;
+            this.drawPlayerChart(this.player.id, [this.game.id]);
 
-            vue.drawPlayerChart(this.player.id, [this.game.id]);
-
-            window.socket.on('App\\Events\\PlayerGameStatsUpdated', function (data) {
-                vue.drawPlayerChart(vue.player.id, [vue.game.id]);
+            window.socket.on('App\\Events\\PlayerGameStatsUpdated', data => {
+                this.drawPlayerChart(this.player.id, [this.game.id]);
             });
 
         },

@@ -161,8 +161,8 @@
             toggleGameSelect: function(e) {
                 let val = parseInt(e.target.value);
                 
-                if (_.includes(this.reportGames, val)) {
-                    let index = _.findIndex(this.reportGames, function(o) { return o == val; });
+                if (this.$lodash.includes(this.reportGames, val)) {
+                    let index = this.$lodash.findIndex(this.reportGames, function(o) { return o == val; });
                     this.reportGames.splice(index, 1);
                     window.socket.emit('leave-room', 'game.' + val);
                 } else {
@@ -178,19 +178,19 @@
             },
 
             gameCheck: function(game_id) {
-                return _.includes(this.reportGames, game_id);
+                return this.$lodash.includes(this.reportGames, game_id);
             },
 
             playerCheck: function(player_id) {
-                return _.includes(this.playerFilter, player_id);
+                return this.$lodash.includes(this.playerFilter, player_id);
             },
 
             togglePlayerFilter: function(e) {
 
                 let val = parseInt(e.target.value);
                 
-                if (_.includes(this.playerFilter, val)) {
-                    let index = _.findIndex(this.playerFilter, function(o) { return o == val; });
+                if (this.$lodash.includes(this.playerFilter, val)) {
+                    let index = this.$lodash.findIndex(this.playerFilter, function(o) { return o == val; });
                     this.playerFilter.splice(index, 1);
                 } else {
                     this.playerFilter.push(val);
@@ -207,16 +207,14 @@
 
         mounted() {
             
-            var vue = this;
-
             this.loadTeam(this.teamId);
             
-            window.socket.on('App\\Events\\GamesRefresh', function (data) {
-                vue.loadTeamGames(vue.team.id);
+            window.socket.on('App\\Events\\GamesRefresh', data => {
+                this.loadTeamGames(this.team.id);
             });
 
-            window.socket.on('App\\Events\\PlayerGameStatsUpdated', function (data) {
-                vue.generateReport();
+            window.socket.on('App\\Events\\PlayerGameStatsUpdated', data => {
+                this.generateReport();
             });
 
         },

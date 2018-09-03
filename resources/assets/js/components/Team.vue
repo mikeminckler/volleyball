@@ -42,61 +42,73 @@
 
         </section>
 
-        <section v-if="team.id && userHasRole(['admin'], team.id)">
-            <div class="h2">Stats Settings</div>
+        <section v-if="team.id">
+            
+            <section class="header">
+                <div class="h2">Players</div>
+            </section>
+            <team-players-list :team="team"></team-players-list>
 
-            <div class="form-block">
-                <div class="form-label"></div>
-                <div class="form-input">High</div>
-                <div class="form-input">Low</div>
-                <div class="form-input">Target Low</div>
-                <div class="form-input">Target Mid</div>
-                <div class="form-input">Target High</div>
-            </div>
+            <section v-if="userCanManageTeam(team.id)">
 
-            <transition-group 
-                name="form-list" 
-                tag="div"
-                v-bind:css="false"
-                v-on:before-enter="beforeEnter"
-                v-on:enter="enter"
-                v-on:leave="leave"
-            >
+                <div class="form-block">
+                    <div class="form-label">
+                        <label for="terms" class="label">Add Players</label>
+                    </div>
+                    <div class="form-input">
+                        <autocomplete object="users" name="" clear="true" :afterSearching="'addPlayerToTeam(' + team.id + ')'"></autocomplete>
+                    </div>
+                </div>
 
-                <div class="form-block" v-for="(stat, index) in stats"
-                    :key="stat.id"
-                    :data-index="index"
+            </section>
+
+            <section v-else>
+                <p>You do not have access to manage this team's players.</p>
+            </section>
+
+            <section v-if="userIsAdmin()">
+
+                <div class="h2">Stats Settings</div>
+
+                <div class="form-block">
+                    <div class="form-label"></div>
+                    <div class="form-input">High</div>
+                    <div class="form-input">Low</div>
+                    <div class="form-input">Target Low</div>
+                    <div class="form-input">Target Mid</div>
+                    <div class="form-input">Target High</div>
+                </div>
+
+                <transition-group 
+                    name="form-list" 
+                    tag="div"
+                    v-bind:css="false"
+                    v-on:before-enter="beforeEnter"
+                    v-on:enter="enter"
+                    v-on:leave="leave"
                 >
 
-                    <div class="form-label">{{ stat.stat_name }}</div>
+                    <div class="form-block" v-for="(stat, index) in stats"
+                        :key="stat.id"
+                        :data-index="index"
+                    >
 
-                    <div class="form-input" v-for="type in statSettings">
-                        <team-stat-setting :type="type" :team="team" :stat="stat"></team-stat-setting>
+                        <div class="form-label">{{ stat.stat_name }}</div>
+
+                        <div class="form-input" v-for="type in statSettings">
+                            <team-stat-setting :type="type" :team="team" :stat="stat"></team-stat-setting>
+                        </div>
+
                     </div>
 
-                </div>
+                </transition-group>
 
-            </transition-group>
+            </section>
 
-
-        </section>
-
-
-        <section v-if="team.id">
-            <div class="h2">Players</div>
-            <team-players-list :team="team"></team-players-list>
-        </section>
-
-        <section v-show="team.id" v-if="userCanManageTeam(team.id)">
-
-            <div class="form-block">
-                <div class="form-label">
-                    <label for="terms" class="label">Add Players</label>
-                </div>
-                <div class="form-input">
-                    <autocomplete object="users" name="" clear="true" :afterSearching="'addPlayerToTeam(' + team.id + ')'"></autocomplete>
-                </div>
-            </div>
+            <section v-else>
+                <div class="h2">Stats</div>
+                <p>You do not have access to manage this team's stats.</p>
+            </section>
 
         </section>
 
@@ -126,8 +138,6 @@
 
             submit: function(e) {
 
-                var vue = this;
-
                 $('input.input-error').removeClass('input-error');
 
                 let post_data = {
@@ -136,31 +146,26 @@
                     'initials': this.team.initials
                 };
 
-                vue.$http.post(e.target.action, post_data).then( function(response) {
+                this.$http.post(e.target.action, post_data).then( response => {
 
-                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Saved Team'});
-                    vue.$router.push('/teams');
+                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Saved Team'});
+                    this.$router.push('/teams');
 
-                }, function(error) {
+                }, error => {
 
-                    // this needs to go into a function 
                     if (error.response.status == 422) {
-                        for(let input in error.response.data) {
 
-                            // we need to show feedback on the form itself
-                            //$("input[name='" + input + "']").addClass('input-error');
+                        this.$lodash.each(error.response.data.errors, (errors, field) => {
+                            $('input[name="' + field + '"]').addClass('input-error');
+                            this.$lodash.each(errors, error => {
+                                this.$store.dispatch('addFeedback', {'type': 'error', 'message': error, 'input': field});
+                            });
+                        });
 
-                            //document.getElementById(input).classList.add('input-error');
-                            $('input[name="' + input + '"]').addClass('input-error');
-
-                            for (let info in error.response.data[input]) {
-                                vue.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data[input][info], 'input': input});
-                            }
-                        }
                     }
 
                     if (error.response.status == 500) {
-                        vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was a server error'});
+                        this.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was a server error'});
                     }
 
                 });
@@ -169,35 +174,31 @@
 
         beforeMount() {
 
-            var vue = this;
-            let team_id = vue.$route.params.id;
+            let team_id = this.$route.params.id;
 
             if (team_id == 'manage-team') {
-                team_id = vue.$store.state.activeTeam.id;
+                team_id = this.$store.state.activeTeam.id;
             }
 
             this.loadTeam(team_id);
-
             this.loadStats();
         },
 
         mounted() {
 
-            var vue = this;
-
-            let team_id = vue.$route.params.id;
+            let team_id = this.$route.params.id;
             if (team_id == 'manage-team') {
-                team_id = vue.$store.state.activeTeam.id;
+                team_id = this.$store.state.activeTeam.id;
             }
-            if (_.toNumber(team_id)) {
+            if (this.$lodash.toNumber(team_id)) {
                 window.socket.emit('join-room', 'team.' + team_id);
             }
 
             // we should only listen for this teams update events
-            window.socket.on('App\\Events\\TeamUpdated', function (data) {
-                vue.hideLoading();
-                vue.$store.dispatch('addFeedback', {'type': 'success', 'message': data.message});
-                vue.loadTeam(team_id);
+            window.socket.on('App\\Events\\TeamUpdated', data => {
+                this.hideLoading();
+                this.$store.dispatch('addFeedback', {'type': 'success', 'message': data.message});
+                this.loadTeam(team_id);
             });
 
         },
@@ -206,7 +207,7 @@
 
             window.socket.removeListener('App\\Events\\TeamUpdated');
 
-            if (_.toNumber(this.team.id)) {
+            if (this.$lodash.toNumber(this.team.id)) {
                 window.socket.emit('leave-room', 'team.' + this.team.id);
             }
 

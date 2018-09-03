@@ -118,7 +118,7 @@ class UsersController extends Controller
     {
         $team = $this->team->findOrFail($id);
         session()->put('team_id', $team->id);
-        return $team;
+        return response()->json(['success' => 'Selected '.$team->team_name]);
     }
 
 }

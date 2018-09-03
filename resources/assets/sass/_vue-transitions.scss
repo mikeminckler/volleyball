@@ -26,7 +26,7 @@
 
 .feedback-enter, .feedback-leave-active {
     opacity: 0;
-    transform: translateX(-200px);
+    transform: translateX(200px);
 }
 
 .feedback-leave-active {

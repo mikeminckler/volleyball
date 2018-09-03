@@ -76,11 +76,11 @@
 
         computed: {
             currentSet: function() {
-                return _.last(this.gameSets);
+                return this.$lodash.last(this.gameSets);
             },
             otherSets: function() {
                 if (this.gameSets.length > 1) {
-                    return _.initial(this.gameSets);
+                    return this.$lodash.initial(this.gameSets);
                 } else {
                     return [];
                 }
@@ -95,27 +95,24 @@
 
             loadSets: function() {
                 
-                var vue = this;
-
-                vue.$http.post('/api/games/sets/' + this.game_id).then( function(response) {
-                    vue.gameSets = response.data;
+                this.$http.post('/api/games/sets/' + this.game_id).then( response => {
+                    this.gameSets = response.data;
                 });
 
             },
 
             addPoint: function(team_id) {
 
-                let team = _.find(this.currentSet.score, function(t) {
+                let team = this.$lodash.find(this.currentSet.score, function(t) {
                     return t.id == team_id;
                 });
                 team.score ++;
 
-                var vue = this;
                 let post_data = {
                     'team_id': team_id
                 }
 
-                vue.$http.post('/api/games/add-point/' + this.game_id, post_data).then( function(response) {
+                this.$http.post('/api/games/add-point/' + this.game_id, post_data).then( response => {
                     
                 });
 
@@ -123,18 +120,17 @@
 
             removePoint: function(team_id) {
 
-                let team = _.find(this.currentSet.score, function(t) {
+                let team = this.$lodash.find(this.currentSet.score, function(t) {
                     return t.id == team_id;
                 });
                 team.score --;
 
-                var vue = this;
                 let post_data = {
                     'team_id': team_id
                 }
 
-                vue.$http.post('/api/games/remove-point/' + this.game_id, post_data).then( function(response) {
-                    
+                this.$http.post('/api/games/remove-point/' + this.game_id, post_data).then( response => {
+                
                 });
 
             }
@@ -145,15 +141,13 @@
 
         mounted() {
         
-            var vue = this;
-
             window.socket.emit('join-room', 'game.' + this.game_id);
 
-            window.socket.on('App\\Events\\GameUpdated', function (data) {
-                vue.hideLoading();
-                vue.$store.dispatch('addFeedback', {'type': 'success', 'message': data.message});
-                vue.loadGame(this.game_id);
-                vue.loadSets();
+            window.socket.on('App\\Events\\GameUpdated', data => {
+                this.hideLoading();
+                this.$store.dispatch('addFeedback', {'type': 'success', 'message': data.message});
+                this.loadGame(this.game_id);
+                this.loadSets();
             });
 
         },

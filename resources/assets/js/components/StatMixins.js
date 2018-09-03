@@ -19,21 +19,18 @@ export default {
         
         loadStat: function(stat_id) {
 
-            var vue = this;
+            if (this.$lodash.toNumber(stat_id)) {
 
-            if (_.toNumber(stat_id)) {
-
-                vue.$http.post('/api/stats/load/' + stat_id).then( function(response) {
-                    vue.stat = response.data;
+                this.$http.post('/api/stats/load/' + stat_id).then( response => {
+                    this.stat = response.data;
                 });
             }
         },
 
         loadStats: function() {
 
-            var vue = this;
-            vue.$http.post('/api/stats').then( function(response) {
-                vue.stats = response.data;
+            this.$http.post('/api/stats').then( response => {
+                this.stats = response.data;
             });
         
         },

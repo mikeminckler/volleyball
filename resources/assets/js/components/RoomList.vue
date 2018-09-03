@@ -65,23 +65,22 @@
             addListeners: function() {
 
                 let room_prop = this.room;
-                let vue = this;
 
-                if (room_prop.match(/\d+/g) && vue.connected == false) {
+                if (room_prop.match(/\d+/g) && this.connected == false) {
 
-                    window.socket.on('update-room', function (room) {
+                    window.socket.on('update-room', room => {
                         window.socket.emit('room-list', room);
                     });
 
-                    window.socket.on('room-list', function (data) {
+                    window.socket.on('room-list', data => {
                         if (data.room == room_prop) {
-                            vue.roomUsers = data.users;
+                            this.roomUsers = data.users;
                         }
                     });
 
                     window.socket.emit('room-list', room_prop);
 
-                    vue.connected = true;
+                    this.connected = true;
 
                 }
             

@@ -20,42 +20,37 @@ export default {
 
         loadTeam: function(team_id) {
 
-            var vue = this;
+            if (this.$lodash.toNumber(team_id)) {
 
-            if (_.toNumber(team_id)) {
-
-                vue.$http.post('/api/teams/load/' + team_id).then( function(response) {
-                    vue.team = response.data;
+                this.$http.post('/api/teams/load/' + team_id).then( response => {
+                    this.team = response.data;
                 });
             }
         },
 
         loadActiveTeam: function() {
 
-            var vue = this;
-
-            vue.$http.post('/api/teams/load/' + vue.$store.state.activeTeam.id).then( function(response) {
-                vue.$store.dispatch('setActiveTeam', response.data);
+            this.$http.post('/api/teams/load/' + this.$store.state.activeTeam.id).then( response => {
+                this.$store.dispatch('setActiveTeam', response.data);
             });
         },
 
         loadPlayers: function(team_id) {
 
-            var vue = this;
-            if (_.toNumber(team_id)) {
+            if (this.$lodash.toNumber(team_id)) {
 
-                vue.$http.post('/api/teams/players/' + team_id).then( function(response) {
-                    vue.team.players = response.data;
+                this.$http.post('/api/teams/players/' + team_id).then( response => {
+                    this.team.players = response.data;
                 });
             }
         },
 
         loadTeamGames: function(team_id) {
-            var vue = this;
-            if (_.toNumber(team_id)) {
+           
+            if (this.$lodash.toNumber(team_id)) {
 
-                vue.$http.post('/api/teams/games/' + team_id).then( function(response) {
-                    vue.team.games = response.data;
+                this.$http.post('/api/teams/games/' + team_id).then( response => {
+                    this.team.games = response.data;
                 });
             }
         

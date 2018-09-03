@@ -121,7 +121,9 @@
                         <div class="column">{{ role.team.team_name }}</div>
                         <div class="column">{{ role.name }}</div>
                         <div class="column icon">
-                            <div class="fa fa-times icon" @click="removeRole(role)"></div> 
+                            <div class="icon" @click="removeRole(role)">
+                                <i class="fas fa-times"></i>
+                            </div> 
                         </div>
 
                     </div>
@@ -209,19 +211,18 @@
 
             removeRole: function(role) {
 
-                var vue = this;
-                let user_id = vue.$route.params.id;
+                let user_id = this.$route.params.id;
                 let post_data = {
                     'role_id': role.id,
                     'team_id': role.team.id
                 }
 
-                vue.$http.post('/api/users/remove-role/' + user_id, post_data).then( function(response) {
+                this.$http.post('/api/users/remove-role/' + user_id, post_data).then( response => {
 
-                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Removed group'});
-                    vue.loadInfo();
+                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Removed group'});
+                    this.loadInfo();
 
-                }, function(error) {
+                }, error => {
                 
                 });
 
@@ -229,22 +230,21 @@
 
             addRoleToUser: function() {
 
-                var vue = this;
-                let user_id = vue.$route.params.id;
+                let user_id = this.$route.params.id;
                 let post_data = {
                     'team_id': document.getElementById("add_team_id").value,
                     'role_id': document.getElementById("add_role_id").value
                 };
 
-                vue.clear = true;   
+                this.clear = true;   
 
-                vue.$http.post('/api/users/save-role/' + user_id, post_data).then( function(response) {
+                this.$http.post('/api/users/save-role/' + user_id, post_data).then( response => {
 
-                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Group saved'});
-                    vue.loadInfo();
-                    vue.clear = false;   
+                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Group saved'});
+                    this.loadInfo();
+                    this.clear = false;   
 
-                }, function(error) {
+                }, error => {
                 
                 });
 
@@ -254,16 +254,16 @@
 
             loadInfo: function() {
 
-                var vue = this;
+                let user_id = this.$route.params.id;
 
-                let user_id = vue.$route.params.id;
                 if (!user_id) {
-                    user_id = vue.$store.state.user.id;
+                    user_id = this.$store.state.user.id;
                 }
+
                 if (user_id != 'create') {
 
-                    vue.$http.post('/api/users/load/' + user_id).then( function(response) {
-                        vue.user = response.data;
+                    this.$http.post('/api/users/load/' + user_id).then( response => {
+                        this.user = response.data;
                     });
 
                 } else {
@@ -273,8 +273,6 @@
 
 
             submit: function(e) {
-
-                var vue = this;
 
                 $('input.input-error').removeClass('input-error');
 
@@ -288,31 +286,26 @@
                     'password_confirmation': this.password_confirmation
                 };
 
-                vue.$http.post(e.target.action, post_data).then( function(response) {
+                this.$http.post(e.target.action, post_data).then( response => {
 
-                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Saved User'});
-                    vue.$router.push('/users/' + response.data.id);
+                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Saved User'});
+                    this.$router.push('/users/' + response.data.id);
 
-                }, function(error) {
+                }, error => {
 
-                    // this needs to go into a function 
                     if (error.response.status == 422) {
-                        for(let input in error.response.data) {
 
-                            // we need to show feedback on the form itself
-                            //$("input[name='" + input + "']").addClass('input-error');
+                        this.$lodash.each(error.response.data.errors, (errors, field) => {
+                            $('input[name="' + field + '"]').addClass('input-error');
+                            this.$lodash.each(errors, error => {
+                                this.$store.dispatch('addFeedback', {'type': 'error', 'message': error, 'input': field});
+                            });
+                        });
 
-                            //document.getElementById(input).classList.add('input-error');
-                            $('input[name="' + input + '"]').addClass('input-error');
-
-                            for (let info in error.response.data[input]) {
-                                vue.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data[input][info], 'input': input});
-                            }
-                        }
                     }
 
                     if (error.response.status == 500) {
-                        vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was a server error'});
+                        this.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was a server error'});
                     }
 
                 });
@@ -324,21 +317,12 @@
                 this.show_password = !this.show_password;
             },
 
-            /*
-            roleCheck: function(role_id) {
-                return _.includes(this.groups, role_id);
-            }
-            */
-
         },
 
         beforeMount() {
-            //this.loadRoles();
             this.loadInfo();
         },
 
-        mounted() {
-        }
 
     }
 </script>

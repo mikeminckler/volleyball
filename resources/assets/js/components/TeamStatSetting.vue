@@ -38,7 +38,6 @@
             updateValue: function(value) {
                 
                 if (value != this.oldValue) {
-                    var vue = this;
                 
                     let post_data = {
                         'stat_id': this.stat.id,
@@ -46,9 +45,9 @@
                         'type': this.type
                     }
                     
-                    vue.$http.post('/api/teams/set-stat/' + this.team.id, post_data).then( function(response) {
-                        vue.oldValue = response.data;
-                        vue.value = response.data;
+                    this.$http.post('/api/teams/set-stat/' + this.team.id, post_data).then( response => {
+                        this.oldValue = response.data;
+                        this.value = response.data;
                     }, function (error) {
                     
                     });
@@ -60,16 +59,14 @@
 
             getValue: function() {
 
-                var vue = this;
-            
                 let post_data = {
                     'stat_id': this.stat.id,
                     'type': this.type
                 }
 
-                vue.$http.post('/api/teams/get-stat/' + this.team.id, post_data).then( function(response) {
-                    vue.oldValue = response.data;
-                    vue.value = response.data;
+                this.$http.post('/api/teams/get-stat/' + this.team.id, post_data).then( response => {
+                    this.oldValue = response.data;
+                    this.value = response.data;
                 }, function (error) {
                 
                 });

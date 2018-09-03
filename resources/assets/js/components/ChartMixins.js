@@ -4,14 +4,13 @@ export default {
 
         drawTeamChart: function(team_id, games, players = undefined) {
 
-            var vue = this;
             let post_data = {
                 'team_id': team_id,
                 'games': games,
                 'players': players
             }
 
-            vue.$http.post('/api/charts/team-games', post_data).then( function(response) {
+            this.$http.post('/api/charts/team-games', post_data).then( response => {
                 
                 var data = google.visualization.arrayToDataTable(response.data.chart);
                 var chart = new google.visualization.LineChart(document.getElementById('team_game_chart'));
@@ -36,13 +35,12 @@ export default {
 
         drawPlayerChart: function(player_id, games) {
 
-            var vue = this;
             let post_data = {
                 'players': [player_id],
                 'games': games
             }
 
-            vue.$http.post('/api/charts/player-games', post_data).then( function(response) {
+            this.$http.post('/api/charts/player-games', post_data).then( response => {
                 
                 var data = google.visualization.arrayToDataTable(response.data.chart);
                 var chart = new google.visualization.LineChart(document.getElementById('player_game_chart'));

@@ -27,7 +27,9 @@
                     </div>
 
                     <div class="column">
-                        <a @click.prevent="remove" class="delete fa fa-times icon" :href="'/api/stats/delete/' + stat.id"></a>
+                        <div @click.prevent="remove(stat.id)" class="delete icon">
+                            <i class="fas fa-times"></i>
+                        </div>
                     </div>
                 </div>
             </transition-group>
@@ -66,10 +68,8 @@
         },
 
         mounted () {
-            var vue = this;
-
-            window.socket.on('App\\Events\\StatsRefresh', function (data) {
-                vue.loadStats();
+            window.socket.on('App\\Events\\StatsRefresh', data => {
+                this.loadStats();
             });
         },
 
@@ -83,15 +83,12 @@
 
         methods: {
 
-            remove: function(e) {
+            remove: function(statId) {
 
-                var vue = this;
-                
-                vue.$http.post(e.target.href).then( function(response) {
+                this.$http.post('/api/stats/delete/' + statId).then( response => {
 
-                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Stat Deleted'});
-
-                    vue.loadStats();
+                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Stat Deleted'});
+                    this.loadStats();
 
                 }, function (error) {
                 

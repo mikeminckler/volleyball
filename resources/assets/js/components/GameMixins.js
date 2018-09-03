@@ -8,12 +8,10 @@ export default {
 
         loadGame: function(game_id) {
 
-            var vue = this;
+            if (this.$lodash.toFinite(game_id)) {
 
-            if (_.toFinite(game_id)) {
-
-                vue.$http.post('/api/games/load/' + game_id).then( function(response) {
-                    vue.game = response.data;
+                this.$http.post('/api/games/load/' + game_id).then( response => {
+                    this.game = response.data;
                 });
 
             }

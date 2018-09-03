@@ -65,22 +65,18 @@
 
             loadTeams: function() {
 
-                var vue = this;
-                vue.$http.post('/api/teams').then( function(response) {
-                    vue.teams = response.data;
+                this.$http.post('/api/teams').then( response => {
+                    this.teams = response.data;
                 });
             
             },
 
             remove: function(e) {
 
-                var vue = this;
-                
-                vue.$http.post(e.target.href).then( function(response) {
+                this.$http.post(e.target.href).then( response => {
 
-                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Team Deleted'});
-
-                    vue.loadTeams();
+                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Team Deleted'});
+                    this.loadTeams();
 
                 }, function (error) {
                 
@@ -94,10 +90,8 @@
 
         mounted() {
             
-            var vue = this;
-
-            window.socket.on('App\\Events\\TeamsRefresh', function (data) {
-                vue.loadTeams();
+            window.socket.on('App\\Events\\TeamsRefresh', data => {
+                this.loadTeams();
             });
 
         },

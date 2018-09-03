@@ -8,7 +8,9 @@
                 {{ stat.stat_name }}
             </div>
             <div class="column icon" v-if="team.stats">
-                <div class="fa fa-undo icon" @click="undo = !undo"></div>
+                <div class="icon" @click="undo = !undo">
+                    <i class="fas fa-undo"></i>
+                </div>
             </div>
         </div>
 
@@ -36,7 +38,9 @@
                 </div>
 
                 <div class="column icon" v-if="undo">
-                    <div class="fa fa-undo icon" @click="removeLastPlayerStat(player.id)"></div>
+                    <div class="icon" @click="removeLastPlayerStat(player.id)">
+                        <i class="fas fa-undo"></i>
+                    </div>
                 </div>
 
             </div>
@@ -69,25 +73,22 @@
 
             updatePlayerStats: function(player_id) {
                 let time = new Date().getTime();
-                let player_index = _.findIndex(this.team.players, function(o) {return o.id == player_id});
+                let player_index = this.$lodash.findIndex(this.team.players, function(o) {return o.id == player_id});
                 this.team.players[player_index].updated_at = time;
             }, 
 
             updateStat: function(stat_id) {
                 let time = new Date().getTime();
-                let stat_index = _.findIndex(this.team.stats, function(o) {return o.id == stat_id});
+                let stat_index = this.$lodash.findIndex(this.team.stats, function(o) {return o.id == stat_id});
                 this.team.stats[stat_index].updated_at = time;
             },
 
             removeLastPlayerStat: function(playerId)
             {
-            
-                var vue = this;
-
-                vue.$http.post('/api/players/remove-last-stat/' + playerId).then( function(response) {
-
-                }, function (error) {
-                
+                this.$http.post('/api/players/remove-last-stat/' + playerId).then( response => {
+                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': response.data.success});
+                }, error => {
+                    this.$store.dispatch('addFeedback', {'type': 'error', 'message': error.response.data.error});
                 });
             }
 
@@ -95,20 +96,18 @@
 
         mounted() {
 
-            var vue = this;
-
-            vue.loadTeam(this.team_id);
+            this.loadTeam(this.team_id);
 
             window.socket.emit('join-room', 'team.' + this.team_id);
 
-            window.socket.on('App\\Events\\TeamUpdated', function (data) {
-                vue.$store.dispatch('addFeedback', {'type': 'success', 'message': data.message});
-                vue.loadTeam(this.team_id);
+            window.socket.on('App\\Events\\TeamUpdated', data => {
+                this.$store.dispatch('addFeedback', {'type': 'success', 'message': data.message});
+                this.loadTeam(this.team_id);
             });
 
-            window.socket.on('App\\Events\\PlayerGameStatsUpdated', function (data) {
-                vue.updatePlayerStats(data.player.id);
-                vue.updateStat(data.stat.id);
+            window.socket.on('App\\Events\\PlayerGameStatsUpdated', data => {
+                this.updatePlayerStats(data.player.id);
+                this.updateStat(data.stat.id);
             });
         
         },

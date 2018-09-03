@@ -71,21 +71,16 @@
                     
             loadGames: function() {
 
-                var vue = this;
-                vue.$http.post('/api/games').then( function(response) {
-                    vue.games = response.data;
+                this.$http.post('/api/games').then( response => {
+                    this.games = response.data;
                 });
             
             },
 
             remove: function(e) {
 
-                var vue = this;
-                
-                vue.$http.post(e.target.href).then( function(response) {
-
-                    vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Game Deleted'});
-
+                this.$http.post(e.target.href).then( response => {
+                    this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Game Deleted'});
                 }, function (error) {
                 
                 });
@@ -98,13 +93,9 @@
         },
         
         mounted() {
-            
-            var vue = this;
-
-            window.socket.on('App\\Events\\GamesRefresh', function (data) {
-                vue.loadGames();
+            window.socket.on('App\\Events\\GamesRefresh', data => {
+                this.loadGames();
             });
-
         },
 
         beforeDestroy() {

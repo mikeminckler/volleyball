@@ -36,14 +36,18 @@ class DropExtraFieldsInPlayerStats extends Migration
             $old_game = Game::find($old_game_id);
             $new_game = Game::find($new_game_id);
 
-            $sets = $old_game->gameSets;
+            if ($old_game instanceof Game) {
 
-            foreach ($sets as $set) {
-                $set->game_id = $new_game->id;
-                $set->save();
+                $sets = $old_game->gameSets;
+
+                foreach ($sets as $set) {
+                    $set->game_id = $new_game->id;
+                    $set->save();
+                }
+
+                $old_game->delete();
+
             }
-
-            $old_game->delete();
         
         }
 

@@ -2,35 +2,32 @@
 
     <div class="team-players-list">
 
-            <transition-group 
-                name="list" 
-                tag="div"
-                v-bind:css="false"
-                v-on:before-enter="beforeEnter"
-                v-on:enter="enter"
-                v-on:leave="leave"
+        <transition-group 
+            name="list" 
+            tag="div"
+            v-bind:css="false"
+            v-on:before-enter="beforeEnter"
+            v-on:enter="enter"
+            v-on:leave="leave"
+        >
+            <div class="row" 
+                v-for="(player, index) in team.players"
+                :key="player.id"
+                :data-index="index"
             >
-                <div class="row" 
-                    v-for="(player, index) in team.players"
-                    :key="player.id"
-                    :data-index="index"
-                >
 
-                    <div class="column">{{ player.full_name }}</div>
-                    <div class="column">
-                        <router-link :to="{path: '/players/stats/' + player.id}">Stats</router-link>
-                    </div>
-                    <div class="column" v-if="userCanManageTeam(team.id)">
-                        <a @click.prevent="removePlayer" 
-                            :data-player-id="player.id" 
-                            class="delete fa fa-times icon" 
-                            :href="'/api/teams/delete-player/' + team.id"
-                        >
-                        </a>
-                    </div>
-
+                <div class="column">{{ player.full_name }}</div>
+                <div class="column">
+                    <router-link :to="{path: '/players/stats/' + player.id}">Stats</router-link>
                 </div>
-            </transition-group>
+                <div class="column" v-if="userCanManageTeam(team.id)">
+                    <div @click.prevent="removePlayer(player.id, team.id)">
+                        <i class="fas fa-times"></i>
+                    </div>
+                </div>
+
+            </div>
+        </transition-group>
 
     </div>
 </template>
@@ -72,17 +69,17 @@
 
         methods: {
             
-            removePlayer: function(e) {
+            removePlayer: function(playerId, teamId) {
 
-                var vue = this;
-                vue.showLoading();
+                this.showLoading();
             
-                let player_id = e.target.dataset.playerId;
                 let post_data = {
-                    'player_id': player_id
+                    'player_id': playerId
                 }
                 
-                vue.$http.post(e.target.href, post_data).then( function(response) {
+                this.$http.post('/api/teams/delete-player/' + teamId, post_data).then( response => {
+
+                    console.log(response);
 
                 }, function (error) {
                 

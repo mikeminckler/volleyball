@@ -1,6 +1,3 @@
-
-var _ = require('lodash');
-
 window.$ = window.jQuery = require('jquery');
 require('./libs/jquery-ui');
 require('./libs/timepicker');
@@ -13,9 +10,7 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 
 var axios = require('axios');
-//var fullCalendar = require('fullcalendar');
 var moment = require('moment');
-
 var io = require('socket.io-client');
 
 if (window.location.hostname.indexOf('gamestats.brentwood.bc.ca') != -1) {
@@ -26,6 +21,9 @@ if (window.location.hostname.indexOf('gamestats.brentwood.bc.ca') != -1) {
 
 Vue.prototype.$http = axios;
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+import lodash from 'lodash';    
+Object.defineProperty(Vue.prototype, '$lodash', { value: lodash });
 
 if (window.app.csrfToken) {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = window.app.csrfToken;
@@ -327,60 +325,54 @@ var app = new Vue({
     methods: {
 
         selectNewTeam: function() {
-        
             this.$store.dispatch('removeActiveTeam');
             this.$router.push('/select-team');
-        
         },
 
         setTeamSessionId: function(team_id) {
         
-            var vue = this;
-            vue.$http.post('/api/set-team/' + team_id).then( function(response) {
-
-            }, function(error) {
-
+            this.$http.post('/api/set-team/' + team_id).then( response => {
+                this.$store.dispatch('addFeedback', {'type': 'success', 'message': response.data.success});
+            }, error => {
+                this.$store.dispatch('addFeedback', {'type': 'error', 'message': 'Error selecting a team'});
             });
 
         },
 
         logout: function(e){
 
-            var vue = this;
-            vue.$http.post(e.target.action).then( function(response) {
+            this.$http.post(e.target.action).then( response => {
 
                 window.socket.emit('auth.info', store.getters.user_name + ' has disconnected');
 
-                vue.$store.dispatch('removeUser');
+                this.$store.dispatch('removeUser');
                 // call the action for the store update
-                vue.$store.dispatch('removeToken').then( function() {
+                this.$store.dispatch('removeToken').then( function() {
                     window.socket.close();
                 });
 
-                vue.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged Out'});
-                vue.$store.dispatch('removeActiveTeam');
-                vue.$router.push('/login');
+                this.$store.dispatch('addFeedback', {'type': 'success', 'message': 'Logged Out'});
+                this.$store.dispatch('removeActiveTeam');
+                this.$router.push('/login');
 
-            }, function(error) {
+            }, error => {
                 // we have timed out or our token is invalid so lets go to the login page
-                vue.$router.push('/login');
+                this.$router.push('/login');
             });
 
         }, 
 
         loginCheck: function() {
         
-            var vue = this;
-
-            vue.$http.post('/api/login-check').then( function(response) {
+            this.$http.post('/api/login-check').then( response => {
 
                 if (response.data.status == 'timeout') {
-                    vue.timeout();
+                    this.timeout();
                 }
 
-            }, function(error) {
+            }, error => {
 
-                vue.timeout();
+                this.timeout();
 
             });
 
@@ -388,26 +380,23 @@ var app = new Vue({
 
         timeout: function() {
 
-            var vue = this;
-        
-            vue.$store.dispatch('removeToken').then( function() {
+            this.$store.dispatch('removeToken').then( () => {
                 window.socket.close();
             });
 
-            vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'Your session has timed out'});
-            vue.$store.dispatch('removeActiveTeam');
-            vue.$router.push('/login');
+            this.$store.dispatch('addFeedback', {'type': 'error', 'message': 'Your session has timed out'});
+            this.$store.dispatch('removeActiveTeam');
+            this.$router.push('/login');
 
         },
 
 
 		loadMenu: function() {
 
-			var vue = this;
-			vue.$http.post('/api/menu').then( function(response) {
-				vue.$store.dispatch('setMenu', response.data); 
-			}, function(error) {
-				vue.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading the menu'});
+			this.$http.post('/api/menu').then( response => {
+				this.$store.dispatch('setMenu', response.data); 
+			}, error => {
+				this.$store.dispatch('addFeedback', {'type': 'error', 'message': 'There was an error loading the menu'});
 			});
 
 		},
@@ -415,29 +404,18 @@ var app = new Vue({
     },
 
     mounted() {
-    
-        var vue = this;
-        vue.$router.push('/login');
-    
+        this.$router.push('/login');
     },
 
     created: function () {
 
-        var vue = this;
-
-        //if (!vue.$store.state.user.authenticated) {
-        //     vue.$router.push('/login');
-        //} else {
-        //    vue.$router.push('/home');
-        //}
-
-        window.socket.on('public.info', function (data) {
-            vue.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
+        window.socket.on('public.info', data => {
+            this.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
         });
 
-        window.socket.on('auth.info', function (data) {
-            app.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
-        }.bind(app));
+        window.socket.on('auth.info', data => {
+            this.$store.dispatch('addFeedback', {'type': 'info', 'message': data});
+        });
 
         /**
          *  Socket Events
@@ -447,91 +425,61 @@ var app = new Vue({
 
         // User Events
 
-        window.socket.on('App\\Events\\UserUpdated', function (data) {
+        window.socket.on('App\\Events\\UserUpdated', data => {
 
-            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+            this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
 
-            vue.$http.post('/api/users/my-info').then( function(response) {
-                vue.$store.dispatch('userInfo', response.data); 
-            }, function(error) {
+            this.$http.post('/api/users/my-info').then( response => {
+                this.$store.dispatch('userInfo', response.data); 
+            }, error => {
             
             });
 
         });
 
-        window.socket.on('App\\Events\\AuthAnnouncement', function (data) {
-            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        window.socket.on('App\\Events\\AuthAnnouncement', data => {
+            this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         });
 
-        window.socket.on('App\\Events\\UserCreated', function (data) {
-            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        window.socket.on('App\\Events\\UserCreated', data => {
+            this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         });
 
-        window.socket.on('App\\Events\\UserRemoved', function (data) {
-            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        window.socket.on('App\\Events\\UserRemoved', data => {
+            this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         });
 
 
         // Team Events
         
-        window.socket.on('App\\Events\\TeamCreated', function (data) {
-            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        window.socket.on('App\\Events\\TeamCreated', data => {
+            this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         });
 
-        window.socket.on('App\\Events\\TeamRemoved', function (data) {
-            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        window.socket.on('App\\Events\\TeamRemoved', data => {
+            this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         });
 
 
         // Game Events
 
-        window.socket.on('App\\Events\\GameCreated', function (data) {
-            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message, 'link': data.link});
+        window.socket.on('App\\Events\\GameCreated', data => {
+            this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message, 'link': data.link});
         });
 
-        window.socket.on('App\\Events\\GameRemoved', function (data) {
-            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
+        window.socket.on('App\\Events\\GameRemoved', data => {
+            this.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data.message});
         });
 
-        // Room Events
-        /*
-        window.socket.on('room-info', function (data) {
-            vue.$store.dispatch('addFeedback', {'type': 'announcement', 'message': data});
-        });
-        */
     }
 
 });
-
-/*
-window.axios.interceptors.request.use(function (config) {
-    // Do something before request is sent
-    app.showLoading();
-    return config;
-  }, function (error) {
-    // Do something with request error
-    return Promise.reject(error);
-  });
-
-window.axios.interceptors.response.use(function (response) {
-    // Do something with response data
-    app.hideLoading();
-    return response;
-  }, function (error) {
-    // Do something with response error
-    return Promise.reject(error);
-  });
-*/
 
 google.charts.load('current', {'packages':['corechart']});
 
 var supportsTouch = 'ontouchstart' in window || navigator.msMaxTouchPoints;
 
 $(function(){
-
-    /**
-     * Date Time Picker using jQuery UI
-     */
 
 	$(document).on('focus', 'input.datepicker', function(){
 		$(this).datepicker({
@@ -561,32 +509,5 @@ $(function(){
 		});
 	});
 
-    /** 
-     * A little Jquery to set css vars for windows size
-     * may be able to ditch all this if we dont need 
-     * window size
-     */
-/*
-    setWidth();
-
-	$(window).resize(function() {
-		if (supportsTouch) {
-			window.addEventListener('orientationchange', orientation_change, false);
-		} else {
-            setWidth();
-		}
-	});
-
-*/
-
 });
 
-/*
-function orientation_change() {
-	setWidth();
-}
-
-function setWidth() {
-    document.documentElement.style.setProperty('--screen-width', $(window).width() + 'px');
-}
-*/

@@ -74,23 +74,21 @@
         },
 
         mounted () {
-            var vue = this;
-            window.socket.on('App\\Events\\PlayerGameStatsUpdated', function (data) {
-                vue.loadTeamGameReport();
+            window.socket.on('App\\Events\\PlayerGameStatsUpdated', data => {
+                this.loadTeamGameReport();
             });
         },
 
         methods: {
             loadTeamGameReport: function() {
-                var vue = this;
 
                 let post_data = {
                     'game_ids': this.game_ids,
                     'players': this.playerFilter
                 }
                 
-                vue.$http.post('/api/teams/game-report/' + this.team.id, post_data).then( function(response) {
-                    vue.stats = response.data;
+                this.$http.post('/api/teams/game-report/' + this.team.id, post_data).then( response => {
+                    this.stats = response.data;
                 });
             }
         }

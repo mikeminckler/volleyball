@@ -28,9 +28,8 @@
         methods: {
 
             roleCheck(roles) {
-                var vue = this;
                 var hasRole = false;
-                return vue.userHasRole(roles);
+                return this.userHasRole(roles);
             }
 
         },

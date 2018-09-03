@@ -54,7 +54,7 @@
         created() {
 
             if (window.localStorage.teamId == this.team.id) {
-                vue.$router.push('/home');
+                this.$router.push('/home');
             }
 
             if (this.roles.length > 0) {
@@ -67,8 +67,8 @@
 
             showTeams: function() {
 
-                this.teams = _.uniqBy(
-                    _.map(this.$store.state.user.roles, function(role) {
+                this.teams = this.$lodash.uniqBy(
+                    this.$lodash.map(this.$store.state.user.roles, function(role) {
                         return {'id': role.team.id, 'name': role.team.team_name};
                     })
                  , 'id');
@@ -82,7 +82,7 @@
                     // wait for click on team
 
                 } else if (this.teams.length == 1) {
-                    this.loadTeam(_.head(this.teams).id);
+                    this.loadTeam(this.$lodash.head(this.teams).id);
                 } else {
                     // logout we have no teams
                     this.$store.dispatch('addFeedback', {'type': 'error', 'message': 'You are not assigned to a Team'});
@@ -97,15 +97,14 @@
 
             setTeam: function() {
 
-                var vue = this;
-                vue.$store.dispatch('setActiveTeam', this.team);
+                this.$store.dispatch('setActiveTeam', this.team);
 
                 // load the home page now that we are logged in
-                if (vue.$store.state.intended != '/login' && vue.$store.state.intended.length > 0) {
-                    vue.$router.push(vue.$store.state.intended);
-                    vue.$store.state.intended = '';
+                if (this.$store.state.intended != '/login' && this.$store.state.intended.length > 0) {
+                    this.$router.push(this.$store.state.intended);
+                    this.$store.state.intended = '';
                 } else {
-                    vue.$router.push('/home');
+                    this.$router.push('/home');
                 }
             }
 

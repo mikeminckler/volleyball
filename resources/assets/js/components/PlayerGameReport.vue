@@ -48,22 +48,20 @@
         },
 
         mounted () {
-            var vue = this;
-            window.socket.on('App\\Events\\PlayerGameStatsUpdated', function (data) {
-                vue.loadPlayerGameReport();
+            window.socket.on('App\\Events\\PlayerGameStatsUpdated', data => {
+                this.loadPlayerGameReport();
             });
         },
 
         methods: {
             loadPlayerGameReport: function() {
-                var vue = this;
 
                 let post_data = {
                     'game_ids': this.game_ids
                 }
                 
-                vue.$http.post('/api/players/game-report/' + this.player.id, post_data).then( function(response) {
-                    vue.games = response.data;
+                this.$http.post('/api/players/game-report/' + this.player.id, post_data).then( response => {
+                    this.games = response.data;
                 });
             }
         }

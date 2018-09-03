@@ -49,17 +49,22 @@ class PlayerGameController extends Controller
         return $player->getGameStatScore($game, $stat, $team);
     }
 
-    public function removeLastStat(Request $request, $id)
+    public function removeLastStat($id)
     {
         $player = $this->player->findOrFail($id);
         $stat = $player->stats->sortByDesc('created_at')->first();
         if ($stat instanceof PlayerStat) {
-            $game = $stat->game;
+            $game = $stat->getGame();
             $statType = $stat->stat;
             $stat->delete();
             if ($game instanceof Game) {
                 event( new PlayerGameStatsUpdated($player, $game, $statType) );
+            } else {
+                return response()->json(['error' => 'Could not find Game'], 422);
             }
+            return response()->json(['success' => 'Removed stat for '.$player->full_name]);
+        } else {
+            return response()->json(['error' => 'Could not find a stat for '.$player->full_name], 422);
         }
 
     }

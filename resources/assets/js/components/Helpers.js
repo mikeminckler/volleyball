@@ -17,7 +17,7 @@ export default {
         },
 
         upperCase(value) {
-            return _.capitalize(value);
+            return this.$lodash.capitalize(value);
         }
 
     }

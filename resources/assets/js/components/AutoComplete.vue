@@ -2,7 +2,7 @@
 
     <div class="search">
 
-        <input id="terms" 
+        <input :id="'search_' + name" 
                 class="input" 
                 name="terms" 
                 v-model="terms" 
@@ -93,11 +93,11 @@
             selectNext: function(e) {
 
                 if (this.results.length > 0) {
-                    let current = _.findIndex(this.results, function(result) {
+                    let current = this.$lodash.findIndex(this.results, function(result) {
                         return result.selected;
                     });
 
-                    _.forEach(this.results, function(result) {
+                    this.$lodash.forEach(this.results, function(result) {
                         result.selected = false;
                     });
 
@@ -119,11 +119,11 @@
             selectPrev: function(e) {
 
                 if (this.results.length > 0) {
-                    let current = _.findIndex(this.results, function(result) {
+                    let current = this.$lodash.findIndex(this.results, function(result) {
                         return result.selected;
                     });
 
-                    _.forEach(this.results, function(result) {
+                    this.$lodash.forEach(this.results, function(result) {
                         result.selected = false;
                     });
 
@@ -144,7 +144,7 @@
 
             selectCurrent: function(e) {
 
-                let current = _.findIndex(this.results, function(result) {
+                let current = this.$lodash.findIndex(this.results, function(result) {
                     return result.selected;
                 });
 
@@ -159,25 +159,23 @@
             search: _.debounce(
                 function () {
 
-                    var vue = this;
-
                     let post_data = {
                         'terms': this.terms
                     }
 
-                    vue.$http.post('/api/search/' + this.object, post_data).then( function(response) {
+                    this.$http.post('/api/search/' + this.object, post_data).then( response => {
                         let res = response.data;
-                        if (vue.canAdd) {
+                        if (this.canAdd) {
                             res.push({
                                 id: 0,
-                                value: vue.terms,
-                                label: 'Add ' + vue.terms,
+                                value: this.terms,
+                                label: 'Add ' + this.terms,
                                 selected: false,
-                                add: vue.canAdd
+                                add: this.canAdd
                             });
                         } 
-                        vue.results = response.data;
-                    }, function (error) {
+                        this.results = response.data;
+                    }, error => {
                     
                     });
 
@@ -210,7 +208,7 @@
                 if (this.add != undefined) {
                     let addFunction = this.add;
 
-                    if ( _.isFunction(this[addFunction])) {
+                    if ( this.$lodash.isFunction(this[addFunction])) {
                         this[addFunction]();
                         this.add = '';
                     }
@@ -224,7 +222,7 @@
                     postFunction = postFunction.substring(0, postFunction.indexOf('('));
                 }
 
-                if ( _.isFunction(this[postFunction])) {
+                if ( this.$lodash.isFunction(this[postFunction])) {
                     this[postFunction](postOptions);
                 }
 
@@ -248,15 +246,15 @@
             addPlayerToTeam: function(team_id) {
 
                 if (this.id) {
-                    var vue = this;
+                    
                     let post_data = {
                         'user_id': this.id,
                         'team_id': team_id
                     }
 
-                    vue.showLoading();
+                    this.showLoading();
 
-                    vue.$http.post('/api/teams/add-player/' + team_id, post_data).then( function(response) {
+                    this.$http.post('/api/teams/add-player/' + team_id, post_data).then( response => {
                         
                     }, function (error) {
                     
@@ -267,16 +265,15 @@
 
             addTeam: function() {
 
-                var vue = this;
                 let post_data = {
                     'team_name': this.terms
                 }
 
-                vue.$http.post('/api/teams/create', post_data).then( function(response) {
+                this.$http.post('/api/teams/create', post_data).then( response => {
 
-                    vue.clicked = true;
-                    vue.terms = response.data.team_name;
-                    vue.id = response.data.id;
+                    this.clicked = true;
+                    this.terms = response.data.team_name;
+                    this.id = response.data.id;
 
                 }, function (error) {
                 
