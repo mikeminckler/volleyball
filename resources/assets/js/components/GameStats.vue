@@ -101,8 +101,9 @@
                     start_time: ''
                 },
                 tabs: {
-                    tab1: true,
-                    tab2: false,
+                    // here we can set the default tab
+                    tab1: false,
+                    tab2: true,
                     tab3: false
                 }
             }

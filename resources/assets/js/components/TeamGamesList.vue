@@ -7,6 +7,30 @@
             <div v-if="userHasRole(['admin', 'coach', 'team_manager'])"><router-link class="button button-icon create" to="/games/create">Create Game</router-link></div>
         </section>
 
+        <transition name="fade">
+            <div class="game-summary">
+
+                <div class="game-summary-team">
+                    <section v-if="showReport">
+                        <team-game-report :team="team" :game_ids="reportGames" :playerFilter="playerFilter"></team-game-report>
+                    </section>
+                </div>
+
+                <div class="game-summary-team">
+                    <section v-if="showReport">
+                        <team-players-stats-report :team="team" :game_ids="reportGames" :playerFilter="playerFilter"></team-players-stats-report>
+                    </section>
+                </div>
+
+            </div>
+        </transition>
+
+        <transition name="fade">
+            <section v-if="showReport">
+                <div id="team_game_chart"></div>
+            </section>
+        </transition>
+
         <section v-if="team.games">
 
             <transition-group 
@@ -85,31 +109,6 @@
 
             </div>
         </section>
-
-
-        <transition name="fade">
-            <div class="game-summary">
-
-                <div class="game-summary-team">
-                    <section v-if="showReport">
-                        <team-game-report :team="team" :game_ids="reportGames" :playerFilter="playerFilter"></team-game-report>
-                    </section>
-                </div>
-
-                <div class="game-summary-team">
-                    <section v-if="showReport">
-                        <team-players-stats-report :team="team" :game_ids="reportGames" :playerFilter="playerFilter"></team-players-stats-report>
-                    </section>
-                </div>
-
-            </div>
-        </transition>
-
-        <transition name="fade">
-            <section v-if="showReport">
-                <div id="team_game_chart"></div>
-            </section>
-        </transition>
 
     </div>
 
