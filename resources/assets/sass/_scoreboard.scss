@@ -29,6 +29,12 @@ div.score-dash {
     text-align: center;
 }
 
+div.score-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 button.add-point, button.remove-point {
     width: 30px;
     height: 30px;
