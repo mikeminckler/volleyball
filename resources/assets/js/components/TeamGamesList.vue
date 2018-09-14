@@ -4,7 +4,12 @@
 
         <section class="header">
             <div class="h1">{{ team.team_name }} Games</div>
-            <div v-if="userHasRole(['admin', 'coach', 'team_manager'])"><router-link class="button button-icon create" to="/games/create">Create Game</router-link></div>
+            <div v-if="userHasRole(['admin', 'coach', 'team_manager'])">
+                <router-link class="button" to="/games/create">
+                    <i class="fas fa-plus"></i>
+                    <div class="">Create Game</div>
+                </router-link>
+            </div>
         </section>
 
         <transition name="fade">

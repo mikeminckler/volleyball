@@ -12,7 +12,18 @@ div.feedback-item {
     display: flex;
     margin: 4px;
     align-items: center;
-    padding-right: 5px;
+    padding: 5px;
+
+    & svg {
+        padding: 0 5px;
+    }
+}
+
+div.feedback-icon {
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 div.feedback-item.success {
@@ -37,28 +48,4 @@ div.feedback-item.announcement {
     background-color: var(--announcement-bg);
     border: 1px solid var(--announcement-border);
     color: var(--announcement-color);
-}
-
-div.feedback-item::before {
-    font-family: FontAwesome;
-    width: 18px;
-    display: inline-block;
-    text-align: center;
-    padding: 3px;
-}
-
-div.feedback-item.error:before {
-    content: "\f00d";
-}
-
-div.feedback-item.success:before {
-    content: "\f00c";
-}
-
-div.feedback-item.info:before {
-    content: "\f129";
-}
-
-div.feedback-item.announcement:before {
-    content: "\f0a1";
 }

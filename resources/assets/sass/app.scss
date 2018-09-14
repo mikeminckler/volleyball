@@ -117,12 +117,19 @@ div.header {
     color: var(--button-text-color);
     padding: 3px 8px;
     line-height: var(--line-height);
-    display: inline-block;
+    display: flex;
     font-size: var(--input-font-size);
     font-weight: var(--font-weight);
     cursor: pointer;
     margin-bottom: 2px;
+    justify-content: center;
+    align-items: center;
+
+    & svg {
+        padding-right: 5px;
+    }
 }
+
 
 div.button.player-filter {
     text-align: center;
@@ -450,33 +457,10 @@ a.icon {
     border-radius: 50%;
 }
 
-.button-icon:before {
-    font-family: FontAwesome;
-    width: 16px;
-    display: inline-block;
-    margin: 0;
-    padding: 0;
-    position: relative;
-}
-
-.create:before {
-    content: "\f067";
-    color: #1f7635;
-}
-
-.create:hover {
-    background-color: var(--success-bg);
-}
-
 .game-center:before {
     content: "\f192";
     color: var(--link-color);
 }
-
-.game-center:hover {
-    background-color: var(--search-results-highlight);
-}
-
 
 /* SEARCH */
 
