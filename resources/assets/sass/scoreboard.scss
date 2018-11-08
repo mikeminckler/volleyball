@@ -1,0 +1,107 @@
+@import url('//fonts.googleapis.com/css?family=Roboto:300,400,500,700,900');
+
+@import "app";
+@import "feedback";
+@import "jquery-ui";
+@import "rows";
+@import "scoreboard";
+@import "stats";
+@import "vue-transitions";
+
+:root {
+
+    --bg-color: #00FF00;
+    --text-color: #FFFFFF;
+    --font: Roboto, sans-serif;
+}
+
+div.container {
+    padding: 0px;
+}
+
+
+div.temp-scoreboard {
+    border: 1px solid black;
+    width: 375px;
+
+    & div.court {
+        padding: 10px 0;
+    }
+
+    & div.score-title {
+        text-align: center;
+    }
+
+    & div.scoreboard-info {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    & div.scoreboard-info.sets {
+        position: relative;
+        top: -3px;    
+    }
+
+    & div.score-set {
+        font-weight: 700;
+    }
+
+    & div.score-number {
+        font-size: 30px;
+        font-weight: 900;
+        width: 50px;
+        padding: 0;
+        text-align: center;
+    }
+
+    & div.score-dash:not(.lower) {
+        width: 0;
+    }
+
+    & div.score-set {
+        width: 100%;
+    }
+
+    & div.score-sets {
+        padding: 0px;
+    }
+
+    & button.add {
+        width: 35px;
+        height: 35px;
+        margin: 3px 5px;
+    }
+
+    & input.scoreboard-team-name {
+        background-color: transparent;
+        border: 0;
+        color: var(--font-color);
+        font-size: 18px;
+        font-weight: 700;
+        width: 55px;
+        text-align: center;
+        position: relative;
+        top: 5px;
+        padding: 0 0 0 5px;
+    }
+
+    & input.scoreboard-team-name-left {
+        padding: 0 5px 0 0;
+    }
+
+    & div.scoreboard-reset {
+
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        top: -15px;
+
+        & div.scoreboard-reset-button {
+            width: 100px;
+        }
+    }
+
+
+}

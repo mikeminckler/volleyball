@@ -18,11 +18,6 @@ var socketioJwt = require('socketio-jwt');
 var Redis = require('ioredis');
 var redis = new Redis();
 
-io.on('connection', socketioJwt.authorize({
-    secret: process.env.JWT_SECRET,
-    timeout: 15000
-}));
-
 io.on('authenticated', function (socket) {
 
     /** we can access the token props via socket.decoded_token
@@ -32,6 +27,8 @@ io.on('authenticated', function (socket) {
      *  socket.decoded_token.email
      *  socket.decoded_token.name
      */
+
+    //console.log('AUTH: ' + socket.decoded_token.name);
 
     socket.join('user.' + socket.decoded_token.userid);
 
@@ -82,12 +79,22 @@ io.on('authenticated', function (socket) {
     });
 });
 
+io.on('connection', socketioJwt.authorize({
+    secret: process.env.JWT_SECRET,
+    timeout: 15000,
+}));
+
 io.on('connection', function( socket ) {
 
     socket.join('public.info');
 
     socket.on('public.info', function (message) {
         socket.broadcast.to('public.info').emit('public.info', message);
+    });
+
+    socket.on('join-scoreboard', function() {
+        //console.log('JOIN SCOREBOARD');
+        socket.join('scoreboard');
     });
 
 });
@@ -98,6 +105,7 @@ io.on('connection', function( socket ) {
 
 redis.subscribe('auth.info');
 redis.subscribe('public.info');
+redis.subscribe('scoreboard');
 
 redis.psubscribe('user.*');
 redis.psubscribe('team.*');

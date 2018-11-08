@@ -77,3 +77,11 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::post('charts/player-games', ['as' => 'charts.player-games', 'uses' => 'ChartsController@playerGames']);
 
 });
+
+Route::post('courts/load', 'CourtsController@load')->name('courts.load');
+Route::post('courts/add-point', 'CourtsController@addPoint')->name('courts.add-point');
+Route::post('courts/remove-point', 'CourtsController@removePoint')->name('courts.remove-point');
+Route::post('courts/add-set', 'CourtsController@addSet')->name('courts.add-set');
+Route::post('courts/remove-set', 'CourtsController@removeSet')->name('courts.remove-set');
+Route::post('courts/set-team-name', 'CourtsController@setTeamName')->name('courts.set-team-name');
+Route::post('courts/reset-scores', 'CourtsController@resetScores')->name('courts.reset-scores');
