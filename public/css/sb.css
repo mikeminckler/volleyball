@@ -1,4 +1,6 @@
-@import url(//fonts.googleapis.com/css?family=Roboto:300,400,500,700,900);@import url(//fonts.googleapis.com/css?family=Lato:200,300,400,700);div.feedback {
+@import url(//fonts.googleapis.com/css?family=Roboto:300,400,500,700,900);@import url(//fonts.googleapis.com/css?family=Lato:200,300,400,700);@charset "UTF-8";
+
+div.feedback {
   position: fixed;
   bottom: 45px;
   right: 15px;
@@ -9,13 +11,9 @@ div.feedback-item {
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   cursor: pointer;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   margin: 4px;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
   padding: 5px;
 }
 
@@ -25,15 +23,9 @@ div.feedback-item svg {
 
 div.feedback-icon {
   width: 20px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 div.feedback-item.success {
@@ -135,7 +127,7 @@ div.feedback-item.announcement {
 .ui-icon {
   display: inline-block;
   vertical-align: middle;
-  margin-top: -.25em;
+  margin-top: -0.25em;
   position: relative;
   text-indent: -99999px;
   overflow: hidden;
@@ -166,7 +158,7 @@ div.feedback-item.announcement {
   cursor: pointer;
   position: relative;
   margin: 2px 0 0 0;
-  padding: .5em .5em .5em .7em;
+  padding: 0.5em 0.5em 0.5em 0.7em;
   font-size: 100%;
 }
 
@@ -204,7 +196,7 @@ div.feedback-item.announcement {
 
 .ui-menu .ui-menu-item-wrapper {
   position: relative;
-  padding: 3px 1em 3px .4em;
+  padding: 3px 1em 3px 0.4em;
 }
 
 .ui-menu .ui-menu-divider {
@@ -236,7 +228,7 @@ div.feedback-item.announcement {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: .2em;
+  left: 0.2em;
   margin: auto 0;
 }
 
@@ -248,11 +240,11 @@ div.feedback-item.announcement {
 }
 
 .ui-button {
-  padding: .4em 1em;
+  padding: 0.4em 1em;
   display: inline-block;
   position: relative;
   line-height: normal;
-  margin-right: .1em;
+  margin-right: 0.1em;
   cursor: pointer;
   vertical-align: middle;
   text-align: center;
@@ -276,8 +268,7 @@ div.feedback-item.announcement {
 
 .ui-button-icon-only {
   width: 2em;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   text-indent: -9999px;
   white-space: nowrap;
 }
@@ -311,7 +302,7 @@ input.ui-button.ui-icon-notext .ui-icon {
   height: auto;
   text-indent: 0;
   white-space: normal;
-  padding: .4em 1em;
+  padding: 0.4em 1em;
 }
 
 /* workarounds */
@@ -350,12 +341,11 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-controlgroup-vertical .ui-controlgroup-item {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .ui-controlgroup .ui-controlgroup-label {
-  padding: .4em 1em;
+  padding: 0.4em 1em;
 }
 
 .ui-controlgroup .ui-controlgroup-label span {
@@ -383,7 +373,7 @@ button.ui-button::-moz-focus-inner {
 .ui-controlgroup-vertical .ui-spinner-input {
   /* Support: IE8 only, Android < 4.4 only */
   width: 75%;
-  width: calc( 100% - 2.4em);
+  width: calc( 100% - 2.4em );
 }
 
 .ui-controlgroup-vertical .ui-spinner .ui-spinner-up {
@@ -391,9 +381,8 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-checkboxradio-label .ui-icon-background {
-  -webkit-box-shadow: inset 1px 1px 1px #ccc;
-          box-shadow: inset 1px 1px 1px #ccc;
-  border-radius: .12em;
+  box-shadow: inset 1px 1px 1px #ccc;
+  border-radius: 0.12em;
   border: none;
 }
 
@@ -420,13 +409,13 @@ button.ui-button::-moz-focus-inner {
 
 .ui-datepicker {
   width: 17em;
-  padding: .2em .2em 0;
+  padding: 0.2em 0.2em 0;
   display: none;
 }
 
 .ui-datepicker .ui-datepicker-header {
   position: relative;
-  padding: .2em 0;
+  padding: 0.2em 0;
 }
 
 .ui-datepicker .ui-datepicker-prev,
@@ -486,13 +475,13 @@ button.ui-button::-moz-focus-inner {
 
 .ui-datepicker table {
   width: 100%;
-  font-size: .9em;
+  font-size: 0.9em;
   border-collapse: collapse;
-  margin: 0 0 .4em;
+  margin: 0 0 0.4em;
 }
 
 .ui-datepicker th {
-  padding: .7em .3em;
+  padding: 0.7em 0.3em;
   text-align: center;
   font-weight: bold;
   border: 0;
@@ -506,15 +495,15 @@ button.ui-button::-moz-focus-inner {
 .ui-datepicker td span,
 .ui-datepicker td a {
   display: block;
-  padding: .2em;
+  padding: 0.2em;
   text-align: right;
   text-decoration: none;
 }
 
 .ui-datepicker .ui-datepicker-buttonpane {
   background-image: none;
-  margin: .7em 0 0 0;
-  padding: 0 .2em;
+  margin: 0.7em 0 0 0;
+  padding: 0 0.2em;
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
@@ -522,9 +511,9 @@ button.ui-button::-moz-focus-inner {
 
 .ui-datepicker .ui-datepicker-buttonpane button {
   float: right;
-  margin: .5em .2em .4em;
+  margin: 0.5em 0.2em 0.4em;
   cursor: pointer;
-  padding: .2em .6em .3em .6em;
+  padding: 0.2em 0.6em 0.3em 0.6em;
   width: auto;
   overflow: visible;
 }
@@ -545,7 +534,7 @@ button.ui-button::-moz-focus-inner {
 
 .ui-datepicker-multi .ui-datepicker-group table {
   width: 95%;
-  margin: 0 auto .4em;
+  margin: 0 auto 0.4em;
 }
 
 .ui-datepicker-multi-2 .ui-datepicker-group {
@@ -627,26 +616,26 @@ button.ui-button::-moz-focus-inner {
   text-indent: -99999px;
   overflow: hidden;
   background-repeat: no-repeat;
-  left: .5em;
-  top: .3em;
+  left: 0.5em;
+  top: 0.3em;
 }
 
 .ui-dialog {
   position: absolute;
   top: 0;
   left: 0;
-  padding: .2em;
+  padding: 0.2em;
   outline: 0;
 }
 
 .ui-dialog .ui-dialog-titlebar {
-  padding: .4em 1em;
+  padding: 0.4em 1em;
   position: relative;
 }
 
 .ui-dialog .ui-dialog-title {
   float: left;
-  margin: .1em 0;
+  margin: 0.1em 0;
   white-space: nowrap;
   width: 90%;
   overflow: hidden;
@@ -655,7 +644,7 @@ button.ui-button::-moz-focus-inner {
 
 .ui-dialog .ui-dialog-titlebar-close {
   position: absolute;
-  right: .3em;
+  right: 0.3em;
   top: 50%;
   width: 20px;
   margin: -10px 0 0 0;
@@ -666,7 +655,7 @@ button.ui-button::-moz-focus-inner {
 .ui-dialog .ui-dialog-content {
   position: relative;
   border: 0;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   background: none;
   overflow: auto;
 }
@@ -675,8 +664,8 @@ button.ui-button::-moz-focus-inner {
   text-align: left;
   border-width: 1px 0 0 0;
   background-image: none;
-  margin-top: .5em;
-  padding: .3em 1em .5em .4em;
+  margin-top: 0.5em;
+  padding: 0.3em 1em 0.5em 0.4em;
 }
 
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
@@ -684,7 +673,7 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-dialog .ui-dialog-buttonpane button {
-  margin: .5em .4em .5em 0;
+  margin: 0.5em 0.4em 0.5em 0;
   cursor: pointer;
 }
 
@@ -741,7 +730,6 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-draggable-handle {
-  -ms-touch-action: none;
   touch-action: none;
 }
 
@@ -753,7 +741,6 @@ button.ui-button::-moz-focus-inner {
   position: absolute;
   font-size: 0.1px;
   display: block;
-  -ms-touch-action: none;
   touch-action: none;
 }
 
@@ -850,7 +837,6 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-selectable {
-  -ms-touch-action: none;
   touch-action: none;
 }
 
@@ -918,14 +904,13 @@ button.ui-button::-moz-focus-inner {
   width: 1.2em;
   height: 1.2em;
   cursor: default;
-  -ms-touch-action: none;
   touch-action: none;
 }
 
 .ui-slider .ui-slider-range {
   position: absolute;
   z-index: 1;
-  font-size: .7em;
+  font-size: 0.7em;
   display: block;
   border: 0;
   background-position: 0 0;
@@ -940,12 +925,12 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-slider-horizontal {
-  height: .8em;
+  height: 0.8em;
 }
 
 .ui-slider-horizontal .ui-slider-handle {
-  top: -.3em;
-  margin-left: -.6em;
+  top: -0.3em;
+  margin-left: -0.6em;
 }
 
 .ui-slider-horizontal .ui-slider-range {
@@ -962,14 +947,14 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-slider-vertical {
-  width: .8em;
+  width: 0.8em;
   height: 100px;
 }
 
 .ui-slider-vertical .ui-slider-handle {
-  left: -.3em;
+  left: -0.3em;
   margin-left: 0;
-  margin-bottom: -.6em;
+  margin-bottom: -0.6em;
 }
 
 .ui-slider-vertical .ui-slider-range {
@@ -986,7 +971,6 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-sortable-handle {
-  -ms-touch-action: none;
   touch-action: none;
 }
 
@@ -1002,17 +986,17 @@ button.ui-button::-moz-focus-inner {
   border: none;
   background: none;
   color: inherit;
-  padding: .222em 0;
-  margin: .2em 0;
+  padding: 0.222em 0;
+  margin: 0.2em 0;
   vertical-align: middle;
-  margin-left: .4em;
+  margin-left: 0.4em;
   margin-right: 2em;
 }
 
 .ui-spinner-button {
   width: 1.6em;
   height: 50%;
-  font-size: .5em;
+  font-size: 0.5em;
   padding: 0;
   margin: 0;
   text-align: center;
@@ -1042,12 +1026,12 @@ button.ui-button::-moz-focus-inner {
 .ui-tabs {
   position: relative;
   /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
-  padding: .2em;
+  padding: 0.2em;
 }
 
 .ui-tabs .ui-tabs-nav {
   margin: 0;
-  padding: .2em .2em 0;
+  padding: 0.2em 0.2em 0;
 }
 
 .ui-tabs .ui-tabs-nav li {
@@ -1055,7 +1039,7 @@ button.ui-button::-moz-focus-inner {
   float: left;
   position: relative;
   top: 0;
-  margin: 1px .2em 0 0;
+  margin: 1px 0.2em 0 0;
   border-bottom-width: 0;
   padding: 0;
   white-space: nowrap;
@@ -1063,7 +1047,7 @@ button.ui-button::-moz-focus-inner {
 
 .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
   float: left;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   text-decoration: none;
 }
 
@@ -1104,7 +1088,7 @@ body .ui-tooltip {
 ----------------------------------*/
 
 .ui-widget {
-  font-family: Arial,Helvetica,sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 1em;
 }
 
@@ -1116,7 +1100,7 @@ body .ui-tooltip {
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-  font-family: Arial,Helvetica,sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 1em;
 }
 
@@ -1200,8 +1184,7 @@ a.ui-button:focus {
 }
 
 .ui-visual-focus {
-  -webkit-box-shadow: 0 0 3px 1px #5e9ed6;
-          box-shadow: 0 0 3px 1px #5e9ed6;
+  box-shadow: 0 0 3px 1px rgb(94, 158, 214);
 }
 
 .ui-state-active,
@@ -1280,7 +1263,7 @@ a.ui-button:active,
 .ui-priority-secondary,
 .ui-widget-content .ui-priority-secondary,
 .ui-widget-header .ui-priority-secondary {
-  opacity: .7;
+  opacity: 0.7;
   filter: Alpha(Opacity=70);
   /* support: IE8 */
   font-weight: normal;
@@ -1289,7 +1272,7 @@ a.ui-button:active,
 .ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled {
-  opacity: .35;
+  opacity: 0.35;
   filter: Alpha(Opacity=35);
   /* support: IE8 */
   background-image: none;
@@ -2086,27 +2069,22 @@ a.ui-button:active,
 
 .ui-widget-overlay {
   background: #aaaaaa;
-  opacity: .003;
+  opacity: 0.003;
   filter: Alpha(Opacity=0.3);
   /* support: IE8 */
 }
 
 .ui-widget-shadow {
-  -webkit-box-shadow: 0px 0px 5px #666666;
   box-shadow: 0px 0px 5px #666666;
 }
 
 div.row {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   line-height: var(--input-line-height);
 }
 
 div.column {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
   padding-right: 5px;
   border-bottom: 1px solid var(--border-color);
   white-space: nowrap;
@@ -2117,16 +2095,12 @@ div.column .button {
 }
 
 div.column.shrink {
-  -webkit-box-flex: 0;
-      -ms-flex: 0;
-          flex: 0;
+  flex: 0;
 }
 
 div.player-name.column {
   min-width: 150px;
-  -webkit-box-flex: 0;
-      -ms-flex: 0;
-          flex: 0;
+  flex: 0;
 }
 
 div.w-50 {
@@ -2150,12 +2124,8 @@ div.row div.column:first-child {
 }
 
 div.score {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
 }
 
 div.score-numbers {
@@ -2185,15 +2155,9 @@ div.score-dash {
 }
 
 div.score-controls {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 button.add-point,
@@ -2215,18 +2179,12 @@ div.score-sets {
 }
 
 div.stats-header {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 
 div.stats-header-item {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
 }
 
 div.stats-header-right {
@@ -2239,12 +2197,8 @@ input.stat-setting {
 }
 
 div.player-game-stat {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
 }
 
 button.stat {
@@ -2261,9 +2215,7 @@ div.stat-score {
 }
 
 div.stats-player.row {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
 }
 
 div.stat-attempts {
@@ -2277,10 +2229,7 @@ div.stat-attempts {
 
 div.stat-score-container {
   border-radius: var(--border-radius);
-  -webkit-transition: all .2s;
-  transition: all .2s;
-  display: -webkit-box;
-  display: -ms-flexbox;
+  transition: all 0.2s;
   display: flex;
   width: 55px;
   height: 24px;
@@ -2295,8 +2244,6 @@ div.stat-score-container.changed {
 }
 
 div.tab-header {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   padding-left: 10px;
 }
@@ -2337,10 +2284,9 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 
 .fade-enter-active,
 .fade-leave-active {
-  -webkit-transition: opacity .1s ease-out, -webkit-transform .1s ease-out;
-  transition: opacity .1s ease-out, -webkit-transform .1s ease-out;
-  transition: opacity .1s ease-out, transform .1s ease-out;
-  transition: opacity .1s ease-out, transform .1s ease-out, -webkit-transform .1s ease-out;
+  transition: opacity 0.1s ease-out, -webkit-transform 0.1s ease-out;
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out, -webkit-transform 0.1s ease-out;
 }
 
 .fade-enter,
@@ -2352,10 +2298,9 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 
 .slide-down-enter-active,
 .slide-down-leave-active {
-  -webkit-transition: opacity .5s ease-out, -webkit-transform .5s ease-out;
-  transition: opacity .5s ease-out, -webkit-transform .5s ease-out;
-  transition: opacity .5s ease-out, transform .5s ease-out;
-  transition: opacity .5s ease-out, transform .5s ease-out, -webkit-transform .5s ease-out;
+  transition: opacity 0.5s ease-out, -webkit-transform 0.5s ease-out;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out, -webkit-transform 0.5s ease-out;
 }
 
 .slide-down-enter,
@@ -2367,10 +2312,9 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 /* FEEDBACK */
 
 .feedback-item {
-  -webkit-transition: opacity .5s ease-out, -webkit-transform .5s ease-out;
-  transition: opacity .5s ease-out, -webkit-transform .5s ease-out;
-  transition: opacity .5s ease-out, transform .5s ease-out;
-  transition: opacity .5s ease-out, transform .5s ease-out, -webkit-transform .5s ease-out;
+  transition: opacity 0.5s ease-out, -webkit-transform 0.5s ease-out;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out, -webkit-transform 0.5s ease-out;
 }
 
 .feedback-enter,
@@ -2382,7 +2326,7 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 
 :root {
   --screen-width: 320px;
-  --font: 'Lato', sans-serif;
+  --font: "Lato", sans-serif;
   --link-color: #21659e;
   --bg-color: #f4f5f9;
   --text-color: #252c41;
@@ -2448,8 +2392,7 @@ input,
 textarea,
 a,
 button {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   font-weight: var(--font-weight);
   font-family: var(--font);
 }
@@ -2474,8 +2417,6 @@ div.header {
   width: 100%;
   line-height: 35px;
   font-size: var(--header-font-size);
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   background-color: var(--light-bg);
   z-index: 20;
@@ -2489,19 +2430,13 @@ button {
   color: var(--button-text-color);
   padding: 3px 8px;
   line-height: var(--line-height);
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   font-size: var(--input-font-size);
   font-weight: var(--font-weight);
   cursor: pointer;
   margin-bottom: 2px;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .button svg,
@@ -2526,25 +2461,16 @@ div.button.player-filter {
 }
 
 div.menu {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  display: -webkit-box;
-  display: -ms-flexbox;
+  flex: 1;
   display: flex;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 div.menu-item {
   text-align: center;
   padding: 0px 10px;
-  -ms-flex-wrap: nowrap;
-      flex-wrap: nowrap;
+  flex-wrap: nowrap;
   white-space: nowrap;
 }
 
@@ -2556,14 +2482,10 @@ div.menu div.menu-item a {
 div.home-link,
 div.right-menu {
   padding: 0px 10px;
-  -webkit-box-flex: 0;
-      -ms-flex: 0;
-          flex: 0;
+  flex: 0;
 }
 
 div.right-menu {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
@@ -2621,16 +2543,12 @@ a {
 }
 
 section {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
   padding-top: var(--section-padding);
   padding-bottom: var(--section-padding);
 }
 
 section.header {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
@@ -2679,17 +2597,13 @@ button {
 }
 
 div.form-block {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   padding: 1px;
 }
 
 div.form-label,
 div.form-input {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
   padding: 0px 2px;
 }
 
@@ -2716,7 +2630,7 @@ textarea {
   border: 1px solid var(--border-color);
 }
 
-input:not([type="checkbox"]) {
+input:not([type=checkbox]) {
   width: 100%;
 }
 
@@ -2729,7 +2643,7 @@ input:-webkit-autofill {
   -webkit-text-fill-color: var(--link-color) !important;
 }
 
-input[type="checkbox"] {
+input[type=checkbox] {
   -webkit-appearance: none;
   width: 20px;
   height: 20px;
@@ -2738,16 +2652,15 @@ input[type="checkbox"] {
   cursor: pointer;
   position: relative;
   background-color: var(--button-color);
-  -webkit-transition: all .2s;
-  transition: all .2s;
+  transition: all 0.2s;
 }
 
-input[type="checkbox"]:checked {
+input[type=checkbox]:checked {
   background-color: var(--checkbox-color);
   border: 1px solid var(--border-highlight-color);
 }
 
-input[type="checkbox"]:after {
+input[type=checkbox]:after {
   font-family: FontAwesome;
   width: 18px;
   display: inline-block;
@@ -2758,22 +2671,16 @@ input[type="checkbox"]:after {
   content: "";
 }
 
-input[type="checkbox"]:checked:after {
+input[type=checkbox]:checked:after {
   content: "\F00C";
 }
 
 /* SELECT TEAM */
 
 div.select-team-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   height: 100%;
 }
 
@@ -2783,8 +2690,7 @@ div.select-team {
   border: 1px solid var(--border-color);
   padding: 15px;
   background-color: #fff;
-  -webkit-box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-          box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
 }
 
 div.select-team-item {
@@ -2810,23 +2716,16 @@ div.login {
   border: 1px solid var(--border-color);
   padding: 15px;
   background-color: var(--light-bg);
-  -webkit-box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-          box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
   margin-bottom: 50px;
 }
 
 div.login-container {
   height: 100%;
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 div.login-logo {
@@ -2839,20 +2738,11 @@ div.login-logo {
 }
 
 form.login {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  flex-direction: column;
   height: 100%;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 form.login div.form-block {
@@ -2940,12 +2830,10 @@ div.results-item:last-child {
   border-right-color: transparent;
   border-left-color: transparent;
   border-radius: 50%;
-  -webkit-transition: opacity .1s;
-  transition: opacity .1s;
+  transition: opacity 0.1s;
   opacity: 0;
   background-color: var(--border-color);
-  -webkit-box-shadow: 0 0 0 2px var(--border-hightlight-color);
-          box-shadow: 0 0 0 2px var(--border-hightlight-color);
+  box-shadow: 0 0 0 2px var(--border-hightlight-color);
   padding: 2px;
 }
 
@@ -2990,10 +2878,9 @@ div.room-list-container {
   border-top-left-radius: var(--border-radius);
   background-color: var(--button-color);
   font-size: var(--small-font);
-  -webkit-transition: -webkit-transform .2s;
-  transition: -webkit-transform .2s;
-  transition: transform .2s;
-  transition: transform .2s, -webkit-transform .2s;
+  transition: -webkit-transform 0.2s;
+  transition: transform 0.2s;
+  transition: transform 0.2s, -webkit-transform 0.2s;
 }
 
 div.room-list-button-container {
@@ -3048,15 +2935,11 @@ div.room-item:nth-child(even) {
 }
 
 div.game-summary {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
 }
 
 div.game-summary-team {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
   padding: 5px;
 }
 
@@ -3071,13 +2954,9 @@ div.feedback-item {
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   cursor: pointer;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   margin: 4px;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
   padding: 5px;
 }
 
@@ -3087,15 +2966,9 @@ div.feedback-item svg {
 
 div.feedback-icon {
   width: 20px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 div.feedback-item.success {
@@ -3197,7 +3070,7 @@ div.feedback-item.announcement {
 .ui-icon {
   display: inline-block;
   vertical-align: middle;
-  margin-top: -.25em;
+  margin-top: -0.25em;
   position: relative;
   text-indent: -99999px;
   overflow: hidden;
@@ -3228,7 +3101,7 @@ div.feedback-item.announcement {
   cursor: pointer;
   position: relative;
   margin: 2px 0 0 0;
-  padding: .5em .5em .5em .7em;
+  padding: 0.5em 0.5em 0.5em 0.7em;
   font-size: 100%;
 }
 
@@ -3266,7 +3139,7 @@ div.feedback-item.announcement {
 
 .ui-menu .ui-menu-item-wrapper {
   position: relative;
-  padding: 3px 1em 3px .4em;
+  padding: 3px 1em 3px 0.4em;
 }
 
 .ui-menu .ui-menu-divider {
@@ -3298,7 +3171,7 @@ div.feedback-item.announcement {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: .2em;
+  left: 0.2em;
   margin: auto 0;
 }
 
@@ -3310,11 +3183,11 @@ div.feedback-item.announcement {
 }
 
 .ui-button {
-  padding: .4em 1em;
+  padding: 0.4em 1em;
   display: inline-block;
   position: relative;
   line-height: normal;
-  margin-right: .1em;
+  margin-right: 0.1em;
   cursor: pointer;
   vertical-align: middle;
   text-align: center;
@@ -3338,8 +3211,7 @@ div.feedback-item.announcement {
 
 .ui-button-icon-only {
   width: 2em;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   text-indent: -9999px;
   white-space: nowrap;
 }
@@ -3373,7 +3245,7 @@ input.ui-button.ui-icon-notext .ui-icon {
   height: auto;
   text-indent: 0;
   white-space: normal;
-  padding: .4em 1em;
+  padding: 0.4em 1em;
 }
 
 /* workarounds */
@@ -3412,12 +3284,11 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-controlgroup-vertical .ui-controlgroup-item {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .ui-controlgroup .ui-controlgroup-label {
-  padding: .4em 1em;
+  padding: 0.4em 1em;
 }
 
 .ui-controlgroup .ui-controlgroup-label span {
@@ -3445,7 +3316,7 @@ button.ui-button::-moz-focus-inner {
 .ui-controlgroup-vertical .ui-spinner-input {
   /* Support: IE8 only, Android < 4.4 only */
   width: 75%;
-  width: calc( 100% - 2.4em);
+  width: calc( 100% - 2.4em );
 }
 
 .ui-controlgroup-vertical .ui-spinner .ui-spinner-up {
@@ -3453,9 +3324,8 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-checkboxradio-label .ui-icon-background {
-  -webkit-box-shadow: inset 1px 1px 1px #ccc;
-          box-shadow: inset 1px 1px 1px #ccc;
-  border-radius: .12em;
+  box-shadow: inset 1px 1px 1px #ccc;
+  border-radius: 0.12em;
   border: none;
 }
 
@@ -3482,13 +3352,13 @@ button.ui-button::-moz-focus-inner {
 
 .ui-datepicker {
   width: 17em;
-  padding: .2em .2em 0;
+  padding: 0.2em 0.2em 0;
   display: none;
 }
 
 .ui-datepicker .ui-datepicker-header {
   position: relative;
-  padding: .2em 0;
+  padding: 0.2em 0;
 }
 
 .ui-datepicker .ui-datepicker-prev,
@@ -3548,13 +3418,13 @@ button.ui-button::-moz-focus-inner {
 
 .ui-datepicker table {
   width: 100%;
-  font-size: .9em;
+  font-size: 0.9em;
   border-collapse: collapse;
-  margin: 0 0 .4em;
+  margin: 0 0 0.4em;
 }
 
 .ui-datepicker th {
-  padding: .7em .3em;
+  padding: 0.7em 0.3em;
   text-align: center;
   font-weight: bold;
   border: 0;
@@ -3568,15 +3438,15 @@ button.ui-button::-moz-focus-inner {
 .ui-datepicker td span,
 .ui-datepicker td a {
   display: block;
-  padding: .2em;
+  padding: 0.2em;
   text-align: right;
   text-decoration: none;
 }
 
 .ui-datepicker .ui-datepicker-buttonpane {
   background-image: none;
-  margin: .7em 0 0 0;
-  padding: 0 .2em;
+  margin: 0.7em 0 0 0;
+  padding: 0 0.2em;
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
@@ -3584,9 +3454,9 @@ button.ui-button::-moz-focus-inner {
 
 .ui-datepicker .ui-datepicker-buttonpane button {
   float: right;
-  margin: .5em .2em .4em;
+  margin: 0.5em 0.2em 0.4em;
   cursor: pointer;
-  padding: .2em .6em .3em .6em;
+  padding: 0.2em 0.6em 0.3em 0.6em;
   width: auto;
   overflow: visible;
 }
@@ -3607,7 +3477,7 @@ button.ui-button::-moz-focus-inner {
 
 .ui-datepicker-multi .ui-datepicker-group table {
   width: 95%;
-  margin: 0 auto .4em;
+  margin: 0 auto 0.4em;
 }
 
 .ui-datepicker-multi-2 .ui-datepicker-group {
@@ -3689,26 +3559,26 @@ button.ui-button::-moz-focus-inner {
   text-indent: -99999px;
   overflow: hidden;
   background-repeat: no-repeat;
-  left: .5em;
-  top: .3em;
+  left: 0.5em;
+  top: 0.3em;
 }
 
 .ui-dialog {
   position: absolute;
   top: 0;
   left: 0;
-  padding: .2em;
+  padding: 0.2em;
   outline: 0;
 }
 
 .ui-dialog .ui-dialog-titlebar {
-  padding: .4em 1em;
+  padding: 0.4em 1em;
   position: relative;
 }
 
 .ui-dialog .ui-dialog-title {
   float: left;
-  margin: .1em 0;
+  margin: 0.1em 0;
   white-space: nowrap;
   width: 90%;
   overflow: hidden;
@@ -3717,7 +3587,7 @@ button.ui-button::-moz-focus-inner {
 
 .ui-dialog .ui-dialog-titlebar-close {
   position: absolute;
-  right: .3em;
+  right: 0.3em;
   top: 50%;
   width: 20px;
   margin: -10px 0 0 0;
@@ -3728,7 +3598,7 @@ button.ui-button::-moz-focus-inner {
 .ui-dialog .ui-dialog-content {
   position: relative;
   border: 0;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   background: none;
   overflow: auto;
 }
@@ -3737,8 +3607,8 @@ button.ui-button::-moz-focus-inner {
   text-align: left;
   border-width: 1px 0 0 0;
   background-image: none;
-  margin-top: .5em;
-  padding: .3em 1em .5em .4em;
+  margin-top: 0.5em;
+  padding: 0.3em 1em 0.5em 0.4em;
 }
 
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
@@ -3746,7 +3616,7 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-dialog .ui-dialog-buttonpane button {
-  margin: .5em .4em .5em 0;
+  margin: 0.5em 0.4em 0.5em 0;
   cursor: pointer;
 }
 
@@ -3803,7 +3673,6 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-draggable-handle {
-  -ms-touch-action: none;
   touch-action: none;
 }
 
@@ -3815,7 +3684,6 @@ button.ui-button::-moz-focus-inner {
   position: absolute;
   font-size: 0.1px;
   display: block;
-  -ms-touch-action: none;
   touch-action: none;
 }
 
@@ -3912,7 +3780,6 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-selectable {
-  -ms-touch-action: none;
   touch-action: none;
 }
 
@@ -3980,14 +3847,13 @@ button.ui-button::-moz-focus-inner {
   width: 1.2em;
   height: 1.2em;
   cursor: default;
-  -ms-touch-action: none;
   touch-action: none;
 }
 
 .ui-slider .ui-slider-range {
   position: absolute;
   z-index: 1;
-  font-size: .7em;
+  font-size: 0.7em;
   display: block;
   border: 0;
   background-position: 0 0;
@@ -4002,12 +3868,12 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-slider-horizontal {
-  height: .8em;
+  height: 0.8em;
 }
 
 .ui-slider-horizontal .ui-slider-handle {
-  top: -.3em;
-  margin-left: -.6em;
+  top: -0.3em;
+  margin-left: -0.6em;
 }
 
 .ui-slider-horizontal .ui-slider-range {
@@ -4024,14 +3890,14 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-slider-vertical {
-  width: .8em;
+  width: 0.8em;
   height: 100px;
 }
 
 .ui-slider-vertical .ui-slider-handle {
-  left: -.3em;
+  left: -0.3em;
   margin-left: 0;
-  margin-bottom: -.6em;
+  margin-bottom: -0.6em;
 }
 
 .ui-slider-vertical .ui-slider-range {
@@ -4048,7 +3914,6 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-sortable-handle {
-  -ms-touch-action: none;
   touch-action: none;
 }
 
@@ -4064,17 +3929,17 @@ button.ui-button::-moz-focus-inner {
   border: none;
   background: none;
   color: inherit;
-  padding: .222em 0;
-  margin: .2em 0;
+  padding: 0.222em 0;
+  margin: 0.2em 0;
   vertical-align: middle;
-  margin-left: .4em;
+  margin-left: 0.4em;
   margin-right: 2em;
 }
 
 .ui-spinner-button {
   width: 1.6em;
   height: 50%;
-  font-size: .5em;
+  font-size: 0.5em;
   padding: 0;
   margin: 0;
   text-align: center;
@@ -4104,12 +3969,12 @@ button.ui-button::-moz-focus-inner {
 .ui-tabs {
   position: relative;
   /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
-  padding: .2em;
+  padding: 0.2em;
 }
 
 .ui-tabs .ui-tabs-nav {
   margin: 0;
-  padding: .2em .2em 0;
+  padding: 0.2em 0.2em 0;
 }
 
 .ui-tabs .ui-tabs-nav li {
@@ -4117,7 +3982,7 @@ button.ui-button::-moz-focus-inner {
   float: left;
   position: relative;
   top: 0;
-  margin: 1px .2em 0 0;
+  margin: 1px 0.2em 0 0;
   border-bottom-width: 0;
   padding: 0;
   white-space: nowrap;
@@ -4125,7 +3990,7 @@ button.ui-button::-moz-focus-inner {
 
 .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
   float: left;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   text-decoration: none;
 }
 
@@ -4166,7 +4031,7 @@ body .ui-tooltip {
 ----------------------------------*/
 
 .ui-widget {
-  font-family: Arial,Helvetica,sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 1em;
 }
 
@@ -4178,7 +4043,7 @@ body .ui-tooltip {
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-  font-family: Arial,Helvetica,sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 1em;
 }
 
@@ -4262,8 +4127,7 @@ a.ui-button:focus {
 }
 
 .ui-visual-focus {
-  -webkit-box-shadow: 0 0 3px 1px #5e9ed6;
-          box-shadow: 0 0 3px 1px #5e9ed6;
+  box-shadow: 0 0 3px 1px rgb(94, 158, 214);
 }
 
 .ui-state-active,
@@ -4342,7 +4206,7 @@ a.ui-button:active,
 .ui-priority-secondary,
 .ui-widget-content .ui-priority-secondary,
 .ui-widget-header .ui-priority-secondary {
-  opacity: .7;
+  opacity: 0.7;
   filter: Alpha(Opacity=70);
   /* support: IE8 */
   font-weight: normal;
@@ -4351,7 +4215,7 @@ a.ui-button:active,
 .ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled {
-  opacity: .35;
+  opacity: 0.35;
   filter: Alpha(Opacity=35);
   /* support: IE8 */
   background-image: none;
@@ -5148,27 +5012,22 @@ a.ui-button:active,
 
 .ui-widget-overlay {
   background: #aaaaaa;
-  opacity: .003;
+  opacity: 0.003;
   filter: Alpha(Opacity=0.3);
   /* support: IE8 */
 }
 
 .ui-widget-shadow {
-  -webkit-box-shadow: 0px 0px 5px #666666;
   box-shadow: 0px 0px 5px #666666;
 }
 
 div.row {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   line-height: var(--input-line-height);
 }
 
 div.column {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
   padding-right: 5px;
   border-bottom: 1px solid var(--border-color);
   white-space: nowrap;
@@ -5179,16 +5038,12 @@ div.column .button {
 }
 
 div.column.shrink {
-  -webkit-box-flex: 0;
-      -ms-flex: 0;
-          flex: 0;
+  flex: 0;
 }
 
 div.player-name.column {
   min-width: 150px;
-  -webkit-box-flex: 0;
-      -ms-flex: 0;
-          flex: 0;
+  flex: 0;
 }
 
 div.w-50 {
@@ -5212,12 +5067,8 @@ div.row div.column:first-child {
 }
 
 div.score {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
 }
 
 div.score-numbers {
@@ -5247,15 +5098,9 @@ div.score-dash {
 }
 
 div.score-controls {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 button.add-point,
@@ -5277,18 +5122,12 @@ div.score-sets {
 }
 
 div.stats-header {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 
 div.stats-header-item {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
 }
 
 div.stats-header-right {
@@ -5301,12 +5140,8 @@ input.stat-setting {
 }
 
 div.player-game-stat {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
+  flex: 1;
 }
 
 button.stat {
@@ -5323,9 +5158,7 @@ div.stat-score {
 }
 
 div.stats-player.row {
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
 }
 
 div.stat-attempts {
@@ -5339,10 +5172,7 @@ div.stat-attempts {
 
 div.stat-score-container {
   border-radius: var(--border-radius);
-  -webkit-transition: all .2s;
-  transition: all .2s;
-  display: -webkit-box;
-  display: -ms-flexbox;
+  transition: all 0.2s;
   display: flex;
   width: 55px;
   height: 24px;
@@ -5357,8 +5187,6 @@ div.stat-score-container.changed {
 }
 
 div.tab-header {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   padding-left: 10px;
 }
@@ -5399,10 +5227,9 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 
 .fade-enter-active,
 .fade-leave-active {
-  -webkit-transition: opacity .1s ease-out, -webkit-transform .1s ease-out;
-  transition: opacity .1s ease-out, -webkit-transform .1s ease-out;
-  transition: opacity .1s ease-out, transform .1s ease-out;
-  transition: opacity .1s ease-out, transform .1s ease-out, -webkit-transform .1s ease-out;
+  transition: opacity 0.1s ease-out, -webkit-transform 0.1s ease-out;
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out, -webkit-transform 0.1s ease-out;
 }
 
 .fade-enter,
@@ -5414,10 +5241,9 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 
 .slide-down-enter-active,
 .slide-down-leave-active {
-  -webkit-transition: opacity .5s ease-out, -webkit-transform .5s ease-out;
-  transition: opacity .5s ease-out, -webkit-transform .5s ease-out;
-  transition: opacity .5s ease-out, transform .5s ease-out;
-  transition: opacity .5s ease-out, transform .5s ease-out, -webkit-transform .5s ease-out;
+  transition: opacity 0.5s ease-out, -webkit-transform 0.5s ease-out;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out, -webkit-transform 0.5s ease-out;
 }
 
 .slide-down-enter,
@@ -5429,10 +5255,9 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 /* FEEDBACK */
 
 .feedback-item {
-  -webkit-transition: opacity .5s ease-out, -webkit-transform .5s ease-out;
-  transition: opacity .5s ease-out, -webkit-transform .5s ease-out;
-  transition: opacity .5s ease-out, transform .5s ease-out;
-  transition: opacity .5s ease-out, transform .5s ease-out, -webkit-transform .5s ease-out;
+  transition: opacity 0.5s ease-out, -webkit-transform 0.5s ease-out;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out, -webkit-transform 0.5s ease-out;
 }
 
 .feedback-enter,
@@ -5467,15 +5292,9 @@ div.court div.score-title {
 }
 
 div.court div.scoreboard-info {
-  -webkit-box-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  display: -webkit-box;
-  display: -ms-flexbox;
+  flex: 1;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
 }
 
 div.court div.scoreboard-info.sets {
@@ -5532,12 +5351,8 @@ div.court input.scoreboard-team-name-left {
 
 div.court div.scoreboard-reset {
   width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  justify-content: center;
   position: relative;
   top: -15px;
 }

@@ -86,6 +86,8 @@ io.on('connection', socketioJwt.authorize({
 
 io.on('connection', function( socket ) {
 
+    console.log('CONNECT');
+
     socket.join('public.info');
 
     socket.on('public.info', function (message) {
@@ -93,7 +95,7 @@ io.on('connection', function( socket ) {
     });
 
     socket.on('join-scoreboard', function() {
-        //console.log('JOIN SCOREBOARD');
+        console.log('JOIN SCOREBOARD');
         socket.join('scoreboard');
     });
 

@@ -24,9 +24,14 @@ if (window.app.csrfToken) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-Vue.component('court', require('./components/Court.vue'));
-Vue.component('feedback', require('./components/Feedback.vue'));
-Vue.component('temp-scoreboard', require('./components/TempScoreboard.vue'));
+import Court from './components/Court.vue';
+Vue.component('court', Court);
+
+import Feedback from './components/Feedback.vue';
+Vue.component('feedback', Feedback);
+
+import TempScoreboard from './components/TempScoreboard.vue';
+Vue.component('temp-scoreboard', TempScoreboard);
 
 var store = new Vuex.Store({
     state: {

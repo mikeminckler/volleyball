@@ -12,3 +12,4 @@ Homestead.yaml
 /public/css/app.css*
 /public/build/
 /public/mix-manifest.json
+/storage/logs

@@ -10,8 +10,6 @@
 
 :root {
 
-    --bg-color: #00FF00;
-    --text-color: #FFFFFF;
     --font: Roboto, sans-serif;
 }
 
@@ -22,11 +20,15 @@ div.container {
 
 div.temp-scoreboard {
     border: 1px solid black;
+    background-color: #00FF00;
+    color: #FFFFFF;
     width: 375px;
+}
 
-    & div.court {
-        padding: 10px 0;
-    }
+
+div.court {
+    width: 375px;
+    padding: 10px 0;
 
     & div.score-title {
         text-align: center;
@@ -103,5 +105,7 @@ div.temp-scoreboard {
         }
     }
 
+}
 
+div.score-keeper-controls {
 }

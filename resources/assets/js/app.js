@@ -31,52 +31,84 @@ if (window.app.csrfToken) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-Vue.component('feedback', require('./components/Feedback.vue'));
-Vue.component('app-menu', require('./components/Menu.vue'));
-Vue.component('autocomplete', require('./components/AutoComplete.vue'));
-Vue.component('scoreboard', require('./components/Scoreboard.vue'));
-Vue.component('room-list', require('./components/RoomList.vue'));
-Vue.component('team-game-stats', require('./components/TeamGameStats.vue'));
-Vue.component('team-game-chart', require('./components/TeamGameChart.vue'));
-Vue.component('team-game-report', require('./components/TeamGameReport.vue'));
-Vue.component('team-games-list', require('./components/TeamGamesList.vue'));
-Vue.component('team-stat-setting', require('./components/TeamStatSetting.vue'));
-Vue.component('team-players-stats-report', require('./components/TeamPlayersStatsReport.vue'));
-Vue.component('team-players-list', require('./components/TeamPlayersList.vue'));
-Vue.component('player-game-stat', require('./components/PlayerGameStat.vue'));
-Vue.component('player-game-report', require('./components/PlayerGameReport.vue'));
+import Feedback from './components/Feedback.vue';
+Vue.component('feedback', Feedback);
+import Menu from './components/Menu.vue';
+Vue.component('app-menu', Menu);
+import AutoComplete from './components/AutoComplete.vue';
+Vue.component('autocomplete', AutoComplete);
+import Scoreboard from './components/Scoreboard.vue';
+Vue.component('scoreboard', Scoreboard);
+import RoomList from './components/RoomList.vue';
+Vue.component('room-list', RoomList);
+import TeamGameStats from './components/TeamGameStats.vue';
+Vue.component('team-game-stats', TeamGameStats);
+import TeamGameChart from './components/TeamGameChart.vue';
+Vue.component('team-game-chart', TeamGameChart);
+import TeamGameReport from './components/TeamGameReport.vue';
+Vue.component('team-game-report', TeamGameReport);
+import TeamGamesList from './components/TeamGamesList.vue';
+Vue.component('team-games-list', TeamGamesList);
+import TeamStatSetting from './components/TeamStatSetting.vue';
+Vue.component('team-stat-setting', TeamStatSetting);
+import TeamPlayersStatsReport from './components/TeamPlayersStatsReport.vue';
+Vue.component('team-players-stats-report', TeamPlayersStatsReport);
+import TeamPlayersList from './components/TeamPlayersList.vue';
+Vue.component('team-players-list', TeamPlayersList);
+import PlayerGameStat from './components/PlayerGameStat.vue';
+Vue.component('player-game-stat', PlayerGameStat);
+import PlayerGameReport from './components/PlayerGameReport.vue';
+Vue.component('player-game-report', PlayerGameReport);
 
-Vue.component('datetimepicker', require('./components/DateTimePicker.vue'));
+import DateTimePicker from './components/DateTimePicker.vue';
+Vue.component('datetimepicker', DateTimePicker);
+
+
+import Login from './components/Login.vue';
+import Home from './components/Home.vue';
+import SelectTeam from './components/SelectTeam.vue';
+import User from './components/User.vue';
+import Users from './components/Users.vue';
+import Teams from './components/Teams.vue';
+import Team from './components/Team.vue';
+import TeamGames from './components/TeamGames.vue';
+import TeamPlayers from './components/TeamPlayers.vue';
+import Games from './components/Games.vue';
+import Game from './components/Game.vue';
+import GameStats from './components/GameStats.vue';
+import PlayerStatsReport from './components/PlayerStatsReport.vue';
+import Stats from './components/Stats.vue';
+import Stat from './components/Stat.vue';
 
 var router = new VueRouter({
     mode: 'history',
     routes: [
-        { path: '/login', component: require('./components/Login.vue') },
-        { path: '/home', component: require('./components/Home.vue') },
-        { path: '/select-team', component: require('./components/SelectTeam.vue') },
+        { path: '/login', component: Login},
+        { path: '/home', component: Home },
+        { path: '/select-team', component: SelectTeam },
 
-        { path: '/my-account', component: require('./components/User.vue') },
-        { path: '/users', component: require('./components/Users.vue') },
-        { path: '/users/:id', component: require('./components/User.vue') },
-        { path: '/users/create', component: require('./components/User.vue') },
+        { path: '/my-account', component: User },
+        { path: '/users', component: Users },
+        { path: '/users/:id', component: User },
+        { path: '/users/create', component: User },
 
-        { path: '/teams', component: require('./components/Teams.vue') },
-        { path: '/teams/:id', component: require('./components/Team.vue') },
-        { path: '/teams/create', component: require('./components/Team.vue') },
-        { path: '/teams/manage-team', component: require('./components/Team.vue') },
-        { path: '/teams/games/:id', component: require('./components/TeamGames.vue') },
-        { path: '/teams/players/:id', component: require('./components/TeamPlayers.vue') },
+        { path: '/teams', component: Teams },
+        { path: '/teams/:id', component: Team },
+        { path: '/teams/create', component: Team },
+        { path: '/teams/manage-team', component: Team },
+        { path: '/teams/games/:id', component: TeamGames },
+        { path: '/teams/players/:id', component: TeamPlayers },
 
-        { path: '/games', component: require('./components/Games.vue') },
-        { path: '/games/:id', component: require('./components/Game.vue') },
-        { path: '/games/create', component: require('./components/Game.vue') },
-        { path: '/games/stats/:id', component: require('./components/GameStats.vue') },
+        { path: '/games', component: Games },
+        { path: '/games/:id', component: Game },
+        { path: '/games/create', component: Game },
+        { path: '/games/stats/:id', component: GameStats },
 
-        { path: '/players/stats/:id', component: require('./components/PlayerStatsReport.vue') },
+        { path: '/players/stats/:id', component: PlayerStatsReport },
 
-        { path: '/stats', component: require('./components/Stats.vue') },
-        { path: '/stats/:id', component: require('./components/Stat.vue') },
-        { path: '/stats/create', component: require('./components/Stat.vue') },
+        { path: '/stats', component: Stats },
+        { path: '/stats/:id', component: Stat },
+        { path: '/stats/create', component: Stat },
 
         //{ path: '/not-found', component: require('./components/404.vue') },
         //{ path: '/*', redirect: '/not-found' }
@@ -84,7 +116,15 @@ var router = new VueRouter({
 });
 
 router.beforeEach( function(to, from, next) {
-    if (to.path != '/login') {
+
+    var auth = true;
+
+    //if ( to.path == '/login' || lodash.includes(to.path, '/players/stats/')) {
+    if ( to.path == '/login' ) {
+        auth = false;
+    }
+
+    if (auth) {
         if (store.state.user.authenticated) {
 
             store.dispatch('clearErrorsFeedback');

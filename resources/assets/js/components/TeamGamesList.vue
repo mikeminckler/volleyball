@@ -60,7 +60,9 @@
                     </div>
 
                     <div class="column" v-if="userCanTakeStats(team.id)">
-                        <router-link :to="{path: '/games/stats/' + game.id}" class="button button-icon game-center">Game Center</router-link>
+                        <router-link :to="{path: '/games/stats/' + game.id}" class="button">
+                            <div class="button-icon"><i class="fas fa-chart-line"></i></div> Game Centre
+                        </router-link>
                     </div>
 
                     <div class="column">

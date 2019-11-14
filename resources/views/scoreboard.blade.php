@@ -9,7 +9,7 @@
 
     <title>Scoreboard</title>
 
-    <link href="{{ mix('/css/scoreboard.css') }}" rel="stylesheet">
+    <link href="{{ mix('/css/sb.css') }}" rel="stylesheet">
 
     <script>
         window.app = <?php echo json_encode([
@@ -26,7 +26,7 @@
         <feedback></feedback>
 
         <div class="container">
-            <temp-scoreboard number-of-courts="4"></temp-scoreboard>
+            @yield('content')
         </div>
 
     </div>
