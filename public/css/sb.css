@@ -11,9 +11,11 @@ div.feedback-item {
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   cursor: pointer;
+  display: -webkit-box;
   display: flex;
   margin: 4px;
-  align-items: center;
+  -webkit-box-align: center;
+          align-items: center;
   padding: 5px;
 }
 
@@ -23,9 +25,12 @@ div.feedback-item svg {
 
 div.feedback-icon {
   width: 20px;
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
 }
 
 div.feedback-item.success {
@@ -2079,12 +2084,14 @@ a.ui-button:active,
 }
 
 div.row {
+  display: -webkit-box;
   display: flex;
   line-height: var(--input-line-height);
 }
 
 div.column {
-  flex: 1;
+  -webkit-box-flex: 1;
+          flex: 1;
   padding-right: 5px;
   border-bottom: 1px solid var(--border-color);
   white-space: nowrap;
@@ -2095,12 +2102,14 @@ div.column .button {
 }
 
 div.column.shrink {
-  flex: 0;
+  -webkit-box-flex: 0;
+          flex: 0;
 }
 
 div.player-name.column {
   min-width: 150px;
-  flex: 0;
+  -webkit-box-flex: 0;
+          flex: 0;
 }
 
 div.w-50 {
@@ -2124,8 +2133,10 @@ div.row div.column:first-child {
 }
 
 div.score {
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+          justify-content: center;
 }
 
 div.score-numbers {
@@ -2155,9 +2166,12 @@ div.score-dash {
 }
 
 div.score-controls {
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
 }
 
 button.add-point,
@@ -2179,12 +2193,15 @@ div.score-sets {
 }
 
 div.stats-header {
+  display: -webkit-box;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+          align-items: center;
 }
 
 div.stats-header-item {
-  flex: 1;
+  -webkit-box-flex: 1;
+          flex: 1;
 }
 
 div.stats-header-right {
@@ -2197,8 +2214,10 @@ input.stat-setting {
 }
 
 div.player-game-stat {
+  display: -webkit-box;
   display: flex;
-  flex: 1;
+  -webkit-box-flex: 1;
+          flex: 1;
 }
 
 button.stat {
@@ -2215,7 +2234,8 @@ div.stat-score {
 }
 
 div.stats-player.row {
-  justify-content: center;
+  -webkit-box-pack: center;
+          justify-content: center;
 }
 
 div.stat-attempts {
@@ -2229,7 +2249,9 @@ div.stat-attempts {
 
 div.stat-score-container {
   border-radius: var(--border-radius);
+  -webkit-transition: all 0.2s;
   transition: all 0.2s;
+  display: -webkit-box;
   display: flex;
   width: 55px;
   height: 24px;
@@ -2244,6 +2266,7 @@ div.stat-score-container.changed {
 }
 
 div.tab-header {
+  display: -webkit-box;
   display: flex;
   padding-left: 10px;
 }
@@ -2284,6 +2307,7 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 
 .fade-enter-active,
 .fade-leave-active {
+  -webkit-transition: opacity 0.1s ease-out, -webkit-transform 0.1s ease-out;
   transition: opacity 0.1s ease-out, -webkit-transform 0.1s ease-out;
   transition: opacity 0.1s ease-out, transform 0.1s ease-out;
   transition: opacity 0.1s ease-out, transform 0.1s ease-out, -webkit-transform 0.1s ease-out;
@@ -2298,6 +2322,7 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 
 .slide-down-enter-active,
 .slide-down-leave-active {
+  -webkit-transition: opacity 0.5s ease-out, -webkit-transform 0.5s ease-out;
   transition: opacity 0.5s ease-out, -webkit-transform 0.5s ease-out;
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
   transition: opacity 0.5s ease-out, transform 0.5s ease-out, -webkit-transform 0.5s ease-out;
@@ -2312,6 +2337,7 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 /* FEEDBACK */
 
 .feedback-item {
+  -webkit-transition: opacity 0.5s ease-out, -webkit-transform 0.5s ease-out;
   transition: opacity 0.5s ease-out, -webkit-transform 0.5s ease-out;
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
   transition: opacity 0.5s ease-out, transform 0.5s ease-out, -webkit-transform 0.5s ease-out;
@@ -2417,6 +2443,7 @@ div.header {
   width: 100%;
   line-height: 35px;
   font-size: var(--header-font-size);
+  display: -webkit-box;
   display: flex;
   background-color: var(--light-bg);
   z-index: 20;
@@ -2430,13 +2457,16 @@ button {
   color: var(--button-text-color);
   padding: 3px 8px;
   line-height: var(--line-height);
+  display: -webkit-box;
   display: flex;
   font-size: var(--input-font-size);
   font-weight: var(--font-weight);
   cursor: pointer;
   margin-bottom: 2px;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
 }
 
 .button svg,
@@ -2461,10 +2491,14 @@ div.button.player-filter {
 }
 
 div.menu {
-  flex: 1;
+  -webkit-box-flex: 1;
+          flex: 1;
+  display: -webkit-box;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  -webkit-box-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+          align-items: center;
 }
 
 div.menu-item {
@@ -2482,10 +2516,12 @@ div.menu div.menu-item a {
 div.home-link,
 div.right-menu {
   padding: 0px 10px;
-  flex: 0;
+  -webkit-box-flex: 0;
+          flex: 0;
 }
 
 div.right-menu {
+  display: -webkit-box;
   display: flex;
 }
 
@@ -2543,12 +2579,14 @@ a {
 }
 
 section {
-  flex: 1;
+  -webkit-box-flex: 1;
+          flex: 1;
   padding-top: var(--section-padding);
   padding-bottom: var(--section-padding);
 }
 
 section.header {
+  display: -webkit-box;
   display: flex;
 }
 
@@ -2597,13 +2635,15 @@ button {
 }
 
 div.form-block {
+  display: -webkit-box;
   display: flex;
   padding: 1px;
 }
 
 div.form-label,
 div.form-input {
-  flex: 1;
+  -webkit-box-flex: 1;
+          flex: 1;
   padding: 0px 2px;
 }
 
@@ -2652,6 +2692,7 @@ input[type=checkbox] {
   cursor: pointer;
   position: relative;
   background-color: var(--button-color);
+  -webkit-transition: all 0.2s;
   transition: all 0.2s;
 }
 
@@ -2678,9 +2719,12 @@ input[type=checkbox]:checked:after {
 /* SELECT TEAM */
 
 div.select-team-container {
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
   height: 100%;
 }
 
@@ -2723,9 +2767,12 @@ div.login {
 div.login-container {
   height: 100%;
   width: 100%;
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
 }
 
 div.login-logo {
@@ -2738,11 +2785,16 @@ div.login-logo {
 }
 
 form.login {
+  display: -webkit-box;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
   height: 100%;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
 }
 
 form.login div.form-block {
@@ -2830,6 +2882,7 @@ div.results-item:last-child {
   border-right-color: transparent;
   border-left-color: transparent;
   border-radius: 50%;
+  -webkit-transition: opacity 0.1s;
   transition: opacity 0.1s;
   opacity: 0;
   background-color: var(--border-color);
@@ -2878,6 +2931,7 @@ div.room-list-container {
   border-top-left-radius: var(--border-radius);
   background-color: var(--button-color);
   font-size: var(--small-font);
+  -webkit-transition: -webkit-transform 0.2s;
   transition: -webkit-transform 0.2s;
   transition: transform 0.2s;
   transition: transform 0.2s, -webkit-transform 0.2s;
@@ -2935,11 +2989,13 @@ div.room-item:nth-child(even) {
 }
 
 div.game-summary {
+  display: -webkit-box;
   display: flex;
 }
 
 div.game-summary-team {
-  flex: 1;
+  -webkit-box-flex: 1;
+          flex: 1;
   padding: 5px;
 }
 
@@ -2954,9 +3010,11 @@ div.feedback-item {
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   cursor: pointer;
+  display: -webkit-box;
   display: flex;
   margin: 4px;
-  align-items: center;
+  -webkit-box-align: center;
+          align-items: center;
   padding: 5px;
 }
 
@@ -2966,9 +3024,12 @@ div.feedback-item svg {
 
 div.feedback-icon {
   width: 20px;
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
 }
 
 div.feedback-item.success {
@@ -5022,12 +5083,14 @@ a.ui-button:active,
 }
 
 div.row {
+  display: -webkit-box;
   display: flex;
   line-height: var(--input-line-height);
 }
 
 div.column {
-  flex: 1;
+  -webkit-box-flex: 1;
+          flex: 1;
   padding-right: 5px;
   border-bottom: 1px solid var(--border-color);
   white-space: nowrap;
@@ -5038,12 +5101,14 @@ div.column .button {
 }
 
 div.column.shrink {
-  flex: 0;
+  -webkit-box-flex: 0;
+          flex: 0;
 }
 
 div.player-name.column {
   min-width: 150px;
-  flex: 0;
+  -webkit-box-flex: 0;
+          flex: 0;
 }
 
 div.w-50 {
@@ -5067,8 +5132,10 @@ div.row div.column:first-child {
 }
 
 div.score {
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+          justify-content: center;
 }
 
 div.score-numbers {
@@ -5098,9 +5165,12 @@ div.score-dash {
 }
 
 div.score-controls {
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+          align-items: center;
 }
 
 button.add-point,
@@ -5122,12 +5192,15 @@ div.score-sets {
 }
 
 div.stats-header {
+  display: -webkit-box;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+          align-items: center;
 }
 
 div.stats-header-item {
-  flex: 1;
+  -webkit-box-flex: 1;
+          flex: 1;
 }
 
 div.stats-header-right {
@@ -5140,8 +5213,10 @@ input.stat-setting {
 }
 
 div.player-game-stat {
+  display: -webkit-box;
   display: flex;
-  flex: 1;
+  -webkit-box-flex: 1;
+          flex: 1;
 }
 
 button.stat {
@@ -5158,7 +5233,8 @@ div.stat-score {
 }
 
 div.stats-player.row {
-  justify-content: center;
+  -webkit-box-pack: center;
+          justify-content: center;
 }
 
 div.stat-attempts {
@@ -5172,7 +5248,9 @@ div.stat-attempts {
 
 div.stat-score-container {
   border-radius: var(--border-radius);
+  -webkit-transition: all 0.2s;
   transition: all 0.2s;
+  display: -webkit-box;
   display: flex;
   width: 55px;
   height: 24px;
@@ -5187,6 +5265,7 @@ div.stat-score-container.changed {
 }
 
 div.tab-header {
+  display: -webkit-box;
   display: flex;
   padding-left: 10px;
 }
@@ -5227,6 +5306,7 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 
 .fade-enter-active,
 .fade-leave-active {
+  -webkit-transition: opacity 0.1s ease-out, -webkit-transform 0.1s ease-out;
   transition: opacity 0.1s ease-out, -webkit-transform 0.1s ease-out;
   transition: opacity 0.1s ease-out, transform 0.1s ease-out;
   transition: opacity 0.1s ease-out, transform 0.1s ease-out, -webkit-transform 0.1s ease-out;
@@ -5241,6 +5321,7 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 
 .slide-down-enter-active,
 .slide-down-leave-active {
+  -webkit-transition: opacity 0.5s ease-out, -webkit-transform 0.5s ease-out;
   transition: opacity 0.5s ease-out, -webkit-transform 0.5s ease-out;
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
   transition: opacity 0.5s ease-out, transform 0.5s ease-out, -webkit-transform 0.5s ease-out;
@@ -5255,6 +5336,7 @@ div.game-summary-team div.player-game-stat:not(.buttons) {
 /* FEEDBACK */
 
 .feedback-item {
+  -webkit-transition: opacity 0.5s ease-out, -webkit-transform 0.5s ease-out;
   transition: opacity 0.5s ease-out, -webkit-transform 0.5s ease-out;
   transition: opacity 0.5s ease-out, transform 0.5s ease-out;
   transition: opacity 0.5s ease-out, transform 0.5s ease-out, -webkit-transform 0.5s ease-out;
@@ -5292,9 +5374,12 @@ div.court div.score-title {
 }
 
 div.court div.scoreboard-info {
-  flex: 1;
+  -webkit-box-flex: 1;
+          flex: 1;
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+          justify-content: center;
 }
 
 div.court div.scoreboard-info.sets {
@@ -5351,8 +5436,10 @@ div.court input.scoreboard-team-name-left {
 
 div.court div.scoreboard-reset {
   width: 100%;
+  display: -webkit-box;
   display: flex;
-  justify-content: center;
+  -webkit-box-pack: center;
+          justify-content: center;
   position: relative;
   top: -15px;
 }

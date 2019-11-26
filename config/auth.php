@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'api',
+        'guard' => 'web',
         'passwords' => 'users',
     ],
 
@@ -42,9 +42,12 @@ return [
         ],
 
         'api' => [
-            'driver' => 'jwt',
-            'provider' => 'jwt',
+            'driver' => 'token',
+            'provider' => 'users',
         ],
+        'channel-token' => [
+            'driver' => 'channel-token',
+        ]
     ],
 
     /*
@@ -70,11 +73,10 @@ return [
             'model' => App\User::class,
         ],
 
-        'jwt' => [
-            'driver' => 'eloquent',
-            'model' => App\User::class,
-        ],
-
+        // 'users' => [
+        //     'driver' => 'database',
+        //     'table' => 'users',
+        // ],
     ],
 
     /*

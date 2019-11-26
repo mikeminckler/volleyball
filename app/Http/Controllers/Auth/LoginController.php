@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Tymon\JWTAuth\JWTAuth;
-use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\JWTException;
-//use Illuminate\Support\Facades\Redis;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
+
+use Inertia\Inertia;
 
 use App\User;
 
@@ -33,86 +32,61 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = '/';
-    protected $auth;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(JWTAuth $auth)
+    public function __construct()
     {
-        $this->auth = $auth;
-        //$this->middleware('guest', ['except' => 'logout']);
+        $this->middleware('guest')->except('logout');
     }
 
     /**
-     * We are going to override the AuthenticatesUsers method
-     * so that we can return our Javascript Web Token 
-     * 
+     * Show the application's login form.
+     *
+     * @return \Illuminate\Http\Response
      */
-
-    public function login(Request $request)
+    public function showLoginForm()
     {
-
-        // check for token and relogin
-        if ($request->header('Authorization') && !$request->input('email')) {
-            try {
-                $user = $this->auth->parseToken()->authenticate();
-            } catch (JWTException $e) {
-                return response()->json(['error' => 'Your token has expired'], 401);
-            }
-        } else {
-            $user = null;
-        }
-
-        if ($user instanceof User) {
-            $token = $this->auth->refresh();
-        } else {
-
-            $this->validateLogin($request);
-            
-            if ($this->hasTooManyLoginAttempts($request)) {
-                $this->fireLockoutEvent($request);
-                return $this->sendLockoutResponse($request);
-            }
-
-            $credentials = $this->credentials($request);
-
-            try {
-                // attempt to verify the credentials and create a token for the user
-                $token = $this->auth->attempt($credentials);
-                if (!$token) {
-                    $this->incrementLoginAttempts($request);
-                    return response()->json(['error' => 'Invalid Credentials'], 401);
-                }
-            } catch (JWTException $e) {
-                // something went wrong whilst attempting to encode the token
-                return response()->json(['error' => 'Could Not Create Token'], 500);
-            }
-
-        }
-
-        // no errors so we can loggin the user
-        // and send back the token to vue
-
-        //$user = User::where('email', $request->input('email'))->first();
-        //auth()->login($user);
-        
-        $this->clearLoginAttempts($request);
-        //Redis::publish('public-message', auth()->user()->full_name.' has logged in');
-        return response()->json(compact('token'));
-
+        return Inertia::render('Login');
     }
 
-    public function logout(Request $request)
+    /**
+     * The user has logged out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return mixed
+     */
+    protected function loggedOut(Request $request)
     {
-        $this->guard()->logout();
-        auth()->logout();
+        return redirect()->route('login')->with('success', 'Logged Out');
+    }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        session()->put('timeout_check', time());
+
+        if (request('remember') == 'true') {
+            Cookie::queue(Cookie::make('login-email', auth()->user()->email, (60 * 24 * 7)));
+        } else {
+            Cookie::queue(Cookie::forget('login-email'));
+        }
+
+        cache()->tags(['user-'.auth()->user()->id])->flush();
+
         return response()->json([
-            'success' => 'logout'
+            'success' => 'Logged In',
+            'user' => auth()->user()->load('roles'),
+            //'redirect' => session()->has('url.intended') ? session()->get('url.intended') : route('dashboard')
         ]);
     }
-
-
 }

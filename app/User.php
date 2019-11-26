@@ -2,15 +2,9 @@
 
 namespace App;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Notifications\Notifiable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use App\Role;
 use App\Player;
@@ -23,13 +17,9 @@ use App\Events\UserRemoved;
 use App\Events\UserRolesUpdated;
 use App\Events\UsersRefresh;
 
-class User extends Model implements
-    AuthenticatableContract,
-    AuthorizableContract,
-    CanResetPasswordContract,
-    JWTSubject
+class User extends Authenticatable
 {
-    use Authenticatable, Authorizable, CanResetPassword, Notifiable;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -49,44 +39,18 @@ class User extends Model implements
         'password', 'remember_token',
     ];
 
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
-
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-
-    public function getJWTCustomClaims()
-    {
-        return [
-            'userid' => $this->id,
-            'email' => $this->email,
-            'name' => $this->full_name
-        ];
-    }
-
     public function player()
     {
         return $this->hasOne('App\Player');
     }
 
-    public function getFullNameAttribute() 
+    public function getFullNameAttribute()
     {
         return $this->first_name.' '.$this->last_name;
     }
 
-    public function saveUser($input) {
-
+    public function saveUser($input)
+    {
         $messages = [];
 
         if (!$this->id) {
@@ -114,7 +78,6 @@ class User extends Model implements
         // broadcast an update event so our info is up to date in browser
 
         foreach ($messages as $message) {
-
             if (auth()->user()->id != $this->id) {
                 $message .= ' by '.auth()->user()->full_name;
             }
@@ -138,7 +101,6 @@ class User extends Model implements
 
     public function addRole($role, $team)
     {
-
         if (!$role instanceof Role) {
             if (is_numeric($role)) {
                 $role = Role::findOrFail($role);
@@ -151,7 +113,7 @@ class User extends Model implements
             return false;
         }
 
-        if (!$this->roles->contains(function($user_role) use($role, $team) {
+        if (!$this->roles->contains(function ($user_role) use ($role, $team) {
             if ($user_role->pivot->team_id == $team->id && $user_role->id == $role->id) {
                 return true;
             }
@@ -166,12 +128,11 @@ class User extends Model implements
 
     public function removeRole($role, $team)
     {
-
         if (!$role instanceof Role) {
             $role = Role::findOrFail($role);
         }
 
-        if ($this->roles->contains(function($user_role) use($role, $team) {
+        if ($this->roles->contains(function ($user_role) use ($role, $team) {
             if ($user_role->pivot->team_id == $team->id && $user_role->id == $role->id) {
                 return true;
             }
@@ -187,7 +148,7 @@ class User extends Model implements
     public function search($term)
     {
         return $this->where('removed', false)
-            ->where(function($query) use($term) {
+            ->where(function ($query) use ($term) {
                 $query->where('first_name', 'like', '%'.$term.'%')
                     ->orWhere('last_name', 'like', '%'.$term.'%')
                     ->orWhere('common_name', 'like', '%'.$term.'%');
@@ -198,15 +159,14 @@ class User extends Model implements
     {
         $users = array();
         foreach ($objects as $user) {
-                $user_array = array();
-                $user_array['id'] = $user->id;
-                $user_array['value'] = $user->full_name;
-                $user_array['label'] = $user->full_name;
-                $user_array['selected'] = false;
-                $users[] = $user_array;
+            $user_array = array();
+            $user_array['id'] = $user->id;
+            $user_array['value'] = $user->full_name;
+            $user_array['label'] = $user->full_name;
+            $user_array['selected'] = false;
+            $users[] = $user_array;
         }
 
         return $users;
     }
-
 }

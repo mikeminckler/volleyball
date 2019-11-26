@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use Inertia\Inertia;
 
 use App\Team;
 use App\Player;
@@ -14,12 +15,11 @@ use App\Events\TeamsRefresh;
 
 class TeamsController extends Controller
 {
-    
     protected $team;
     protected $player;
     protected $user;
 
-    public function __construct(Team $team, Player $player, User $user) 
+    public function __construct(Team $team, Player $player, User $user)
     {
         $this->team = $team;
         $this->player = $player;
@@ -62,17 +62,17 @@ class TeamsController extends Controller
         return $team;
     }
 
-    public function players($id) 
+    public function players($id)
     {
-        return $this->team->findOrFail($id)->players->sortBy(function($player) {
+        return $this->team->findOrFail($id)->players->sortBy(function ($player) {
             return $player->user->last_name;
         })->values()->all();
     }
 
     /**
      * We pass in the user id here instead of the player id
-     * which allows us to create a player object if we 
-     * need to. 
+     * which allows us to create a player object if we
+     * need to.
      */
 
     public function addPlayer(Request $request, $id)
@@ -85,7 +85,6 @@ class TeamsController extends Controller
     {
         $player = $this->player->findOrFail($request->input('player_id'));
         return $this->team->findOrFail($id)->removePlayer($player);
-
     }
 
     public function games($id)
@@ -93,4 +92,15 @@ class TeamsController extends Controller
         return $this->team->findOrFail($id)->games();
     }
 
+    public function selectTeam()
+    {
+        return Inertia::render('SelectTeam');
+    }
+
+    public function setTeam()
+    {
+        $team = $this->team->findOrFail(request('team_id'));
+        session()->put('team_id', $team->id);
+        return response()->json(['success' => 'Selected '.$team->team_name]);
+    }
 }

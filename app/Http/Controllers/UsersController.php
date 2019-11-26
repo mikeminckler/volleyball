@@ -11,29 +11,24 @@ use App\Role;
 use App\Events\UserRemoved;
 
 use App\Services\Storage;
-use Tymon\JWTAuth\JWTAuth;
 use Cookie;
 
 class UsersController extends Controller
 {
-
     protected $user;
     protected $team;
     protected $role;
 
-    public function __construct(User $user, Team $team, Role $role) 
+    public function __construct(User $user, Team $team, Role $role)
     {
         $this->user = $user;
         $this->team = $team;
         $this->role = $role;
     }
 
+    /*
     public function myInfo()
     {
-        //$token = app(JWTAuth::class)->getToken();
-        //$storage = app(Storage::class);
-        //$storage->put('jwt', $token);
-        //$cookie = Cookie::make('jwt', $token, 5000);
         return auth()->user()->load('roles');
     }
 
@@ -41,6 +36,7 @@ class UsersController extends Controller
     {
         return auth()->user()->roles->pluck('role_name');
     }
+     */
 
     public function users()
     {
@@ -83,19 +79,19 @@ class UsersController extends Controller
         return $user;
     }
 
-    public function roles($id) 
+    public function roles($id)
     {
         return $this->user->findOrFail($id)->roles->pluck('id');
     }
 
-    public function saveRole(Request $request, $id) 
+    public function saveRole(Request $request, $id)
     {
         $team = $this->team->findOrFail($request->input('team_id'));
         return $this->user->findOrFail($id)
             ->addRole($request->input('role_id'), $team);
     }
 
-    public function removeRole(Request $request, $id) 
+    public function removeRole(Request $request, $id)
     {
         $team = $this->team->findOrFail($request->input('team_id'));
         $role = $this->role->findOrFail($request->input('role_id'));
@@ -105,20 +101,10 @@ class UsersController extends Controller
 
     public function loginCheck(Request $request)
     {
-
         if (auth()->check()) {
             return response()->json(['status' => 'ok']);
         } else {
             return response()->json(['status' => 'timeout']);
         }
-
     }
-
-    public function setTeam($id)
-    {
-        $team = $this->team->findOrFail($id);
-        session()->put('team_id', $team->id);
-        return response()->json(['success' => 'Selected '.$team->team_name]);
-    }
-
 }
