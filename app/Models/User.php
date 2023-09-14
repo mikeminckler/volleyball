@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -66,6 +68,29 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function saveUser($input, $id = null) 
+    {
+        if ($id) {
+            $user = User::findOrFail($id);
+        } else {
+            $user = new User();
+        }
+
+        $user->name = Arr::get($input, 'name');
+        $email = Arr::get($input, 'email');
+        if (!$email) {
+            $email = collect(explode(' ', Str::lower(Arr::get($input, 'name'))))->filter()->implode('.').'@brentwood.ca';
+        }
+        if (!$user->password) {
+            $user->password = bcrypt(Str::random(12));
+        }
+        $user->email = $email;
+        $user->nickname = Arr::get($input, 'nickname');
+        $user->save();
+
+        return $user;
+    }
+
     public function roles()
     {
         return $this->belongsToMany(Role::class);
@@ -121,5 +146,32 @@ class User extends Authenticatable
         }
 
         return $this->roles->contains('id', $role->id);
+    }
+
+    public function search() 
+    {
+        $terms = request('terms');
+
+        if (Str::length($terms) > 2) {
+            $terms = collect(explode(' ', $terms));
+
+            $terms = $terms->filter(function ($term) {
+                return Str::length($term) > 2;
+            });
+
+            $results = collect();
+
+            foreach ($terms as $term) {
+                $results->push(
+                    User::where('name', 'like', '%'.$term.'%')
+                        ->orWhere('nickname', 'like', '%'.$term.'%')
+                        ->get()
+                );
+            }
+
+            return $results->flatten()->filter()->values();
+        } else {
+            return collect();
+        }
     }
 }

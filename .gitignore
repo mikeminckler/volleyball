@@ -26,3 +26,4 @@ soketi.json
 /storage/clockwork
 .php-cs-fixer.cache
 .DS_STORE
+/public/vendor/horizon/

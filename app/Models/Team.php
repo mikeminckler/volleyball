@@ -41,6 +41,13 @@ class Team extends Model
         return $this->belongsToMany(User::class);   
     }
 
+    public function addUser(User $user) 
+    {
+        if (!$this->users()->get()->contains('id', $user->id)) {
+            $this->users()->attach($user);
+        }
+    }
+
     public function search() 
     {
         $terms = request('terms');

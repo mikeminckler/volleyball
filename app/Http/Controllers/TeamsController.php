@@ -7,6 +7,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 use App\Models\Team;
+use App\Models\User;
+use App\Models\Game;
 
 class TeamsController extends Controller
 {
@@ -59,6 +61,25 @@ class TeamsController extends Controller
     public function search() 
     {
         return (new Team)->search();
+    }
+
+    public function addPlayer($id) 
+    {
+        request()->validate([
+            'user' => 'required',
+            'game_id' => 'required',
+        ]);
+
+        $input = request()->all();
+
+        $team = Team::findOrFail($id);
+        $user = User::findOrFail( Arr::get($input, 'user.id'));
+
+        $team->addUser($user);
+
+        $game = Game::findOrFail( Arr::get($input, 'game_id'));
+
+        return redirect()->route('games.view', ['id' => $game->id]);
     }
 
     protected function getTeams()

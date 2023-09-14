@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TeamsController;
 use App\Http\Controllers\GamesController;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,11 @@ Route::middleware([
     Route::post('teams/create', [TeamsController::class, 'store'])->name('teams.create');
     Route::post('teams/search', [TeamsController::class, 'search'])->name('teams.search');
     Route::post('teams/{id}', [TeamsController::class, 'store'])->name('teams.store')->where('id', '\d+');
+    Route::post('teams/{id}/add-player', [TeamsController::class, 'addPlayer'])->name('teams.add-player');
 
     Route::post('games/create', [GamesController::class, 'store'])->name('games.create');
     Route::get('games/{id}', [GamesController::class, 'view'])->name('games.view')->where('id', '\d+');
+
+    Route::post('users/create', [UsersController::class, 'store'])->name('users.create');
+    Route::post('users/search', [UsersController::class, 'search'])->name('users.search');
 });

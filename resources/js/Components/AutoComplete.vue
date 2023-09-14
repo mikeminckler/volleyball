@@ -7,8 +7,10 @@ const props = defineProps({
     model: { type: String, required: true },
     modelValue: {},
     focus: { type: Boolean, default: false },
+    placeholder: { type: String, default: 'Search' },
 });
-defineEmits(['update:modelValue', 'create'])
+
+const emit = defineEmits(['update:modelValue', 'create']);
 
 const terms = ref('');
 const results = ref([]);
@@ -33,13 +35,19 @@ onMounted(() => {
     }
 });
 
+const selectResult = (result) => {
+    emit('update:modelValue', result);
+    results.value = [];
+    terms.value = '';
+}
+
 </script>
 
 <template>
     <div class="max-w-xs relative">
-        <input v-model="terms" ref="input" placeholder="Search..." class="px-2 w-full border focus:outline-none focus:border-gray-500" />
+        <input v-model="terms" ref="input" :placeholder="placeholder + '...'" class="px-2 w-full border focus:outline-none focus:border-gray-500" />
         <div class="w-full text-sm absolute w-full">
-            <div class="row" v-for="result in results" @click="$emit('update:modelValue', result)">{{ result.name }}</div>
+            <div class="row" v-for="result in results" @click="selectResult(result)">{{ result.name }}</div>
             <div class="row flex items-center cursor-pointer" v-if="searched && !results.length" @click="$emit('create', terms)">
                 <FaIcon icon="fas fa-plus">Add {{ terms }}</FaIcon>
             </div>

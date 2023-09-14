@@ -1,5 +1,5 @@
 <template>
-    <font-awesome-icon :icon="icon"></font-awesome-icon> <span class="pl-2"><slot /></span>
+    <font-awesome-icon :icon="icon"></font-awesome-icon> <span v-if="$slots.default" class="pl-2"><slot /></span>
 </template>
 
 <script setup>
@@ -12,6 +12,8 @@
 
     import {
         faPlus,
+        faCaretUp,
+        faCaretDown,
     } from '@fortawesome/free-solid-svg-icons'
 
     defineProps({
@@ -20,5 +22,9 @@
 
     config.autoAddCss = false;
 
-    library.add(faPlus);
+    library.add(
+        faPlus, 
+        faCaretUp,
+        faCaretDown,
+    );
 </script>

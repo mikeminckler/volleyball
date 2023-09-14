@@ -24,7 +24,7 @@ class GamesController extends Controller
     public function view($id) 
     {
         $game = Game::findOrFail($id);
-        $game->load(['team1', 'team2']);
+        $game->load(['team1.users', 'team2']);
 
         return inertia('Game', ['game' => $game]);
     }
