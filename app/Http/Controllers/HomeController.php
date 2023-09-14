@@ -3,27 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Route;
+
+use App\Models\Team;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function home() 
     {
-        //$this->middleware('auth');
-    }
+        $currentTeam = auth()->user()->currentTeam?->load(['games.team1', 'games.team2']);
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return Inertia::render('Home');
+        return inertia('Home', [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'teams' => Team::all(),
+            'currentTeam' => $currentTeam,
+        ]);
     }
 }

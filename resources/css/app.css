@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+
+a {
+    @apply text-sky-600;
+}
+
+h1 {
+    @apply text-2xl;
+}
+
+h2 {
+    @apply text-lg;
+}
+
+.row {
+    @apply px-2 py-1 border-b;
+}
+
+.row:first-child {
+    @apply border-t;
+}
+
+.row:nth-child(odd) {
+    @apply bg-white bg-opacity-50;
+}
+
+.button {
+    @apply inline-flex items-center border rounded shadow px-2 cursor-pointer bg-white;
+}
+
+.date {
+    @apply text-sm opacity-70 border-b px-1;
+}

@@ -3,104 +3,66 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use Inertia\Inertia;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
-use App\Team;
-use App\Player;
-use App\User;
-
-use App\Events\TeamRemoved;
-use App\Events\TeamsRefresh;
+use App\Models\Team;
 
 class TeamsController extends Controller
 {
-    protected $team;
-    protected $player;
-    protected $user;
-
-    public function __construct(Team $team, Player $player, User $user)
+    public function index() 
     {
-        $this->team = $team;
-        $this->player = $player;
-        $this->user = $user;
+        return inertia('Teams', ['teams' => $this->getTeams()]);
     }
 
-    public function teams()
+    public function store($id = null) 
     {
-        return $this->team->where('removed', false)->get()
-            ->sortBy('team_name')
-            ->values()
-            ->all();
+        request()->validate([
+            'name' => 'required',
+        ]);
+
+        $team = (new Team)->saveTeam(request()->only(['name']), $id);
+
+        if (request('json')) {
+            return response()->json([
+                'team' => $team,
+            ]);
+        } else {
+            return redirect()->route('teams.index');
+        }
     }
 
-    public function create(Requests\TeamSave $request)
+    public function resetTeam() 
     {
-        $team = new Team;
-        return $team
-            ->saveTeam($request->only('team_name', 'initials'));
+        $user = auth()->user();
+        $user->current_team_id = null;
+        $user->save();
+        return redirect()->route('home');
     }
 
-    public function load($id)
+    public function select() 
     {
-        return $this->team->findOrFail($id)->load('players', 'homeGames', 'awayGames', 'stats');
+        request()->validate([
+            'team_id' => 'required',
+        ]);
+
+        $team = Team::findOrFail( request('team_id'));
+
+        $user = auth()->user();
+        $user->current_team_id = $team->id;
+        $user->save();
+
+        return redirect()->route('home');
+
     }
 
-    public function store(Requests\TeamSave $request, $id)
+    public function search() 
     {
-        return $this->team->findOrFail($id)
-            ->saveTeam($request->only('team_name', 'initials'));
+        return (new Team)->search();
     }
 
-    public function destroy(Request $request, $id)
+    protected function getTeams()
     {
-        $team = $this->team->findOrFail($id);
-        $team->removed = true;
-        $team->save();
-        event(new TeamRemoved($team->team_name.' has been removed'));
-        event(new TeamsRefresh());
-        return $team;
-    }
-
-    public function players($id)
-    {
-        return $this->team->findOrFail($id)->players->sortBy(function ($player) {
-            return $player->user->last_name;
-        })->values()->all();
-    }
-
-    /**
-     * We pass in the user id here instead of the player id
-     * which allows us to create a player object if we
-     * need to.
-     */
-
-    public function addPlayer(Request $request, $id)
-    {
-        $user = $this->user->findOrFail($request->input('user_id'));
-        return $this->team->findOrFail($id)->addPlayer($user);
-    }
-
-    public function removePlayer(Request $request, $id)
-    {
-        $player = $this->player->findOrFail($request->input('player_id'));
-        return $this->team->findOrFail($id)->removePlayer($player);
-    }
-
-    public function games($id)
-    {
-        return $this->team->findOrFail($id)->games();
-    }
-
-    public function selectTeam()
-    {
-        return Inertia::render('SelectTeam');
-    }
-
-    public function setTeam()
-    {
-        $team = $this->team->findOrFail(request('team_id'));
-        session()->put('team_id', $team->id);
-        return response()->json(['success' => 'Selected '.$team->team_name]);
+        return Team::all();
     }
 }
