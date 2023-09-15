@@ -58,7 +58,7 @@ const createResult = () => {
         <input v-model="terms" ref="input" :placeholder="placeholder + '...'" class="px-2 w-full border focus:outline-none focus:border-gray-400 rounded" />
         <div class="w-full text-sm absolute w-full z-10 bg-white shadow rounded" v-if="searched">
             <div class="row" v-for="result in results" @click="selectResult(result)">{{ result.name }}</div>
-            <div class="row flex items-center cursor-pointer" v-if="searched && !results.length && terms.length > 2" @click="createResult()">
+            <div class="row flex items-center cursor-pointer" v-if="searched && terms.length > 2" @click="createResult()">
                 <FaIcon icon="fas fa-plus">Add {{ terms }}</FaIcon>
             </div>
         </div>
