@@ -15,11 +15,14 @@
         faCaretUp,
         faCaretDown,
         faRotateLeft,
+        faTimes,
+        faCheck,
+        faCircle,
     } from '@fortawesome/free-solid-svg-icons'
 
     import {
-        faCircle,
-        faCircleCheck,
+        faCircle as farCircle,
+        faCircleCheck as farCircleCheck,
     } from '@fortawesome/free-regular-svg-icons'
 
     defineProps({
@@ -33,7 +36,10 @@
         faCaretUp,
         faCaretDown,
         faRotateLeft,
+        farCircle,
+        farCircleCheck,
+        faTimes,
+        faCheck,
         faCircle,
-        faCircleCheck,
     );
 </script>
