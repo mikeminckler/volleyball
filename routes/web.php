@@ -37,6 +37,7 @@ Route::middleware([
 
     Route::post('games/create', [GamesController::class, 'store'])->name('games.create');
     Route::get('games/{id}', [GamesController::class, 'view'])->name('games.view')->where('id', '\d+');
+    Route::post('games/{id}/chart', [GamesController::class, 'chart'])->name('games.chart')->where('id', '\d+');
 
     Route::post('users/create', [UsersController::class, 'store'])->name('users.create');
     Route::post('users/search', [UsersController::class, 'search'])->name('users.search');

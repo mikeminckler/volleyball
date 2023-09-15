@@ -11,6 +11,7 @@ const props = defineProps({
 
 import UserStat from '@/Components/UserStat.vue';
 import Score from '@/Components/Score.vue';
+import GoogleChart from '@/Components/GoogleChart.vue';
 
 </script>
 
@@ -41,6 +42,10 @@ import Score from '@/Components/Score.vue';
                 </div>
             </div>
 
+        </div>
+
+        <div class="">
+            <GoogleChart :game="game"></GoogleChart>
         </div>
 
     </div>

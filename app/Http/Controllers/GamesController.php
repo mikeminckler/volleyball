@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Game;
+use App\Utilities\Chart;
 
 class GamesController extends Controller
 {
@@ -27,5 +28,14 @@ class GamesController extends Controller
         $game->load(['team1.users', 'team2']);
 
         return inertia('Game', ['game' => $game]);
+    }
+
+    public function chart($id) 
+    {
+        $game = Game::findOrFail($id);
+
+        return response()->json([
+            'data' => Chart::convertGamesForGoogleChart($game),
+        ]);
     }
 }
