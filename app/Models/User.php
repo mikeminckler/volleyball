@@ -11,6 +11,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -178,13 +179,15 @@ class User extends Authenticatable
         }
     }
 
-    public function getScore(Stat $stat, Game $game) 
+    public function getScore(Stat $stat, Collection $games = null) 
     {
         $user_stats = UserStat::where('user_id', $this->id)
-            ->where('stat_id', $stat->id)
-            ->where('game_id', $game->id)
-            ->get();
+            ->where('stat_id', $stat->id);
 
-        return $stat->calculateScore($user_stats);
+        if ($games) {
+            $user_stats->whereIn('game_id', $games->pluck('id'));
+        }
+
+        return $stat->calculateScore($user_stats->get());
     }
 }

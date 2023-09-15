@@ -112,18 +112,22 @@ class TeamsController extends Controller
     public function statScore($id) 
     {
         request()->validate([
-            'game' => 'required',
+            'games' => 'required',
             'stat' => 'required',
         ]);
 
         $input = request()->all();
         $team = Team::findOrFail($id);   
 
-        $game = Game::findOrFail( Arr::get($input, 'game.id'));
+        $game_ids = collect( Arr::get($input, 'games'))->map(function($game) {
+            return $game['id'];
+        })->toArray();
+
+        $games = Game::whereIn('id', $game_ids)->get();
         $stat = Stat::findOrFail( Arr::get($input, 'stat.id'));
 
         return response()->json([
-            'score' => $team->getScore($stat, $game),
+            'score' => $team->getScore($stat, $games),
         ]);
     }
 

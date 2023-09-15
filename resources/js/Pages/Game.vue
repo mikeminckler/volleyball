@@ -7,11 +7,10 @@ const { displayShortDateTime } = useDates();
 
 const props = defineProps({
     game: { type: Object, required: true },
-    stats: { type: Array, required: true },
 });
 
 import UserStat from '@/Components/UserStat.vue';
-import TeamStat from '@/Components/TeamStat.vue';
+import Score from '@/Components/Score.vue';
 
 </script>
 
@@ -27,17 +26,17 @@ import TeamStat from '@/Components/TeamStat.vue';
 
             <div class="contents row">
                 <div class="cell"></div>
-                <div class="cell" v-for="stat in stats">
+                <div class="cell" v-for="stat in $page.props.stats">
                     <div class="flex">
                         <div class="">{{ stat.name }}</div>
-                        <TeamStat :game="game" :stat="stat" :team="game.team1"></TeamStat>
+                        <Score :games="[game]" type="team" :item="game.team1" :stat="stat"></Score>
                     </div>
                 </div>
             </div>
 
             <div class="contents row" v-for="user in game.team1.users">
                 <div class="cell">{{ user.nickname ??= user.name }}</div>
-                <div class="cell" v-for="stat in stats">
+                <div class="cell" v-for="stat in $page.props.stats">
                     <UserStat :user="user" :stat="stat" :game="game"></UserStat>
                 </div>
             </div>

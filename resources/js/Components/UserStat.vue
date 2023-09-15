@@ -1,23 +1,13 @@
 <script setup>
 
 import { ref, computed } from 'vue';
-import Score from '@/Components/Score.vue'
+import Score from '@/Components/Score.vue';
 
 const props = defineProps({
     user: { type: Object, required: true },
     stat: { type: Object, required: true },
-    game: { type: Object, required: true },
+    game: { type: Object },
 });
-
-const score = ref();
-
-const getScore = () => {
-    axios.post(route('users.stat-score', { id: props.user.id }), { game: props.game, stat: props.stat }).then(response => {
-        score.value = response.data.score;
-    });
-}
-
-getScore();
 
 const buttons = computed(() => {
     let items = [];
@@ -38,15 +28,11 @@ const buttons = computed(() => {
 });
 
 const createStat = (value) => {
-    axios.post(route('users.create-stat',  { id: props.user.id }), { game: props.game, stat: props.stat, score: value }).then(response => {
-        getScore();
-    });
+    axios.post(route('users.create-stat',  { id: props.user.id }), { game: props.game, stat: props.stat, score: value });
 }
 
 const undo = () => {
-    axios.post(route('users.undo-stat',  { id: props.user.id }), { game: props.game, stat: props.stat }).then(response => {
-        getScore();
-    });
+    axios.post(route('users.undo-stat',  { id: props.user.id }), { game: props.game, stat: props.stat });
 }
 
 </script>
@@ -60,7 +46,7 @@ const undo = () => {
         <div class="" v-else>{{ button }}</div>
     </div>
 
-    <Score :score="score" v-if="score"></Score>
+    <Score type="user" :item="user" :games="[game]" :stat="stat"></Score>
 
     <div class="button text-sm w-6 h-6 opacity-70 ml-2" @click="undo()">
         <FaIcon icon="fa-solid fa-rotate-left"></FaIcon>

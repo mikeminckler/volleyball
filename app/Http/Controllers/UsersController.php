@@ -62,7 +62,7 @@ class UsersController extends Controller
         broadcast(new UserStatCreated($user_stat)); 
 
         return response()->json([
-            'score' => $user->getScore($stat, $game),
+            'score' => $user->getScore($stat, collect([$game])),
         ]);
     }
 
@@ -86,10 +86,10 @@ class UsersController extends Controller
             ->first()
             ->delete();
 
-        broadcast(new UserStatDeleted($game, $stat)); 
+        broadcast(new UserStatDeleted($game, $stat, $user)); 
 
         return response()->json([
-            'score' => $user->getScore($stat, $game),
+            'score' => $user->getScore($stat, collect([$game])),
         ]);
     }
 
@@ -97,18 +97,22 @@ class UsersController extends Controller
     public function statScore($id) 
     {
         request()->validate([
-            'game' => 'required',
+            'games' => 'required',
             'stat' => 'required',
         ]);
 
         $input = request()->all();
         $user = User::findOrFail($id);   
 
-        $game = Game::findOrFail( Arr::get($input, 'game.id'));
+        $game_ids = collect( Arr::get($input, 'games'))->map(function($game) {
+            return $game['id'];
+        })->toArray();
+
+        $games = Game::whereIn('id', $game_ids)->get();
         $stat = Stat::findOrFail( Arr::get($input, 'stat.id'));
 
         return response()->json([
-            'score' => $user->getScore($stat, $game),
+            'score' => $user->getScore($stat, $games),
         ]);
     }
 }

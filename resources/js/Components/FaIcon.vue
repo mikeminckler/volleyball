@@ -17,6 +17,11 @@
         faRotateLeft,
     } from '@fortawesome/free-solid-svg-icons'
 
+    import {
+        faCircle,
+        faCircleCheck,
+    } from '@fortawesome/free-regular-svg-icons'
+
     defineProps({
         icon: { type: String, required: true },
     });
@@ -28,5 +33,7 @@
         faCaretUp,
         faCaretDown,
         faRotateLeft,
+        faCircle,
+        faCircleCheck,
     );
 </script>

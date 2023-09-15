@@ -25,9 +25,14 @@ export function useDates() {
         return dayjs(date).format('MMM D, \'YY h:mma');
     }
 
+    function daysOld(date) {
+        return dayjs().diff(dayjs(date), 'day');
+    }
+
     return {
         displayDateTime,
         displayHumanDateTime,
         displayShortDateTime,
+        daysOld,
     }
 }

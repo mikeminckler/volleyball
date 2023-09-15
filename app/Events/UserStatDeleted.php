@@ -13,6 +13,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
 use App\Models\Game;
 use App\Models\Stat;
+use App\Models\User;
 
 class UserStatDeleted implements ShouldBroadcastNow
 {
@@ -20,14 +21,16 @@ class UserStatDeleted implements ShouldBroadcastNow
 
     public $game;
     public $stat;
+    public $user;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Game $game, Stat $stat)
+    public function __construct(Game $game, Stat $stat, User $user)
     {
         $this->game = $game;
         $this->stat = $stat;
+        $this->user = $user;
     }
 
     /**

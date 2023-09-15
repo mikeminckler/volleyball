@@ -3,9 +3,10 @@
 import { router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 import { useDates } from '@/Composables/UseDates.js'
-const { displayShortDateTime } = useDates();
+const { displayShortDateTime, daysOld } = useDates();
 
 import AutoComplete from '@/Components/AutoComplete.vue';
+import Score from '@/Components/Score.vue';
 
 const props = defineProps({
     teams: { type: Array },
@@ -45,6 +46,22 @@ const sortPlayer = (data) => {
     router.post(route('teams.sort-player', { id: props.currentTeam.id }), { user: data.user, direction: data.direction });
 }
 
+const selectedGames = ref(props.currentTeam ? props.currentTeam.games.filter(game => {
+    return daysOld(game.created_at) < 7;
+}) : []);
+
+const toggleGame = (game) => {
+    const index = selectedGames.value.findIndex(g => {
+        return game.id === g.id 
+    });
+        
+    if (index >= 0) {
+        selectedGames.value.splice(index, 1);
+    } else {
+        selectedGames.value.push(game);
+    }
+}
+
 </script>
 
 <template>
@@ -59,34 +76,64 @@ const sortPlayer = (data) => {
         </div>
     </div>
 
-    <div class="grid grid-cols-2" v-if="currentTeam">
+    <div class="grid grid-cols-[auto_auto]" v-if="currentTeam">
 
         <div class="">
             <h1>Games</h1>
 
-            <div class="flex mt-4">
+            <div class="mt-4">
                 <div class="button" @click="showCreateGame = !showCreateGame">
                     <FaIcon icon="fas fa-plus">New Game</FaIcon>
                 </div>
                 <div class="" v-if="showCreateGame">
-                    <AutoComplete v-model="opponent" model="teams" :focus="true" @create="createTeam($event)"></AutoComplete>
+                    <AutoComplete v-model="opponent" model="teams" :focus="true" @create="createTeam($event)" placeholder="Search or Add Team"></AutoComplete>
                 </div>
             </div>
 
             <div class="mt-4">
-                <Link class="block" :href="route('games.view', {id : game.id })" v-for="game in currentTeam.games">{{ game.team2.name }} - {{ displayShortDateTime(game.created_at) }}</Link>
+                <div class="flex" v-for="game in currentTeam.games">
+                    <div class="text-xl cursor-pointer opacity-50" @click="toggleGame(game)">
+                        <FaIcon icon="far fa-circle" v-if="!selectedGames.find( g => g.id === game.id)"></FaIcon>
+                        <FaIcon icon="far fa-circle-check" v-else></FaIcon>
+                    </div>
+                    <Link class="ml-2" :href="route('games.view', {id : game.id })">{{ game.team2.name }} - {{ displayShortDateTime(game.created_at) }}</Link>
+                </div>
             </div>
         </div>
 
-        <div class="">
+        <div class="ml-8">
 
             <h1>Players</h1>
 
-            <div class="mt-4">
-                <div class="flex row" v-for="player in currentTeam.users">
-                    <div class="flex-1">{{ player.name }}</div>
-                    <div class="button" @click="sortPlayer({ user: player, direction: 'up'})"><FaIcon icon="fa-caret-up"></FaIcon></div>
-                    <div class="button ml-1" @click="sortPlayer({ user: player, direction: 'down'})"><FaIcon icon="fa-caret-down"></FaIcon></div>
+            <div class="mt-4 grid grid-cols-6">
+                
+                <div class="contents row">
+                    <div class="cell"></div>
+                    <div class="cell" v-for="stat in $page.props.stats">
+                        <div class="">{{ stat.name }}</div>
+                    </div>
+                    <div class="cell"></div>
+                </div>
+
+                <div class="contents row" v-for="player in currentTeam.users" :key="'player-' + player.id">
+                    <div class="cell">{{ player.name }}</div>
+
+                    <div class="cell" v-for="stat in $page.props.stats" :key="stat.name + '-' + selectedGames.length">
+                        <Score :games="selectedGames" type="user" :item="player" :stat="stat" v-if="selectedGames.length"></Score>
+                    </div>
+
+                    <div class="flex cell">
+                        <div class="button" @click="sortPlayer({ user: player, direction: 'up'})"><FaIcon icon="fa-caret-up"></FaIcon></div>
+                        <div class="button ml-1" @click="sortPlayer({ user: player, direction: 'down'})"><FaIcon icon="fa-caret-down"></FaIcon></div>
+                    </div>
+                </div>
+
+                <div class="contents row" v-if="selectedGames.length">
+                    <div class="cell"></div>
+                    <div class="cell" v-for="stat in $page.props.stats" :key="'team-' + stat.name + '-' + selectedGames.length">
+                        <Score :games="selectedGames" type="team" :item="currentTeam" :stat="stat"></Score>
+                    </div>
+                    <div class="cell"></div>
                 </div>
             </div>
 

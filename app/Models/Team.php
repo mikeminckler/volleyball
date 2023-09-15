@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
@@ -33,7 +34,7 @@ class Team extends Model
 
     public function games() 
     {
-        return $this->hasMany(Game::class, 'team1_id');
+        return $this->hasMany(Game::class, 'team1_id')->latest();
     }
 
     public function users() 
@@ -71,12 +72,14 @@ class Team extends Model
         }
     }
 
-    public function getScore(Stat $stat, Game $game) 
+    public function getScore(Stat $stat, Collection $games = null) 
     {
-        $user_stats = UserStat::where('stat_id', $stat->id)
-            ->where('game_id', $game->id)
-            ->get();
+        $user_stats = UserStat::where('stat_id', $stat->id);
 
-        return $stat->calculateScore($user_stats);
+        if ($games) {
+            $user_stats->whereIn('game_id', $games->pluck('id'));
+        }
+
+        return $stat->calculateScore($user_stats->get());
     }
 }
