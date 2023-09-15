@@ -31,6 +31,7 @@ Route::middleware([
     Route::post('teams/search', [TeamsController::class, 'search'])->name('teams.search');
     Route::post('teams/{id}', [TeamsController::class, 'store'])->name('teams.store')->where('id', '\d+');
     Route::post('teams/{id}/add-player', [TeamsController::class, 'addPlayer'])->name('teams.add-player')->where('id', '\d+');
+    Route::post('teams/{id}/remove-player', [TeamsController::class, 'removePlayer'])->name('teams.remove-player')->where('id', '\d+');
     Route::post('teams/{id}/sort-player', [TeamsController::class, 'sortPlayer'])->name('teams.sort-player')->where('id', '\d+');
     Route::post('teams/{id}/stat-score', [TeamsController::class, 'statScore'])->name('teams.stat-score')->where('id', '\d+');
 

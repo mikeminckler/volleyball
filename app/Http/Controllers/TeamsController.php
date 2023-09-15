@@ -78,6 +78,21 @@ class TeamsController extends Controller
         return redirect()->route('home');
     }
 
+    public function removePlayer($id) 
+    {
+        request()->validate([
+            'user' => 'required',
+        ]);
+
+        $input = request()->all();
+        $team = Team::findOrFail($id);
+        $user = User::findOrFail( Arr::get($input, 'user.id'));
+
+        $team->removeUser($user);
+
+        return redirect()->route('home');
+    }
+
     public function sortPlayer($id) 
     {
         request()->validate([

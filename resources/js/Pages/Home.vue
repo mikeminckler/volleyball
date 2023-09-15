@@ -42,6 +42,12 @@ watch(() => addPlayer.value, () => {
     router.post(route('teams.add-player', { id: props.currentTeam.id }), { user: addPlayer.value });
 });
 
+const removePlayer = (player) => {
+    if (confirm('Are you sure you want to remove that player?')) {
+        router.post(route('teams.remove-player', { id: props.currentTeam.id }), { user: player });
+    }
+}
+
 const sortPlayer = (data) => {
     router.post(route('teams.sort-player', { id: props.currentTeam.id }), { user: data.user, direction: data.direction });
 }
@@ -127,6 +133,7 @@ const toggleGame = (game) => {
                     <div class="flex cell">
                         <div class="button" @click="sortPlayer({ user: player, direction: 'up'})"><FaIcon icon="fa-caret-up"></FaIcon></div>
                         <div class="button ml-1" @click="sortPlayer({ user: player, direction: 'down'})"><FaIcon icon="fa-caret-down"></FaIcon></div>
+                        <div class="button ml-1" @click="removePlayer(player)"><FaIcon icon="fas fa-times"></FaIcon></div>
                     </div>
                 </div>
 

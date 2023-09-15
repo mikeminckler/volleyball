@@ -49,6 +49,13 @@ class Team extends Model
         }
     }
 
+    public function removeUser(User $user) 
+    {
+        if ($this->users()->get()->contains('id', $user->id)) {
+            $this->users()->detach($user);
+        }
+    }
+
     public function search() 
     {
         $terms = request('terms');
