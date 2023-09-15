@@ -1,5 +1,6 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
+import { debounce } from 'lodash';
 
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -20,6 +21,10 @@ const submit = () => {
     });
 };
 
+const updateTeam = debounce(function(team) {
+    axios.post(route('teams.update', { id: team.id }), { name: team.name });
+}, 500);
+
 </script>
 
 <template>
@@ -29,8 +34,14 @@ const submit = () => {
 
         <h1>Teams</h1>
 
-        <div class="mt-4">
-            <div class="row" v-for="team in teams">{{ team.name }}</div>
+        <div class="mt-4 max-w-xl">
+            <div class="row" v-for="team in teams">
+                <input class="px-2 py-1 rounded w-full bg-transparent border border-transparent focus:outline-none focus:border-gray-400" 
+                    :name="'team-name-' + team.id" 
+                    @keyup="updateTeam(team)" 
+                    v-model="team.name" />
+            </div>
+
         </div>
 
         <div class="max-w-2xl mt-8">

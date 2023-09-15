@@ -16,6 +16,9 @@ import GoogleChart from '@/Components/GoogleChart.vue';
 </script>
 
 <template>
+
+    <Head :title="'vs ' + game.team2.name" />
+
     <div class="">
 
         <div class="flex justify-between border-b border-gray-400">

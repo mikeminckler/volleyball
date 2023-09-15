@@ -29,7 +29,7 @@ Route::middleware([
     Route::post('teams/reset', [TeamsController::class, 'resetTeam'])->name('teams.reset');
     Route::post('teams/create', [TeamsController::class, 'store'])->name('teams.create');
     Route::post('teams/search', [TeamsController::class, 'search'])->name('teams.search');
-    Route::post('teams/{id}', [TeamsController::class, 'store'])->name('teams.store')->where('id', '\d+');
+    Route::post('teams/{id}', [TeamsController::class, 'store'])->name('teams.update')->where('id', '\d+');
     Route::post('teams/{id}/add-player', [TeamsController::class, 'addPlayer'])->name('teams.add-player')->where('id', '\d+');
     Route::post('teams/{id}/remove-player', [TeamsController::class, 'removePlayer'])->name('teams.remove-player')->where('id', '\d+');
     Route::post('teams/{id}/sort-player', [TeamsController::class, 'sortPlayer'])->name('teams.sort-player')->where('id', '\d+');

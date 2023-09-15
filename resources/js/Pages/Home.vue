@@ -97,7 +97,7 @@ const toggleGame = (game) => {
             </div>
 
             <div class="mt-4">
-                <div class="flex" v-for="game in currentTeam.games">
+                <div class="flex row" v-for="game in currentTeam.games">
                     <div class="text-xl cursor-pointer opacity-50" @click="toggleGame(game)">
                         <FaIcon icon="far fa-circle" v-if="!selectedGames.find( g => g.id === game.id)"></FaIcon>
                         <FaIcon icon="far fa-circle-check" v-else></FaIcon>
