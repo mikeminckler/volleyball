@@ -79,14 +79,16 @@ class UsersController extends Controller
         $game = Game::findOrFail( Arr::get($input, 'game.id'));
         $stat = Stat::findOrFail( Arr::get($input, 'stat.id'));
 
-        $user_stats = UserStat::where('user_id', $user->id)
+        $user_stat = UserStat::where('user_id', $user->id)
             ->where('stat_id', $stat->id)
             ->where('game_id', $game->id)
             ->latest()
-            ->first()
-            ->delete();
+            ->first();
 
-        broadcast(new UserStatDeleted($game, $stat, $user)); 
+        if ($user_stat) {
+            $user_stat->delete();
+            broadcast(new UserStatDeleted($game, $stat, $user)); 
+        }
 
         return response()->json([
             'score' => $user->getScore($stat, collect([$game])),

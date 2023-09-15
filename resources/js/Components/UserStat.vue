@@ -2,6 +2,7 @@
 
 import { ref, computed } from 'vue';
 import Score from '@/Components/Score.vue';
+const clicked = ref();
 
 const props = defineProps({
     user: { type: Object, required: true },
@@ -28,11 +29,17 @@ const buttons = computed(() => {
 });
 
 const createStat = (value) => {
-    axios.post(route('users.create-stat',  { id: props.user.id }), { game: props.game, stat: props.stat, score: value });
+    clicked.value = 'stat-' + value;
+    axios.post(route('users.create-stat',  { id: props.user.id }), { game: props.game, stat: props.stat, score: value }).then(response => {
+        setTimeout( () => clicked.value = null, 250);
+    });
 }
 
 const undo = () => {
-    axios.post(route('users.undo-stat',  { id: props.user.id }), { game: props.game, stat: props.stat });
+    clicked.value = 'undo';
+    axios.post(route('users.undo-stat',  { id: props.user.id }), { game: props.game, stat: props.stat }).then(response => {
+        setTimeout( () => clicked.value = null, 250);
+    });
 }
 
 </script>
@@ -40,15 +47,15 @@ const undo = () => {
 <template>
 
 <div class="flex items-center">
-    
-    <div class="button text w-7 h-7 ml-1 first:ml-0" v-for="button in buttons" @click="createStat(button)">
+
+    <div class="button text w-7 h-7 ml-1 first:ml-0" v-for="button in buttons" @click="createStat(button)" :class="clicked === 'stat-' + button ? 'clicked' : ''">
         <FaIcon icon="fa-plus" v-if="buttons.length === 1"></FaIcon>
         <div class="" v-else>{{ button }}</div>
     </div>
 
     <Score type="user" :item="user" :games="[game]" :stat="stat"></Score>
 
-    <div class="button text-sm w-6 h-6 opacity-70 ml-2" @click="undo()">
+    <div class="button text-sm w-6 h-6 opacity-70 ml-2" @click="undo()" :class="clicked === 'undo' ? 'clicked' : ''">
         <FaIcon icon="fa-solid fa-rotate-left"></FaIcon>
     </div>
 </div>
