@@ -27,4 +27,24 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    /**
+     * Prepare exception for rendering.
+     *
+     * @param  \Throwable  $e
+     * @return \Throwable
+     */
+    public function render($request, Throwable $e)
+    {
+        $response = parent::render($request, $e);
+
+        if ($response->status() === 419) {
+            auth()->logout();
+            session()->invalidate();
+            session()->regenerateToken();
+            return redirect()->route('login');
+        }
+
+        return $response;
+    }
 }
