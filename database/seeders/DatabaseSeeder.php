@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         $user->name = 'Mike Minckler';
         $user->email = 'mike.minckler@brentwood.ca';
         $user->email_verified_at = now();
-        $user->password = $this->createPassword();
+        $user->password = bcrypt('volleyball');
         $user->save();
 
         $admin = new Role();
@@ -53,14 +53,4 @@ class DatabaseSeeder extends Seeder
         }
     }
 
-    protected function createPassword()
-    {
-        $password = Str::random();
-
-        if (!env('production')) {
-            $password = 'password';
-        }
-
-        return bcrypt($password);
-    }
 }
