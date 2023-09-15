@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
 use App\Models\Team;
+use App\Models\UserStat;
 
 class Game extends Model
 {
@@ -40,5 +41,10 @@ class Game extends Model
     public function team2() 
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function stats() 
+    {
+        return $this->hasMany(UserStat::class);   
     }
 }

@@ -38,13 +38,13 @@ class Team extends Model
 
     public function users() 
     {
-        return $this->belongsToMany(User::class);   
+        return $this->belongsToMany(User::class)->withPivot('sort_order')->orderByPivot('sort_order');
     }
 
     public function addUser(User $user) 
     {
         if (!$this->users()->get()->contains('id', $user->id)) {
-            $this->users()->attach($user);
+            $this->users()->attach($user, ['sort_order' => $this->users()->count() + 1]);
         }
     }
 
@@ -69,5 +69,14 @@ class Team extends Model
         } else {
             return collect();
         }
+    }
+
+    public function getScore(Stat $stat, Game $game) 
+    {
+        $user_stats = UserStat::where('stat_id', $stat->id)
+            ->where('game_id', $game->id)
+            ->get();
+
+        return $stat->calculateScore($user_stats);
     }
 }

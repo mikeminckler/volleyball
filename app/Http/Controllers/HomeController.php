@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     public function home() 
     {
-        $currentTeam = auth()->user()->currentTeam?->load(['games.team1', 'games.team2']);
+        $currentTeam = auth()->user()->currentTeam?->load(['games.team1', 'games.team2', 'users']);
 
         return inertia('Home', [
             'canLogin' => Route::has('login'),

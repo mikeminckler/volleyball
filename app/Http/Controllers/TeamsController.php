@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\Game;
+use App\Models\Stat;
 
 class TeamsController extends Controller
 {
@@ -55,7 +56,6 @@ class TeamsController extends Controller
         $user->save();
 
         return redirect()->route('home');
-
     }
 
     public function search() 
@@ -67,19 +67,64 @@ class TeamsController extends Controller
     {
         request()->validate([
             'user' => 'required',
-            'game_id' => 'required',
         ]);
 
         $input = request()->all();
-
         $team = Team::findOrFail($id);
         $user = User::findOrFail( Arr::get($input, 'user.id'));
 
         $team->addUser($user);
 
-        $game = Game::findOrFail( Arr::get($input, 'game_id'));
+        return redirect()->route('home');
+    }
 
-        return redirect()->route('games.view', ['id' => $game->id]);
+    public function sortPlayer($id) 
+    {
+        request()->validate([
+            'user' => 'required',
+            'direction' => 'required',
+        ]);
+
+        $input = request()->all();
+        $team = Team::findOrFail($id);
+        $user = $team->users->firstWhere('id', Arr::get($input, 'user.id'));
+
+        $users = $team->users->sortBy(function($player) use($user, $input) {
+            if ($player->id === $user->id) {
+            
+                if ( Arr::get($input, 'direction') === 'up') {
+                    return (int) $player->pivot->sort_order - 1.5;
+                } else {
+                    return (int) $player->pivot->sort_order + 1.5;
+                }
+
+            }
+            return (int) $player->pivot->sort_order;
+        })
+        ->values()
+        ->each(function($player, $new_order) use($team) {
+            $team->users()->updateExistingPivot($player->id, ['sort_order' => $new_order + 1]);
+        });
+
+        return redirect()->route('home');
+    }
+
+    public function statScore($id) 
+    {
+        request()->validate([
+            'game' => 'required',
+            'stat' => 'required',
+        ]);
+
+        $input = request()->all();
+        $team = Team::findOrFail($id);   
+
+        $game = Game::findOrFail( Arr::get($input, 'game.id'));
+        $stat = Stat::findOrFail( Arr::get($input, 'stat.id'));
+
+        return response()->json([
+            'score' => $team->getScore($stat, $game),
+        ]);
     }
 
     protected function getTeams()

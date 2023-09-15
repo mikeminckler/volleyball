@@ -18,20 +18,20 @@ h2 {
     @apply text-lg;
 }
 
-.row {
+.row, .contents.row .cell {
     @apply px-2 py-1 border-b;
 }
 
-.row:first-child {
+.row:first-child, .contents.row:first-child .cell {
     @apply border-t;
 }
 
-.row:nth-child(odd) {
+.row:nth-child(odd), .contents.row:nth-child(odd) .cell {
     @apply bg-white bg-opacity-50;
 }
 
 .button {
-    @apply inline-flex items-center border rounded shadow px-2 cursor-pointer bg-white;
+    @apply inline-flex justify-center items-center border rounded shadow px-2 cursor-pointer bg-white;
 }
 
 .date {

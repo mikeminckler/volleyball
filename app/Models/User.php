@@ -16,6 +16,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Models\Role;
 use App\Models\Team;
+use App\Models\Stat;
+use App\Models\Game;
+use App\Models\UserStat;
 
 class User extends Authenticatable
 {
@@ -173,5 +176,15 @@ class User extends Authenticatable
         } else {
             return collect();
         }
+    }
+
+    public function getScore(Stat $stat, Game $game) 
+    {
+        $user_stats = UserStat::where('user_id', $this->id)
+            ->where('stat_id', $stat->id)
+            ->where('game_id', $game->id)
+            ->get();
+
+        return $stat->calculateScore($user_stats);
     }
 }

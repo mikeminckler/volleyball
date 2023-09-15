@@ -19,7 +19,11 @@ const searched = ref(false);
 
 watch(() => terms.value, () => {
     searched.value = false;
-    search();
+    if (terms.value.length > 2) {
+        search();
+    } else {
+        results.value = [];
+    }
 });
 
 const search = debounce(function() {
@@ -41,14 +45,20 @@ const selectResult = (result) => {
     terms.value = '';
 }
 
+const createResult = () => {
+    emit('create', terms.value);
+    results.value = [];
+    terms.value = '';
+}
+
 </script>
 
 <template>
     <div class="max-w-xs relative">
-        <input v-model="terms" ref="input" :placeholder="placeholder + '...'" class="px-2 w-full border focus:outline-none focus:border-gray-500" />
+        <input v-model="terms" ref="input" :placeholder="placeholder + '...'" class="px-2 w-full border focus:outline-none focus:border-gray-400 rounded" />
         <div class="w-full text-sm absolute w-full">
             <div class="row" v-for="result in results" @click="selectResult(result)">{{ result.name }}</div>
-            <div class="row flex items-center cursor-pointer" v-if="searched && !results.length" @click="$emit('create', terms)">
+            <div class="row flex items-center cursor-pointer" v-if="searched && !results.length && terms.length > 2" @click="createResult()">
                 <FaIcon icon="fas fa-plus">Add {{ terms }}</FaIcon>
             </div>
         </div>

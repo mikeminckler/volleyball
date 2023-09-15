@@ -14,6 +14,7 @@
         faPlus,
         faCaretUp,
         faCaretDown,
+        faRotateLeft,
     } from '@fortawesome/free-solid-svg-icons'
 
     defineProps({
@@ -26,5 +27,6 @@
         faPlus, 
         faCaretUp,
         faCaretDown,
+        faRotateLeft,
     );
 </script>

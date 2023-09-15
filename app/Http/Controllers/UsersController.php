@@ -3,8 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
+use App\Models\UserStat;
 use App\Models\User;
+use App\Models\Game;
+use App\Models\Stat;
+
+use App\Events\UserStatCreated;
+use App\Events\UserStatDeleted;
 
 class UsersController extends Controller
 {
@@ -28,5 +35,80 @@ class UsersController extends Controller
         } else {
             return redirect()->route('users.index');
         }
+    }
+
+    public function createStat($id) 
+    {
+        request()->validate([
+            'game' => 'required',
+            'stat' => 'required',
+            'score' => 'required|numeric',
+        ]);
+
+        $input = request()->all();
+
+        $user = User::findOrFail($id);
+        $game = Game::findOrFail( Arr::get($input, 'game.id'));
+        $stat = Stat::findOrFail( Arr::get($input, 'stat.id'));
+
+        $user_stat = new UserStat;
+        $user_stat->user_id = $user->id;
+        $user_stat->game_id = $game->id;
+        $user_stat->stat_id = $stat->id;
+        $user_stat->point = $game->stats->count();
+        $user_stat->score = (float) Arr::get($input, 'score');
+        $user_stat->save();
+
+        broadcast(new UserStatCreated($user_stat)); 
+
+        return response()->json([
+            'score' => $user->getScore($stat, $game),
+        ]);
+    }
+
+    public function undoStat($id) 
+    {
+        request()->validate([
+            'game' => 'required',
+            'stat' => 'required',
+        ]);
+
+        $input = request()->all();
+
+        $user = User::findOrFail($id);
+        $game = Game::findOrFail( Arr::get($input, 'game.id'));
+        $stat = Stat::findOrFail( Arr::get($input, 'stat.id'));
+
+        $user_stats = UserStat::where('user_id', $user->id)
+            ->where('stat_id', $stat->id)
+            ->where('game_id', $game->id)
+            ->latest()
+            ->first()
+            ->delete();
+
+        broadcast(new UserStatDeleted($game, $stat)); 
+
+        return response()->json([
+            'score' => $user->getScore($stat, $game),
+        ]);
+    }
+
+
+    public function statScore($id) 
+    {
+        request()->validate([
+            'game' => 'required',
+            'stat' => 'required',
+        ]);
+
+        $input = request()->all();
+        $user = User::findOrFail($id);   
+
+        $game = Game::findOrFail( Arr::get($input, 'game.id'));
+        $stat = Stat::findOrFail( Arr::get($input, 'stat.id'));
+
+        return response()->json([
+            'score' => $user->getScore($stat, $game),
+        ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Game;
+use App\Models\Stat;
 
 class GamesController extends Controller
 {
@@ -25,7 +26,8 @@ class GamesController extends Controller
     {
         $game = Game::findOrFail($id);
         $game->load(['team1.users', 'team2']);
+        $stats = Stat::all();
 
-        return inertia('Game', ['game' => $game]);
+        return inertia('Game', ['game' => $game, 'stats' => $stats]);
     }
 }

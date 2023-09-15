@@ -5,50 +5,43 @@ import { ref, watch } from 'vue'
 import { useDates } from '@/Composables/UseDates.js'
 const { displayShortDateTime } = useDates();
 
-import AutoComplete from '@/Components/AutoComplete.vue';
-
 const props = defineProps({
     game: { type: Object, required: true },
+    stats: { type: Array, required: true },
 });
 
-const addPlayer = ref();
-
-const createUser = (name) => {
-    axios.post(route('users.create'), { name: name, json: true }).then(response => {
-        addPlayer.value = response.data.user;
-    });
-};
-
-watch(() => addPlayer.value, () => {
-    router.post(route('teams.add-player', { id: props.game.team1.id }), { user: addPlayer.value, game_id: props.game.id });
-});
+import UserStat from '@/Components/UserStat.vue';
+import TeamStat from '@/Components/TeamStat.vue';
 
 </script>
 
 <template>
     <div class="">
+
         <div class="flex justify-between border-b border-gray-400">
             <div class="">{{ game.team1.name }} vs <span class="font-semibold">{{ game.team2.name }}</span></div>
             <div class="date">{{ displayShortDateTime(game.created_at) }}</div>
         </div>
 
-        <div class="">
-            <div class="flex" v-for="user in game.team1.users">
-                <div class="">{{ user.nickname ??= user.name }}</div>
+        <div class="grid grid-cols-[auto_auto_auto_auto_auto] mt-4">
 
-                <div class="">
-                    STATS
-                </div>
-
-                <div class="flex">
-                    <div class="w-4 border grid place-items-center"><FaIcon icon="fa-caret-up"></FaIcon></div>
-                    <div class="w-4 border grid place-items-center"><FaIcon icon="fa-caret-down"></FaIcon></div>
+            <div class="contents row">
+                <div class="cell"></div>
+                <div class="cell" v-for="stat in stats">
+                    <div class="flex">
+                        <div class="">{{ stat.name }}</div>
+                        <TeamStat :game="game" :stat="stat" :team="game.team1"></TeamStat>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="">
-            <AutoComplete v-model="addPlayer" model="users" placeholder="Add Player" @create="createUser($event)"></AutoComplete>
+            <div class="contents row" v-for="user in game.team1.users">
+                <div class="cell">{{ user.nickname ??= user.name }}</div>
+                <div class="cell" v-for="stat in stats">
+                    <UserStat :user="user" :stat="stat" :game="game"></UserStat>
+                </div>
+            </div>
+
         </div>
 
     </div>
