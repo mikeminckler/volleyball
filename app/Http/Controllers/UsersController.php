@@ -33,8 +33,14 @@ class UsersController extends Controller
                 'user' => $user,
             ]);
         } else {
-            return redirect()->route('users.index');
+            return redirect()->route('users.edit', ['id' => $user->id]);
         }
+    }
+
+    public function edit($id) 
+    {
+        $user = User::findOrFail($id);
+        return inertia('User', ['user' => $user]);
     }
 
     public function createStat($id) 

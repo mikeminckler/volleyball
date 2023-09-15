@@ -27,3 +27,4 @@ soketi.json
 .php-cs-fixer.cache
 .DS_STORE
 /public/vendor/horizon/
+package-lock.json

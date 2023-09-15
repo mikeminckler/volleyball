@@ -116,7 +116,9 @@ const toggleGame = (game) => {
                 </div>
 
                 <div class="contents row" v-for="player in currentTeam.users" :key="'player-' + player.id">
-                    <div class="cell">{{ player.name }}</div>
+                    <div class="cell">
+                        <Link :href="route('users.edit', { id: player.id })">{{ player.nickname ??= player.name }}</Link>
+                    </div>
 
                     <div class="cell" v-for="stat in $page.props.stats" :key="stat.name + '-' + selectedGames.length">
                         <Score :games="selectedGames" type="user" :item="player" :stat="stat" v-if="selectedGames.length"></Score>
