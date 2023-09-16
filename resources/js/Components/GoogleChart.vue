@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref } from 'vue';
+import { ref, onBeforeUnmount } from 'vue';
 
 const loaded = ref(false);
 
@@ -47,6 +47,10 @@ Echo.private('game.' + props.game.id)
             drawChart();
         }
     });
+
+onBeforeUnmount(() => {
+    Echo.leave('game.' + props.game.id);
+});
 
 </script>
 

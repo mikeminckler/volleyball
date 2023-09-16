@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Game;
 use App\Utilities\Chart;
 
+use App\Events\GameUpdated;
+
 class GamesController extends Controller
 {
 
@@ -18,6 +20,8 @@ class GamesController extends Controller
         ]);
 
         $game = (new Game)->saveGame(request()->only(['team1', 'team2', 'notes']), $id);
+
+        broadcast(new GameUpdated($game)); 
 
         return redirect()->route('games.view', ['id' => $game->id]);
     }

@@ -1,6 +1,6 @@
 <script setup>
 
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeUnmount } from 'vue';
 import Score from '@/Components/Score.vue'
 import { useColors } from '@/Composables/UseColors.js'
 const { getColor } = useColors();
@@ -46,6 +46,12 @@ props.games.forEach(game => {
                 }
             }
         });
+});
+
+onBeforeUnmount(() => {
+    props.games.forEach(game => {
+        Echo.leave('game.' + game.id);
+    });
 });
 
 </script>
