@@ -82,7 +82,7 @@ const toggleGame = (game) => {
         </div>
     </div>
 
-    <div class="grid grid-cols-[auto_auto]" v-if="currentTeam">
+    <div class="grid md:grid-cols-[auto_auto] text-sm md:text-base" v-if="currentTeam">
 
         <div class="">
             <h1>Games</h1>
@@ -108,18 +108,18 @@ const toggleGame = (game) => {
             </div>
         </div>
 
-        <div class="ml-8">
+        <div class="md:ml-8">
 
             <h1>Players</h1>
 
-            <div class="mt-4 grid grid-cols-6">
+            <div class="mt-4 grid grid-cols-5 md:grid-cols-6">
                 
                 <div class="contents row">
                     <div class="cell"></div>
                     <div class="cell" v-for="stat in $page.props.stats">
-                        <div class="">{{ stat.name }}</div>
+                        <div class="text-xs md:text-base">{{ stat.name }}</div>
                     </div>
-                    <div class="cell"></div>
+                    <div class="cell hidden md:block"></div>
                 </div>
 
                 <div class="contents row" v-for="player in currentTeam.users" :key="'player-' + player.id">
@@ -131,7 +131,7 @@ const toggleGame = (game) => {
                         <Score :games="selectedGames" type="user" :item="player" :stat="stat" v-if="selectedGames.length"></Score>
                     </div>
 
-                    <div class="flex cell">
+                    <div class="hidden md:flex cell">
                         <div class="button" @click="sortPlayer({ user: player, direction: 'up'})"><FaIcon icon="fa-caret-up"></FaIcon></div>
                         <div class="button ml-1" @click="sortPlayer({ user: player, direction: 'down'})"><FaIcon icon="fa-caret-down"></FaIcon></div>
                         <div class="button ml-1" @click="removePlayer(player)"><FaIcon icon="fas fa-times"></FaIcon></div>
@@ -143,7 +143,7 @@ const toggleGame = (game) => {
                     <div class="cell" v-for="stat in $page.props.stats" :key="'team-' + stat.name + '-' + selectedGames.length">
                         <Score :games="selectedGames" type="team" :item="currentTeam" :stat="stat"></Score>
                     </div>
-                    <div class="cell"></div>
+                    <div class="cell hidden md:block"></div>
                 </div>
             </div>
 

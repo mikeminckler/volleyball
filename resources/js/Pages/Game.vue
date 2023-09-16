@@ -26,9 +26,9 @@ const updateGame = debounce(function() {
 
     <div class="">
 
-        <div class="flex justify-between border-b border-gray-400 py-1 items-baseline">
+        <div class="md:flex justify-between border-b border-gray-400 py-1 items-baseline">
             <div class="">{{ game.team1.name }} vs <span class="font-semibold">{{ game.team2.name }}</span></div>
-            <div class="flex-1 flex justify-center">
+            <div class="flex-1 md:flex justify-center">
                 <input class="w-64 text-center py-1 px-2 border border-gray-300 rounded focus:outline-none focus:border-gray-400" 
                     @keyup="updateGame()"
                     v-model="game.notes" 
@@ -37,7 +37,7 @@ const updateGame = debounce(function() {
             <div class="date">{{ displayShortDateTime(game.created_at) }}</div>
         </div>
 
-        <div class="grid grid-cols-[auto_auto_auto_auto_auto] mt-4">
+        <div class="grid md:grid-cols-[auto_auto_auto_auto_auto] mt-4">
 
             <div class="contents row">
                 <div class="cell"></div>
@@ -52,6 +52,7 @@ const updateGame = debounce(function() {
             <div class="contents row" v-for="user in game.team1.users">
                 <div class="cell">{{ user.nickname ??= user.name }}</div>
                 <div class="cell" v-for="stat in $page.props.stats">
+                    <div class="md:hidden text-xs">{{ stat.name }}</div>
                     <UserStat :user="user" :stat="stat" :game="game"></UserStat>
                 </div>
             </div>

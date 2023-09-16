@@ -50,8 +50,8 @@ props.games.forEach(game => {
 </script>
 
 <template>
-    <div class="flex items-baseline" v-if="score">
-        <div class="pl-2 font-bold">{{ score.score }}</div>
+    <div class="flex items-baseline text-xs md:text-base" v-if="score">
+        <div class="pl-1 md:pl-2 font-bold">{{ score.score }}</div>
         <div class="pl-1 text-xs opacity-70 font-semibold" v-if="score.attempts > 0">({{ score.attempts }})</div>
     </div>
 </template>
