@@ -18,6 +18,7 @@
         faTimes,
         faCheck,
         faCircle,
+        faSquare,
     } from '@fortawesome/free-solid-svg-icons'
 
     import {
@@ -41,5 +42,6 @@
         faTimes,
         faCheck,
         faCircle,
+        faSquare,
     );
 </script>

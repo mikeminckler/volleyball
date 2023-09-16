@@ -58,6 +58,8 @@ class Stat extends Model
             $score = number_format(round(($total / $attempts), 2), 2, '.', '');
         }
 
-        return ['score' => $score, 'attempts' => $attempts];
+        $latest = $user_stats->sortByDesc('id')->values()->take(10)->map->chart_score;
+
+        return ['score' => $score, 'attempts' => $attempts, 'latest' => $latest];
     }
 }

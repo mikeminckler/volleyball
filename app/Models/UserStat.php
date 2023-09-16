@@ -11,6 +11,10 @@ class UserStat extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'score' => 'float',
+    ];
+
     public function stat() 
     {
         return $this->belongsTo(Stat::class);   
