@@ -4,10 +4,12 @@ import '../css/app.css';
 
 import { createApp, h } from 'vue';
 import { createInertiaApp, Link, Head } from '@inertiajs/vue3';
+import { createPinia } from 'pinia';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+const pinia = createPinia();
 
 import AppLayout from '@/Layouts/AppLayout.vue';
 import FaIcon from '@/Components/FaIcon.vue';
@@ -28,6 +30,7 @@ createInertiaApp({
             .component('Head', Head)
             .component('FaIcon', FaIcon)
             .use(ZiggyVue, Ziggy)
+            .use(pinia)
             .mount(el);
     },
     progress: {

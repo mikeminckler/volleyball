@@ -42,6 +42,14 @@ h2 {
     @apply bg-green-100 border-green-300;
 }
 
+.score {
+    @apply bg-transparent transition-colors duration-500 rounded;
+}
+
+.score.loading {
+    @apply bg-yellow-100;
+}
+
 .date {
     @apply text-sm opacity-70 border-b px-1;
 }

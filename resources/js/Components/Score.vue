@@ -13,9 +13,13 @@ const props = defineProps({
 });
 
 const score = ref();
+const loading = ref(true);
+
 const getScore = () => {
+    loading.value = true;
     axios.post(route(props.type + 's.stat-score', { id: props.item.id }), { games: props.games, stat: props.stat }).then(response => {
         score.value = response.data.score;
+        setTimeout( () => loading.value = false, 500);
     });
 }
 
@@ -57,7 +61,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="flex items-center h-[28px] overflow-hidden text-xs md:text-base relative -mt-1" v-if="score">
+    <div class="score flex items-center h-[28px] overflow-hidden text-xs md:text-base relative -mt-1" v-if="score" :class="loading ? 'loading' : ''">
 
         <div class="flex relative leading-none items-baseline">
             <div class="pl-1 font-bold">{{ score.score }}</div>

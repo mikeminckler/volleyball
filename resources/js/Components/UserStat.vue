@@ -4,6 +4,10 @@ import { ref, computed } from 'vue';
 import Score from '@/Components/Score.vue';
 const clicked = ref();
 
+import { storeToRefs } from 'pinia';
+import { useGlobalStore } from '@/Stores/GlobalStore.js';
+const { showUndo } = storeToRefs(useGlobalStore());
+
 const props = defineProps({
     user: { type: Object, required: true },
     stat: { type: Object, required: true },
@@ -48,7 +52,7 @@ const undo = () => {
 
 <div class="flex items-center">
 
-    <div class="button text w-7 h-7 ml-1 first:ml-0" v-for="button in buttons" @click="createStat(button)" :class="clicked === 'stat-' + button ? 'clicked' : ''">
+    <div class="button text w-6 h-6 ml-0.5 first:ml-0" v-for="button in buttons" @click="createStat(button)" :class="clicked === 'stat-' + button ? 'clicked' : ''">
         <FaIcon icon="fa-plus" v-if="buttons.length === 1"></FaIcon>
 
         <div class="text-green-600" v-else-if="stat.low_score === -1 && stat.high_score === 1 && button === 1">
@@ -68,7 +72,7 @@ const undo = () => {
 
     <Score type="user" :item="user" :games="[game]" :stat="stat"></Score>
 
-    <div class="button text-sm w-6 h-6 opacity-70 ml-2" @click="undo()" :class="clicked === 'undo' ? 'clicked' : ''">
+    <div class="button text-sm w-6 h-6 opacity-70 ml-2" @click="undo()" :class="clicked === 'undo' ? 'clicked' : ''" v-if="showUndo">
         <FaIcon icon="fa-solid fa-rotate-left"></FaIcon>
     </div>
 </div>

@@ -6,6 +6,10 @@ import { debounce } from 'lodash'
 import { useDates } from '@/Composables/UseDates.js'
 const { displayShortDateTime } = useDates();
 
+import { storeToRefs } from 'pinia';
+import { useGlobalStore } from '@/Stores/GlobalStore.js';
+const { showUndo } = storeToRefs(useGlobalStore());
+
 const props = defineProps({
     game: { type: Object, required: true },
 });
@@ -53,7 +57,11 @@ onBeforeUnmount(() => {
         <div class="grid md:grid-cols-[auto_auto_auto_auto_auto] mt-4">
 
             <div class="contents row">
-                <div class="cell"></div>
+                <div class="cell">
+                    <div class="button text-sm w-6 h-6 opacity-70 ml-2" @click="showUndo = !showUndo">
+                        <FaIcon icon="fa-solid fa-rotate-left"></FaIcon>
+                    </div>
+                </div>
                 <div class="cell" v-for="stat in $page.props.stats">
                     <div class="flex">
                         <div class="">{{ stat.name }}</div>
