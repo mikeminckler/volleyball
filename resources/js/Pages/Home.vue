@@ -103,6 +103,7 @@ const toggleGame = (game) => {
                         <FaIcon icon="far fa-circle-check" v-else></FaIcon>
                     </div>
                     <Link class="ml-2" :href="route('games.view', {id : game.id })">{{ game.team2.name }} - {{ displayShortDateTime(game.created_at) }}</Link>
+                    <div class="ml-4 opacity-75">{{ game.notes }}</div>
                 </div>
             </div>
         </div>

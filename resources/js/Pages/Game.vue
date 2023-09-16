@@ -2,6 +2,7 @@
 
 import { router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue'
+import { debounce } from 'lodash'
 import { useDates } from '@/Composables/UseDates.js'
 const { displayShortDateTime } = useDates();
 
@@ -13,6 +14,10 @@ import UserStat from '@/Components/UserStat.vue';
 import Score from '@/Components/Score.vue';
 import GoogleChart from '@/Components/GoogleChart.vue';
 
+const updateGame = debounce(function() {
+    axios.post(route('games.update', { id: props.game.id }), props.game);
+}, 1000);
+
 </script>
 
 <template>
@@ -21,8 +26,14 @@ import GoogleChart from '@/Components/GoogleChart.vue';
 
     <div class="">
 
-        <div class="flex justify-between border-b border-gray-400">
+        <div class="flex justify-between border-b border-gray-400 py-1 items-baseline">
             <div class="">{{ game.team1.name }} vs <span class="font-semibold">{{ game.team2.name }}</span></div>
+            <div class="flex-1 flex justify-center">
+                <input class="w-64 text-center py-1 px-2 border border-gray-300 rounded focus:outline-none focus:border-gray-400" 
+                    @keyup="updateGame()"
+                    v-model="game.notes" 
+                    placeholder="Scores" />
+            </div>
             <div class="date">{{ displayShortDateTime(game.created_at) }}</div>
         </div>
 

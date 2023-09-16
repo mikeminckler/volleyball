@@ -13,7 +13,7 @@ class Game extends Model
 {
     use HasFactory;
 
-    protected $visible = ['id', 'team1', 'team2', 'created_at'];
+    protected $visible = ['id', 'team1', 'team2', 'created_at', 'notes'];
 
     public function saveGame($input, $id = null) 
     {
@@ -28,6 +28,7 @@ class Game extends Model
 
         $game->team1_id = $team1->id;
         $game->team2_id = $team2->id;
+        $game->notes = Arr::get($input, 'notes');
         $game->save();
 
         return $game;

@@ -17,7 +17,7 @@ class GamesController extends Controller
             'team2.id' => 'required',
         ]);
 
-        $game = (new Game)->saveGame(request()->only(['team1', 'team2']), $id);
+        $game = (new Game)->saveGame(request()->only(['team1', 'team2', 'notes']), $id);
 
         return redirect()->route('games.view', ['id' => $game->id]);
     }
