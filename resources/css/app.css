@@ -19,7 +19,7 @@ h2 {
 }
 
 .row, .contents.row .cell {
-    @apply px-2 py-1 border-b;
+    @apply px-1 py-1 border-b;
 }
 
 .row:first-child, .contents.row:first-child .cell {
@@ -44,4 +44,46 @@ h2 {
 
 .date {
     @apply text-sm opacity-70 border-b px-1;
+}
+
+/* SCORES */
+
+.pip.score-green {
+    @apply bg-green-500;
+}
+
+.pip.score-red {
+    @apply bg-red-500;
+}
+
+.pip.score-blue {
+    @apply bg-blue-500;
+}
+
+.pip.score-yellow {
+    @apply bg-yellow-500;
+}
+
+.pip.score-gray {
+    @apply bg-gray-500;
+}
+
+.score-total.score-green {
+    @apply bg-green-200 border-green-300;
+}
+
+.score-total.score-red {
+    @apply bg-red-200 border-red-300;
+}
+
+.score-total.score-blue {
+    @apply bg-blue-200 border-blue-300;
+}
+
+.score-total.score-yellow {
+    @apply bg-yellow-200 border-yellow-300;
+}
+
+.score-total.score-gray {
+    @apply bg-gray-200 border-gray-300;
 }

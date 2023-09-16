@@ -1,7 +1,9 @@
 <script setup>
 
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import Score from '@/Components/Score.vue'
+import { useColors } from '@/Composables/UseColors.js'
+const { getColor } = useColors();
 
 const props = defineProps({
     type: { type: String, required: true },
@@ -11,7 +13,6 @@ const props = defineProps({
 });
 
 const score = ref();
-
 const getScore = () => {
     axios.post(route(props.type + 's.stat-score', { id: props.item.id }), { games: props.games, stat: props.stat }).then(response => {
         score.value = response.data.score;
@@ -47,32 +48,26 @@ props.games.forEach(game => {
         });
 });
 
-const getColor = (score) => {
-    if (score === 1) {
-        return 'text-green-500';
-    } else if (score === -1) {
-        return 'text-red-500';
-    } else if (score > 0) {
-        return 'text-blue-500';
-    } else if (score < 0) {
-        return 'text-yellow-500';
-    } else {
-        return 'text-gray-500';
-    }
-}
-
 </script>
 
 <template>
-    <div class="flex items-baseline text-xs md:text-base relative" v-if="score">
-        <div class="pl-1 md:pl-2 font-bold -mt-px">{{ score.score }}</div>
-        <div class="pl-1 text-xs opacity-70 font-semibold" v-if="score.attempts > 0">({{ score.attempts }})</div>
-        <div class="absolute bottom-0 right-0 w-full -mb-[4px]" v-if="score.latest?.length">
-            <div class="text-[6px] leading-none flex">
-                <div class="pl-[2px]" v-for="item in score.latest" :class="getColor(item)">
-                    <FaIcon icon="fas fa-square"></FaIcon>
-                </div>
-            </div>
+    <div class="flex items-center h-[28px] overflow-hidden text-xs md:text-base relative -mt-1" v-if="score">
+
+        <div class="flex relative leading-none items-baseline">
+            <div class="pl-1 font-bold">{{ score.score }}</div>
+            <div class="text-xs opacity-70 font-semibold" v-if="score.attempts > 0">({{ score.attempts }})</div>
         </div>
+
+        <div class="flex" :class="stat.reverse ? 'flex-row justify-start' : 'flex-row-reverse justify-end'">
+            <div class="text-xs ml-0.5 text-center score-total rounded border w-4 font-semibold text-gray-800" 
+                :class="getColor(total.chart_score)" 
+                v-for="total in score.totals"
+            >{{ total.total }}</div>
+        </div>
+
+        <div class="flex absolute bottom-0">
+            <div class="ml-0.5 w-1 h-1 md:w-1.5 md:h-1.5 pip" v-for="item in score.latest" :class="getColor(item)"></div>
+        </div>
+
     </div>
 </template>

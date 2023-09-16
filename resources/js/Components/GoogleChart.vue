@@ -19,7 +19,7 @@ const drawChart = () => {
 
         const options = {
             title: 'vs ' + props.game.team2.name,
-            height: 325,
+            height: 500,
             curveType: 'function',
             legend: { position: 'bottom' },
             backgroundColor: 'transparent',

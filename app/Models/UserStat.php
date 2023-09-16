@@ -22,38 +22,40 @@ class UserStat extends Model
 
     public function getChartScoreAttribute()
     {
-        $high_score = $this->stat->high_score;
-        $low_score = $this->stat->low_score;
-        
-        if ($low_score == $high_score) {
+        //return cache()->tags(['user-stats'])->rememberForever('user-stat-'.$this->id.'-chart-score', function() {
+            $high_score = $this->stat->high_score;
+            $low_score = $this->stat->low_score;
+            
+            if ($low_score == $high_score) {
 
-            return $this->score;
+                return $this->score;
 
-        } else if ($low_score == -1 && $high_score == 1) {
+            } else if ($low_score == -1 && $high_score == 1) {
 
-            return $this->score;
+                return $this->score;
 
-        } else if ($low_score > $high_score) {
+            } else if ($low_score > $high_score) {
 
-            if ($this->score > 0) {
-                $average = $this->score / $low_score;
-                $diff = 1 - $average;
+                if ($this->score > 0) {
+                    $average = $this->score / $low_score;
+                    $diff = 1 - $average;
+                } else {
+                    $diff = 1;
+                }
+
+                return round((($diff - 0.5) * 2), 2);
+
             } else {
-                $diff = 1;
+
+                if ($this->score > 0) {
+                    $average =  $this->score / $high_score;
+                } else {
+                    $average = 0;
+                }
+
+                return round(($average - 0.5) * 2, 2);
+
             }
-
-            return round((($diff - 0.5) * 2), 2);
-
-        } else {
-
-            if ($this->score > 0) {
-                $average =  $this->score / $high_score;
-            } else {
-                $average = 0;
-            }
-
-            return round(($average - 0.5) * 2, 2);
-
-        }
+        //});
     }
 }

@@ -51,15 +51,15 @@ const undo = () => {
     <div class="button text w-7 h-7 ml-1 first:ml-0" v-for="button in buttons" @click="createStat(button)" :class="clicked === 'stat-' + button ? 'clicked' : ''">
         <FaIcon icon="fa-plus" v-if="buttons.length === 1"></FaIcon>
 
-        <div class="text-green-600" v-else-if="stat.name === 'Hitting' && button === 1">
+        <div class="text-green-600" v-else-if="stat.low_score === -1 && stat.high_score === 1 && button === 1">
             <FaIcon icon="fa-check"></FaIcon>
         </div>
 
-        <div class="text-xs text-gray-500" v-else-if="stat.name === 'Hitting' && button === 0">
+        <div class="text-xs text-gray-500" v-else-if="stat.low_score === -1 && stat.high_score === 1 && button === 0">
             <FaIcon icon="fa-circle"></FaIcon>
         </div>
 
-        <div class="text-red-600" v-else-if="stat.name === 'Hitting' && button === -1">
+        <div class="text-red-600" v-else-if="stat.low_score === -1 && stat.high_score === 1 && button === -1">
             <FaIcon icon="fa-times"></FaIcon>
         </div>
 

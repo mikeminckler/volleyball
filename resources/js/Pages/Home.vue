@@ -112,7 +112,7 @@ const toggleGame = (game) => {
 
             <h1>Players</h1>
 
-            <div class="mt-4 grid grid-cols-5 md:grid-cols-6">
+            <div class="mt-4 grid grid-cols-5 md:grid-cols-[auto_auto_auto_auto_auto_auto]">
                 
                 <div class="contents row">
                     <div class="cell"></div>
