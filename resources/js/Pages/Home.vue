@@ -12,6 +12,7 @@ import GoogleChart from '@/Components/GoogleChart.vue';
 const props = defineProps({
     teams: { type: Array },
     currentTeam: { type: Object },
+    games: { type: Object },
 });
 
 const showCreateGame = ref(false);
@@ -98,13 +99,19 @@ const toggleGame = (game) => {
             </div>
 
             <div class="mt-4">
-                <div class="flex row" v-for="game in currentTeam.games">
+                <div class="flex row" v-for="game in games.data">
                     <div class="text-xl cursor-pointer opacity-50" @click="toggleGame(game)">
                         <FaIcon icon="far fa-circle" v-if="!selectedGames.find( g => g.id === game.id)"></FaIcon>
                         <FaIcon icon="far fa-circle-check" v-else></FaIcon>
                     </div>
                     <Link class="ml-2" :href="route('games.view', {id : game.id })">{{ game.team2.name }} - {{ displayShortDateTime(game.created_at) }}</Link>
                     <div class="ml-4 opacity-75">{{ game.notes }}</div>
+                </div>
+                <div class="flex w-full justify-center mt-2">
+                    <div class="" v-for="link in games.links">
+                        <Link class="mx-1" :href="link.url" v-if="link.url"><span v-html="link.label"></span></Link>
+                        <div class="opacity-50 mx-1" v-else><span v-html="link.label"></span></div>
+                    </div>
                 </div>
             </div>
         </div>

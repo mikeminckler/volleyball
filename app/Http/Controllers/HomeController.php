@@ -19,6 +19,7 @@ class HomeController extends Controller
             'canRegister' => Route::has('register'),
             'teams' => Team::all(),
             'currentTeam' => $currentTeam,
+            'games' => $currentTeam?->games()->with(['team1', 'team2'])->paginate(),
         ]);
     }
 }
