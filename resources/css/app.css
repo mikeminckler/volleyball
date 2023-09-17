@@ -35,7 +35,7 @@ h2 {
 }
 
 .button {
-    @apply inline-flex text-gray-800 font-semibold justify-center items-center border rounded shadow px-2 cursor-pointer bg-white transition-colors duration-150;
+    @apply inline-flex text-gray-800 font-semibold justify-center items-center border rounded shadow px-1 cursor-pointer bg-white transition-colors duration-150;
 }
 
 .button.clicked {

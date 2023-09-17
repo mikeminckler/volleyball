@@ -19,6 +19,7 @@
         faCheck,
         faCircle,
         faListOl,
+        faChartLine,
     } from '@fortawesome/free-solid-svg-icons'
 
     import {
@@ -43,5 +44,6 @@
         faCheck,
         faCircle,
         faListOl,
+        faChartLine,
     );
 </script>

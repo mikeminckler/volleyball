@@ -70,6 +70,22 @@ const toggleGame = (game) => {
     }
 }
 
+import { storeToRefs } from 'pinia';
+import { useGlobalStore } from '@/Stores/GlobalStore.js';
+const { selectedPlayers } = storeToRefs(useGlobalStore());
+
+const togglePlayer = (player) => {
+    const index = selectedPlayers.value.findIndex(p => {
+        return p.id === player.id 
+    });
+        
+    if (index >= 0) {
+        selectedPlayers.value.splice(index, 1);
+    } else {
+        selectedPlayers.value.push(player);
+    }
+}
+
 </script>
 
 <template>
@@ -99,13 +115,15 @@ const toggleGame = (game) => {
             </div>
 
             <div class="mt-4">
-                <div class="flex row" v-for="game in games.data">
+                <div class="flex items-center row leading-none" v-for="game in games.data">
                     <div class="text-xl cursor-pointer opacity-50" @click="toggleGame(game)">
                         <FaIcon icon="far fa-circle" v-if="!selectedGames.find( g => g.id === game.id)"></FaIcon>
                         <FaIcon icon="far fa-circle-check" v-else></FaIcon>
                     </div>
-                    <Link class="ml-2" :href="route('games.view', {id : game.id })">{{ game.team2.name }} - {{ displayShortDateTime(game.created_at) }}</Link>
-                    <div class="ml-4 opacity-75">{{ game.notes }}</div>
+                    <div class="">
+                        <Link class="ml-2" :href="route('games.view', {id : game.id })">{{ game.team2.name }} - <span class="text-sm">{{ displayShortDateTime(game.created_at) }}</span></Link>
+                        <div class="ml-2 text-sm opacity-75">{{ game.notes }}</div>
+                    </div>
                 </div>
                 <div class="flex w-full justify-center mt-2">
                     <div class="" v-for="link in games.links">
@@ -116,7 +134,7 @@ const toggleGame = (game) => {
             </div>
         </div>
 
-        <div class="md:ml-8">
+        <div class="md:ml-4">
 
             <h1>Players</h1>
 
@@ -140,6 +158,7 @@ const toggleGame = (game) => {
                     </div>
 
                     <div class="hidden md:flex cell">
+                        <div class="button" @click="togglePlayer(player)"><FaIcon icon="fa-chart-line"></FaIcon></div>
                         <div class="button" @click="sortPlayer({ user: player, direction: 'up'})"><FaIcon icon="fa-caret-up"></FaIcon></div>
                         <div class="button ml-1" @click="sortPlayer({ user: player, direction: 'down'})"><FaIcon icon="fa-caret-down"></FaIcon></div>
                         <div class="button ml-1" @click="removePlayer(player)"><FaIcon icon="fas fa-times"></FaIcon></div>
