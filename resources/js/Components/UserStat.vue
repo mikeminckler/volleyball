@@ -52,7 +52,7 @@ const undo = () => {
 
 <div class="flex items-center">
 
-    <div class="button text w-4 md:w-6 h-6 md:ml-0.5 first:ml-0 text-sm" v-for="button in buttons" @click="createStat(button)" :class="clicked === 'stat-' + button ? 'clicked' : ''">
+    <div class="button text w-6 h-6 md:ml-0.5 first:ml-0 text-sm" v-for="button in buttons" @click="createStat(button)" :class="clicked === 'stat-' + button ? 'clicked' : ''">
         <FaIcon icon="fa-plus" v-if="buttons.length === 1"></FaIcon>
 
         <div class="text-green-600" v-else-if="stat.low_score === -1 && stat.high_score === 1 && button === 1">
