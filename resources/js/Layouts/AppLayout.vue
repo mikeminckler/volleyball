@@ -32,10 +32,10 @@ const resetTeam = () => {
         <Banner />
 
         <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
+            <nav class="bg-white border-b border-gray-100" v-if="$page.props.auth.user">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
+                    <div class="flex justify-between">
                         <div class="flex">
                             <div class="shrink-0 flex items-center">
                                 <ResponsiveNavLink :href="route('home')">Home</ResponsiveNavLink>
@@ -265,7 +265,7 @@ const resetTeam = () => {
 
             <!-- Page Content -->
             <main>
-                <div class="max-w-6xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                     <slot />
                 </div>
             </main>

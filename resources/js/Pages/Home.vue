@@ -83,7 +83,7 @@ const toggleGame = (game) => {
         </div>
     </div>
 
-    <div class="grid md:grid-cols-[auto_auto] text-sm md:text-base" v-if="currentTeam">
+    <div class="grid md:grid-cols-[auto_auto] text-sm md:text-base mt-4" v-if="currentTeam">
 
         <div class="">
             <h1>Games</h1>
