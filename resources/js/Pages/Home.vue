@@ -7,6 +7,7 @@ const { displayShortDateTime, daysOld } = useDates();
 
 import AutoComplete from '@/Components/AutoComplete.vue';
 import Score from '@/Components/Score.vue';
+import GoogleChart from '@/Components/GoogleChart.vue';
 
 const props = defineProps({
     teams: { type: Array },
@@ -150,6 +151,10 @@ const toggleGame = (game) => {
             <AutoComplete class="mt-4" v-model="addPlayer" model="users" placeholder="Add Player" @create="createUser($event)"></AutoComplete>
         </div>
 
+    </div>
+
+    <div class="">
+        <GoogleChart :games="selectedGames"></GoogleChart>
     </div>
 
 

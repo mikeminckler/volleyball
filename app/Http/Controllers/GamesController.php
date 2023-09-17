@@ -36,13 +36,15 @@ class GamesController extends Controller
         return inertia('Game', ['game' => $game]);
     }
 
-    public function chart($id) 
+    public function chart() 
     {
-        $game = Game::findOrFail($id);
-        $players = User::whereIn('id', collect( request('players'))->pluck('id'))->get();
+        $input = request()->all();
+
+        $games = Game::whereIn('id', collect( Arr::get($input, 'games'))->pluck('id'))->get();
+        $players = User::whereIn('id', collect( Arr::get($input, 'players'))->pluck('id'))->get();
 
         return response()->json([
-            'data' => Chart::convertGamesForGoogleChart($game, $players),
+            'data' => Chart::convertGamesForGoogleChart($games, $players),
         ]);
     }
 }

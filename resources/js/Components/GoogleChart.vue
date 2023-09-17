@@ -12,17 +12,17 @@ google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(loaded.value = true);
 
 const props = defineProps({
-    game: { type: Object },
+    games: { type: Array, required: true },
 });
 
 const drawChart = () => {
-    axios.post(route('games.chart', { id : props.game.id }),  { players: selectedPlayers.value }).then(response => {
+    axios.post(route('games.chart'), { games: props.games, players: selectedPlayers.value }).then(response => {
 
         const data = google.visualization.arrayToDataTable(response.data.data);
         const chart = new google.visualization.LineChart(document.getElementById('chart'));
 
         const options = {
-            title: 'vs ' + props.game.team2.name,
+            //title: 'vs ' + props.games.map(g => g.team2.name)
             height: 300,
             curveType: 'function',
             legend: { position: 'bottom' },
@@ -43,22 +43,29 @@ const drawChart = () => {
 drawChart();
 
 watch(() => selectedPlayers.value.length, () => drawChart());
+watch(() => props.games.length, () => drawChart());
 
-Echo.private('game.' + props.game.id)
-    .listen('UserStatCreated', (data) => {
-        if (data.user_stat.game_id === props.game.id) {
-            drawChart();
-        }
-    })
-    .listen('UserStatDeleted', (data) => {
-        if (data.game.id === props.game.id) {
-            drawChart();
-        }
-    });
+props.games.forEach(game => {
+
+    Echo.private('game.' + game.id)
+        .listen('UserStatCreated', (data) => {
+            if (data.user_stat.game_id === game.id) {
+                drawChart();
+            }
+        })
+        .listen('UserStatDeleted', (data) => {
+            if (data.game.id === game.id) {
+                drawChart();
+            }
+        });
+});
 
 onBeforeUnmount(() => {
-    Echo.leave('game.' + props.game.id);
+    props.games.forEach(game => {
+        Echo.leave('game.' + game.id);
+    });
 });
+
 
 </script>
 

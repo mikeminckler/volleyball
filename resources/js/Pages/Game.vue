@@ -92,7 +92,7 @@ onBeforeUnmount(() => {
         </div>
 
         <div class="">
-            <GoogleChart :game="game"></GoogleChart>
+            <GoogleChart :games="[game]"></GoogleChart>
         </div>
 
     </div>
