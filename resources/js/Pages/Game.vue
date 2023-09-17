@@ -8,7 +8,7 @@ const { displayShortDateTime } = useDates();
 
 import { storeToRefs } from 'pinia';
 import { useGlobalStore } from '@/Stores/GlobalStore.js';
-const { showUndo } = storeToRefs(useGlobalStore());
+const { showUndo, selectedPlayers } = storeToRefs(useGlobalStore());
 
 const props = defineProps({
     game: { type: Object, required: true },
@@ -22,6 +22,17 @@ const updateGame = debounce(function() {
     axios.post(route('games.update', { id: props.game.id }), props.game);
 }, 10);
 
+const togglePlayer = (player) => {
+    const index = selectedPlayers.value.findIndex(p => {
+        return p.id === player.id 
+    });
+        
+    if (index >= 0) {
+        selectedPlayers.value.splice(index, 1);
+    } else {
+        selectedPlayers.value.push(player);
+    }
+}
 
 Echo.private('game.' + props.game.id)
     .listen('GameUpdated', (data) => {
@@ -54,7 +65,7 @@ onBeforeUnmount(() => {
             <div class="date">{{ displayShortDateTime(game.created_at) }}</div>
         </div>
 
-        <div class="grid md:grid-cols-[auto_auto_auto_auto_auto] mt-4">
+        <div class="grid grid-cols-[auto_auto_auto_auto_auto] mt-4">
 
             <div class="contents row">
                 <div class="cell">
@@ -71,7 +82,7 @@ onBeforeUnmount(() => {
             </div>
 
             <div class="contents row" v-for="user in game.team1.users">
-                <div class="cell">{{ user.nickname ??= user.name }}</div>
+                <div class="cell" @click="togglePlayer(user)">{{ user.nickname ??= user.name }}</div>
                 <div class="cell" v-for="stat in $page.props.stats">
                     <div class="md:hidden text-xs">{{ stat.name }}</div>
                     <UserStat :user="user" :stat="stat" :game="game"></UserStat>

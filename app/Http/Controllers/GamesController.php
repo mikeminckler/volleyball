@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 use App\Models\Game;
+use App\Models\User;
 use App\Utilities\Chart;
 
 use App\Events\GameUpdated;
@@ -37,9 +39,10 @@ class GamesController extends Controller
     public function chart($id) 
     {
         $game = Game::findOrFail($id);
+        $players = User::whereIn('id', collect( request('players'))->pluck('id'))->get();
 
         return response()->json([
-            'data' => Chart::convertGamesForGoogleChart($game),
+            'data' => Chart::convertGamesForGoogleChart($game, $players),
         ]);
     }
 }

@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="score flex items-center h-[28px] overflow-hidden text-xs md:text-base relative -mt-1" v-if="score" :class="loading ? 'loading' : ''">
+    <div class="score md:flex items-center md:h-[28px] overflow-hidden relative -mt-1" v-if="score" :class="loading ? 'loading' : ''">
 
         <div class="flex relative leading-none items-baseline">
             <div class="pl-1 font-bold">{{ score.score }}</div>
@@ -69,7 +69,7 @@ onBeforeUnmount(() => {
         </div>
 
         <div class="flex" :class="stat.reverse ? 'flex-row justify-start' : 'flex-row-reverse justify-end'">
-            <div class="text-xs ml-0.5 text-center score-total rounded border w-4 font-semibold text-gray-800" 
+            <div class="text-xs ml-0.5 text-center score-total md:rounded border md:px-px font-semibold text-gray-800" 
                 :class="getColor(total.chart_score)" 
                 v-for="total in score.totals"
             >{{ total.total }}</div>
