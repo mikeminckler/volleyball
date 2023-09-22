@@ -55,7 +55,7 @@ const sortPlayer = (data) => {
 }
 
 const selectedGames = ref(props.currentTeam ? props.currentTeam.games.filter(game => {
-    return daysOld(game.created_at) < 7;
+    return daysOld(game.created_at) < 6;
 }) : []);
 
 const toggleGame = (game) => {
@@ -179,7 +179,7 @@ const togglePlayer = (player) => {
 
     </div>
 
-    <div class="">
+    <div class="" :key="'team-' + currentTeam?.id" v-if="currentTeam">
         <GoogleChart :games="selectedGames"></GoogleChart>
     </div>
 
